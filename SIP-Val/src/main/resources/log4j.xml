@@ -20,7 +20,7 @@
 				value="%d [%t] %c%n%-5p: [%x] %m%n" />
 		</layout>
 		-->
-		<layout class="ch.bedag.a6z.sipvalidator.logging.MessageOnlyLayout">
+		<layout class="ch.kostceco.bento.sipval.logging.MessageOnlyLayout">
 		</layout>
 		
 		<!-- Level DEBUG bis INFO werden ausgegeben -->
@@ -43,7 +43,7 @@
 				value="%d [%t] %c%n%-5p: [%x] %m%n" />
 		</layout>
 		-->
-		<layout class="ch.bedag.a6z.sipvalidator.logging.MessageOnlyLayout">
+		<layout class="ch.kostceco.bento.sipval.logging.MessageOnlyLayout">
 		</layout>
 		<!-- Level WARN bis FATAL werden ausgegeben -->
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
