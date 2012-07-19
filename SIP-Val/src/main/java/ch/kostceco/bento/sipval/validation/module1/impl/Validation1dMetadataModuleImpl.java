@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 $Id: Validation1dMetadataModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
@@ -144,6 +144,10 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                     }
                     if (newFile.getName().endsWith(XSD_ARELDA)) {
                         xsdToValidate = newFile;
+                    } else {
+                    	if (newFile.getName().endsWith("arelda.xsd")) {
+                            xsdToValidate = newFile;
+                    	}
                     }
                     
                 }

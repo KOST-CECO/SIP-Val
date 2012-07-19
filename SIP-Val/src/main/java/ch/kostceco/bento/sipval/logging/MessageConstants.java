@@ -146,8 +146,6 @@ public interface MessageConstants {
     String ERROR_MODULE_BB_CANNOTPROCESSMD5             = "error.module.bb.cannotprocessmd5";
     String ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5         = "error.module.bb.cannotclosestreammd5";
     String MESSAGE_MODULE_Bb_WRONGMD5                   = "error.module.bb.wrongmd5";
-    String MESSAGE_MODULE_Bb_NOTMD5                     = "error.module.bb.notmd5";
-    
     
     // Modul 2c Meldungen
     String MESSAGE_MODULE_BC_FILEMISSING                = "message.module.bc.filemissing";

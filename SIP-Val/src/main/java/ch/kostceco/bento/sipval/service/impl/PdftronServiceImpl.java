@@ -100,6 +100,7 @@ public class PdftronServiceImpl implements PdftronService {
             }
             report = newReport;
             
+            // TODO: Zeilen 104-106 löschen und cmd scripts anpassen --> StyleSheet soll nicht gelöscht werden!
             // das gleichzeitig erzeugte Stylesheet löschen
             File styleSheetToDelete = new File(pathToOutput, "report.xsl");
             styleSheetToDelete.delete();

@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 $Id: Validation2bChecksumModuleImpl.java 25 2011-09-29 08:46:27Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
@@ -64,9 +64,11 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
         Map<String, String> filesInSipFileMD5 = new HashMap<String, String>();
         Map<String, String> filesInSipFileSHA1 = new HashMap<String, String>();
         Map<String, String> filesInSipFileSHA256 = new HashMap<String, String>();
+        Map<String, String> filesInSipFileSHA512 = new HashMap<String, String>();
         Map<String, String> filesInMetadataMD5 = new HashMap<String, String>();
         Map<String, String> filesInMetadataSHA1 = new HashMap<String, String>();
         Map<String, String> filesInMetadataSHA256 = new HashMap<String, String>();
+        Map<String, String> filesInMetadataSHA512 = new HashMap<String, String>();
 
         try {
             Integer zaehlerWait = 1;
@@ -127,6 +129,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                     String pruefalgorithmusMD5 = "MD5";
                     String pruefalgorithmusSHA1 = "SHA-1";
                     String pruefalgorithmusSHA256 = "SHA-256";
+                    String pruefalgorithmusSHA512 = "SHA-512";
                     
                     NodeIterator nl = XPathAPI.selectNodeIterator(dateiNode, "name");
                     Node nameNode = nl.nextNode();
@@ -433,7 +436,100 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                 		}
 
                 	}
+
                 	
+                	if (pruefalgorithmus.equals(pruefalgorithmusSHA512)) {
+                		// pruefalgorithmus ist SHA512 und wird auf die korrekte Länge (=128) überprüft
+                		
+                		if (pruefsumme.length() != 128) {
+                            System.out.print("\r                                                                                                                                     ");
+                    		System.out.flush();
+                            System.out.print("\r");
+                    		System.out.flush();
+
+                            valid = false;
+
+                            getMessageService().logError(
+                                    getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
+                                    getTextResourceService().getText(MESSAGE_DASHES) + 
+                                    getTextResourceService().getText(MESSAGE_MODULE_Bb_WRONGMD5, path));     
+
+                		} else {
+
+                            // Start SHA512 berechnung
+                            for (FileEntry fileEntry : fileEntryList) {
+                                String fileName = fileEntry.getName();
+                                String toReplace = toplevelDir + "/"; 
+                                fileName = fileName.replace(toReplace, ""); 
+                                
+                                if (fileName.equals(path)) {
+                        			
+                                    filesInMetadataSHA512.put(path, pruefsumme);
+
+                                    MessageDigest digest = MessageDigest.getInstance("SHA-512");
+                                    EntryInputStream eis5 = zipfile.openEntryInputStream(fileEntry.getName());
+                                    BufferedInputStream is5 = new BufferedInputStream(eis5);
+                                    
+                                    
+                                    byte[] buffer = new byte[8192];
+                                    int read = 0;
+                                    try {
+                                        while ((read = is5.read(buffer)) > 0) {
+                                            digest.update(buffer, 0, read);
+                                        }
+
+                                        byte[] sha512sum = digest.digest();
+                                        
+                                        BigInteger bigInt = new BigInteger(1, sha512sum);
+                                        String output = bigInt.toString(16);
+
+                                        while(output.length() < 128 ){
+                                            output = "0" + output;
+                                        }
+                                        
+                                        filesInSipFileSHA512.put(fileName, output);
+
+                                        
+                                    } catch (IOException e) {
+                                        getMessageService().logError(
+                                                getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
+                                                getTextResourceService().getText(MESSAGE_DASHES) + 
+                                                getTextResourceService().getText(ERROR_MODULE_BB_CANNOTPROCESSMD5));                                
+                                        
+                                        System.out.print("\r                                                                                                                                     ");
+                                		System.out.flush();
+                                        System.out.print("\r");
+                                		System.out.flush();
+
+                                        return false;
+
+                                    } finally {
+                                        try {
+                                            eis5.close();
+                                            is5.close();
+                                        } catch (IOException e) {
+                                            getMessageService().logError(
+                                                    getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
+                                                    getTextResourceService().getText(MESSAGE_DASHES) + 
+                                                    getTextResourceService().getText(ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5));                                
+                                            
+                                            System.out.print("\r                                                                                                                                     ");
+                                    		System.out.flush();
+                                            System.out.print("\r");
+                                    		System.out.flush();
+
+                                            return false;
+                                        }
+                                    }
+                                    //Ende SHA512 Berechnung
+                                } else {
+                                	// Die Datei befindet sich nicht im SIP -> Kein Fehler da in 2a bereits ausgegeben
+                                }
+                			}
+                		}
+
+                	}
+
 
                     boolean topReached2 = false;
 

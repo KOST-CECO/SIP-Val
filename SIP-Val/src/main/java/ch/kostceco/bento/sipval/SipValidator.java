@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v1.0.6 application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+The SIP-Val v1.1.0 application is used for validate Submission Information Package (SIP).
+Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 $Id: SipValidator.java 25 2011-09-29 08:46:27Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 

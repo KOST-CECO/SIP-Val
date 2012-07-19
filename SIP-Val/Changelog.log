@@ -1,5 +1,15 @@
+Changelog seit der Version 1.1.0 (Stand 02.05.2012)
+===================================================
+
 Changelog seit der Version 1.0.6 (Stand 29.09.2011)
 ===================================================
+02.05.2012 by Rc
+ - Version auf 1.1.0 erhöht (SIPValidator.java sowie (fr_)messages.properties )
+ 
+30.04.2012 by Rc
+ - Minimalste Anpassungen damit auch die SIPs Version 4 überprüft werden
+    - Validation2bChecksumModuleImpl.java mit SHA512 ergänzt
+    - Validation1dMetadataModuleImpl.java Anpassungen an die neuen xsd
 
 Changelog seit der Version 1.0.5 (Stand 12.09.2011)
 ===================================================
