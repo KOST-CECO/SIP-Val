@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: razm
+Build-Jdk: 1.6.0_02
+Specification-Title: SipValidator
+Specification-Version: 1.0.0-SNAPSHOT
+Specification-Vendor: Bedag Informatik AG
+Implementation-Title: SipValidator
+Implementation-Version: 1.0.0-SNAPSHOT
+Implementation-Vendor-Id: ch.bedag.bsd.a6z.sipvalidator
+Implementation-Vendor: Bedag Informatik AG
+Main-Class: ch.kostceco.bento.sipval.SipValidator
+Artifact-Group: ch.bedag.bsd.a6z.sipvalidator
+Artifact-Id: sipvalidator
+Artifact-Name: SipValidator
+Build-Number: 
+Build-Timestamp: 
+Description: Submission Information Package Validator
+OS-Name: Windows Vista
+Version: 1.0.0-SNAPSHOT
+

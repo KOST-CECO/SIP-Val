@@ -1,0 +1,52 @@
+Changelog seit der Version 0.9.0 (Stand 11.04.2011)
+===================================================
+
+
+Changelog seit der Version 0.3.0 (Stand 07.04.2011)
+===================================================
+
+11.04.2011 by RC
+ - Version auf 0.9.0 erhöht
+ - iValidPdfs und totalErrors in Validation3cFormatValidationModuleImpl angepasst, da die Logik falsch war und negative Total Valid entstanden.
+ - kleinere Korrekturen von Schreibfehler in src/main/resources/messages.properties
+
+Changelog seit der Version 0.2.0 (Stand 17.03.2011)
+===================================================
+
+07.04.20011 by Rc
+ - Version auf 0.3.0 erhöht
+ - GPL2 durch GPL3 ersetzt
+ - Usage-Meldung verbessert
+    - error.parameter.usage in src/main/resources/messages.properties (De & Fr) verbessert
+    - if (args.length < 2) in SipValidator.java vor MESSAGE_SIPVALIDATION und Ausgabe verbessert
+ - Kommentar: @author razm Daniel Ludin, Bedag AG @version 2.0 auf Version 0.2.0 gesetzt
+  
+06.04.20011 by Rc
+ - Update zip64 von 1.00 auf 1.02 (1.02 Cleaned up the code, the build script and added "or later" to the GPL).
+ - Anpassungen der Fehlermeldungen 2a, 2b und 2c mit verständlicheren Meldungen
+ - Fehlermeldung in 2d "Keine Referenzierung in metadata.xml/paket/inhaltsverzeichnis/content" als Kommentar maskiert,
+   weil diese Dateien kassiert wurden und es keinen Fehler ist, respektive nicht ausgegeben werden sollen
+ - französische Kopie von src/main/resources/messages.properties als fr_messages.properties erstellt
+ 
+31.03.2011 by Rc
+ - SIP-Name Start-Notiz in src/main/resources/messages.properties/message.sipvalidation integriert
+ - MESSAGE_SIPVALIDATION mit sipDatei ergänzt in SipValidator.java (logInfo & logError)
+ 
+28.03.2011 by Rc
+ - getPathToDroidSignatureFile anstelle getNameOfDroidSignatureFile (original maskiert), da
+   die fehlerfreie Kompilierung bei KOST ansonsten nicht möglich war 
+    - ConfigurationServiceImpl angepasst
+    - ConfigurationService angepasst
+    - Validation3aFormatRecognitionModuleImpl angepasst
+    - Validation3bUnspecifiedFormatModuleImpl angepasst
+    - Validation3cFormatValidationModuleImpl angepasst
+    - Konfigurationsdatei angepasst
+ - Struktur an KOST angepasst kostceco.bento.sipval anstelle bedag.a6z.sipvalidator
+ - gpl2 Notiz in ale src intergriert
+ - gpl2 Start-Notiz in src/main/resources/messages.properties/message.sipvalidation integriert
+ - ü in src/main/resources/messages.properties/message.sipvalidation normalisiert
+ - Unzulaessiges Format des SIP-Namen anstelle Dateinamen in src/main/resources/messages.properties/message.sipvalidation
+ 
+21.03.2011 by Rc
+ - exitValue in JhoveServiceImpl als Kommentar maskiert, weil diese nicht verwendet wird
+ - exitValue in PdftronServiceImpl als Kommentar maskiert, weil diese nicht verwendet wird
