@@ -1,7 +1,7 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: MessageConstants.java 14 2011-07-21 07:07:28Z u2044 $
+$Id: MessageConstants.java 25 2011-09-29 08:46:27Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -65,6 +65,7 @@ public interface MessageConstants {
     String MESSAGE_VALIDATION_INTERRUPTED               = "message.validation.interrupted";
     String MESSAGE_VALIDATION_FINISHED                  = "message.validation.finished";
 	String MESSAGE_MODULE_WAIT                          = "message.module.wait";
+	String MESSAGE_MODULE_WAITZAEHLER                   = "message.module.waitzaehler";
     String MESSAGE_MODULE_VALID                         = "message.module.valid";
     String MESSAGE_MODULE_INVALID                       = "message.module.invalid";
     String MESSAGE_MODULE_INVALID_2ARGS                 = "message.module.invalid.2args";
@@ -150,6 +151,7 @@ public interface MessageConstants {
     
     // Modul 2c Meldungen
     String MESSAGE_MODULE_BC_FILEMISSING                = "message.module.bc.filemissing";
+    String MESSAGE_MODULE_BC_FILEMISSINGO                = "message.module.bc.filemissingo";
     
     // Modul 2d Meldungen
     String MESSAGE_MODULE_BD_MISSINGINABLIEFERUNG       = "message.module.bd.missinginablieferung";

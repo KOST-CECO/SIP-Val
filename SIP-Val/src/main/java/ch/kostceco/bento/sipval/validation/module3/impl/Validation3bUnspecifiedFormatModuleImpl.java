@@ -1,7 +1,7 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation3bUnspecifiedFormatModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
+$Id: Validation3bUnspecifiedFormatModuleImpl.java 25 2011-09-29 08:46:27Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -57,7 +57,8 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
         Map<String, File> filesInSipFile = new HashMap<String, File>();
 
         String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
-    	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
+        Integer zaehlerWait = 1;
+        System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAITZAEHLER, zaehlerWait));
         System.out.flush();
 
         if (nameOfSignature == null) {
@@ -136,11 +137,22 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
                     
                     String extensionConfig = hPuids.get(ff.getPUID());
                     
+                    // Fehlermeldung: [3b] -- content/2_DATEN/daten_VALIDA.siard (fmt/18 = pdf v1.4)
                     if (extensionConfig == null) {
-                        getMessageService().logError(
-                                getTextResourceService().getText(MESSAGE_MODULE_Cb) + 
-                                getTextResourceService().getText(MESSAGE_DASHES) +  fileKey + " (" + ff.getPUID() + ")");
-                        valid = false;
+                        
+                        if (ff.getVersion() == null) {
+                            getMessageService().logError(
+                                    getTextResourceService().getText(MESSAGE_MODULE_Cb) + 
+                                    getTextResourceService().getText(MESSAGE_DASHES) +  fileKey + " (" + ff.getPUID() + " = " + ff.getExtension(x) + ")");
+                            valid = false;
+
+                        } else {
+                            getMessageService().logError(
+                                    getTextResourceService().getText(MESSAGE_MODULE_Cb) + 
+                                    getTextResourceService().getText(MESSAGE_DASHES) +  fileKey + " (" + ff.getPUID() + " = " + ff.getExtension(x) + " v" + ff.getVersion() + ")");
+                            valid = false;
+                        }
+
                         
                         if (counterPuid.get(ff.getPUID()) == null) {
                             counterPuid.put(ff.getPUID(), new Integer(1));
@@ -153,6 +165,15 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
                 }
 
             }
+            System.out.print("\r                                                                                                                                     ");
+            System.out.flush();
+            System.out.print("\r");
+            System.out.flush();
+
+            zaehlerWait = zaehlerWait + 1;
+
+            System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAITZAEHLER, zaehlerWait));
+            System.out.flush();
             
         }
         System.out.print("\r                                                                                                                                     ");

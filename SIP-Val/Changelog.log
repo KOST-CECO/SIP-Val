@@ -1,6 +1,51 @@
+Changelog seit der Version 1.0.6 (Stand 29.09.2011)
+===================================================
+
+Changelog seit der Version 1.0.5 (Stand 12.09.2011)
+===================================================
+29.09.2011 by Rc
+ - Version auf 1.0.6 erhöht (SIPValidator.java sowie (fr_)messages.properties )
+ - 2c mit der Überprüfung zusätzliche Primär-Ordner ergänzt 
+ - Handbücher (DE und FR) mit den Änderungen angepasst
+
+28.09.2011 by Rc
+ - message.module.waitzaehler bei Schleifen eingefügt die viel Zeit benötigen (2b, 3a, 3b und 3c)
+   dieser gibt die "Bearbeitungsschrittnummer" aus. Entsprechend wurden folgende Dateien angepasst:
+    - (fr_)messages.properties
+    - MessageConstants.java
+    - Validation2bChecksumModuleImpl.java
+    - Validation3aFormatRecognitionModuleImpl.java
+    - Validation3bUnspecifiedFormatModuleImpl.java
+    - Validation3cFormatValidationModuleImpl.java
+
+26.09.2011 by Rc
+ - Modul 2b - Pruefsummenvalidierung - komplett überarbeitet.
+    - überprüft jetzt nebst MD5 auch SHA1 und SHA 256 und dies je nach 
+      metadata.xml-Eintrag der entsprechenden Datei
+
+19.09.2011 by Rc
+ - im Modul 2a - Zusätzliche Primärdateien - wird jetzt auch der korrekten Ordner geprüft.
+   entsprechend wurde 2a komplett überarbeitet und die Fehlermeldungen von 2a und 2c 
+   verdeutlicht in (fr_)messages.properties. 
+
+15.09.2011 by Rc
+ - In Validation3bUnspecifiedFormatModuleImpl.java bei der Logausgabe die 
+   PUID mit der Extension und Version ergänzt (z.B. fmt/18 = pdf v1.4).
+
 Changelog seit der Version 1.0.4 (Stand 25.07.2011)
 ===================================================
- 
+12.09.2011 by Rc
+ - Version auf 1.0.5 erhöht (SIPValidator.java sowie (fr_)messages.properties )
+ - aufgrund der neuen DROID-Signatur musste nicht nur letztere angepasst werden 
+   (DROID_SignatureFile_V52-kc.xml) sondern auch die sipvalidator.conf.xml und die 
+   entsprechenden Handbücher. Am src wurden ansonsten keine Änderungen vorgenommen.
+    - DROID_SignatureFile_V52-kc.xml: Korrekturen im Bereich PDF/A (fmt/95 und fmt/354)
+    - sipvalidator.conf.xml: 
+       . Die Unterscheidung zwischen 1a (fmt/95) und 1b (fmt/354) eingepflegt
+       . Die Aufhebung der verschiedenen TIFF-Versionen eingepflegt (neu nur noch fmt/353)
+    - Handbücher:
+       . Anpassungen in der Konfiguration nachgepflegt
+       . Hinweis auf die Validierung PDF/A-1b auch wenn als 1a erkannt 
 
 Changelog seit der Version 1.0.3 (Stand 20.07.2011)
 ===================================================

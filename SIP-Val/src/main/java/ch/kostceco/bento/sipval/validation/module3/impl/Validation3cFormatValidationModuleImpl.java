@@ -1,7 +1,7 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation3cFormatValidationModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
+$Id: Validation3cFormatValidationModuleImpl.java 25 2011-09-29 08:46:27Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -97,7 +97,8 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
     public boolean validate(File sipDatei) throws Validation3cFormatValidationException {
         
         boolean isValid = true;
-    	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
+        Integer zaehlerWait = 1;
+        System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAITZAEHLER, zaehlerWait));
         System.out.flush();
         
         Map<String, File> filesInSipFile = new HashMap<String, File>();
@@ -298,6 +299,16 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
                         getTextResourceService().getText(MESSAGE_MODULE_CC_NOJHOVEVAL) + 
                         extension);
             }
+            System.out.print("\r                                                                                                                                     ");
+            System.out.flush();
+            System.out.print("\r");
+            System.out.flush();
+
+            zaehlerWait = zaehlerWait + 1;
+
+            System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAITZAEHLER, zaehlerWait));
+            System.out.flush();
+
 
         }
         
@@ -492,6 +503,15 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 
                 return false;
             }
+            System.out.print("\r                                                                                                                                     ");
+            System.out.flush();
+            System.out.print("\r");
+            System.out.flush();
+
+            zaehlerWait = zaehlerWait + 1;
+
+            System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAITZAEHLER, zaehlerWait));
+            System.out.flush();
         }
        
         System.out.print("\r                                                                                                                                     ");

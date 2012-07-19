@@ -1,7 +1,7 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation2cSurplusFilesModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
+$Id: Validation2cSurplusFilesModuleImpl.java 25 2011-09-29 08:46:27Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -60,22 +60,21 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl imp
         boolean valid = true;
         FileEntry metadataxml = null;
         Map<String, String> filesInSipFile = new HashMap<String, String>();
+        Map<String, String> filesInSipFileO = new HashMap<String, String>();
         Map<String, String> filesInMetadata = new HashMap<String, String>();
-        
+        Map<String, String> filesInMetadataO = new HashMap<String, String>(); 
         
         try {
             Zip64File zipfile = new Zip64File(sipDatei);
             List<FileEntry> fileEntryList = zipfile.getListFileEntries();
             for (FileEntry fileEntry : fileEntryList) {
                 
-                //System.out.println(fileEntry.getName());
-
                 if (fileEntry.getName().equals("header/" + METADATA) || 
                         fileEntry.getName().equals(toplevelDir + "/header/" + METADATA)) {
                     metadataxml = fileEntry;
                 }
                 
-                if (!fileEntry.isDirectory()) {
+                // schreibt alle Dateien und Ordner exkl. metadata(O).xml in filesInSipFile
                     if (!fileEntry.getName().equals("header/" + METADATA) && 
                         !fileEntry.getName().equals(toplevelDir + "/header/" + METADATA)) {
                         
@@ -83,11 +82,14 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl imp
                         String toReplace = toplevelDir + "/";
                         fileName = fileName.replace(toReplace, "");
                         
-                        filesInSipFile.put(fileName, fileName);
-                        
+                        if (fileEntry.isDirectory()) {
+                            fileName = fileName.substring(0, fileName.length()-1);
+                            filesInSipFileO.put(fileName, fileName);
+                            } else {
+                            	filesInSipFile.put(fileName, fileName);
+                            }
                     }
-                }
-
+                                   
             }
             
             // keine metadata.xml in der SIP-Datei gefunden
@@ -103,6 +105,7 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl imp
             EntryInputStream eis = zipfile.openEntryInputStream(metadataxml.getName());
             BufferedInputStream is = new BufferedInputStream(eis);
 
+            // Liest alle Dateien aus Metadata.xml
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
@@ -153,11 +156,16 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl imp
                 return false;
             }
 
+
+
+            // entfernt in filesInSipFile alle Einträge die in Metadata aufgeführt sind --> Rest sind zusätzliche
             Set<String> keysInMetadata = filesInMetadata.keySet();
+
             for (Iterator<String> iterator = keysInMetadata.iterator(); iterator.hasNext();) {
                 String keyMetadata = iterator.next();
                 filesInSipFile.remove(keyMetadata);
             }
+           
 
             Set<String> keysInSipfile = filesInSipFile.keySet();
             for (Iterator<String> iterator = keysInSipfile.iterator(); iterator.hasNext();) {
@@ -167,8 +175,83 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl imp
                         getTextResourceService().getText(MESSAGE_MODULE_Bc) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         getTextResourceService().getText(MESSAGE_MODULE_BC_FILEMISSING, keySipfile));
-                valid = false;                
+                valid = false; 
             }
+            
+            EntryInputStream eisO = zipfile.openEntryInputStream(metadataxml.getName());
+            BufferedInputStream isO = new BufferedInputStream(eisO);
+
+            // Liest alle Ordner aus Metadata.xml
+            try {
+                DocumentBuilderFactory dbfO = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dbO = dbfO.newDocumentBuilder();
+                Document docO = dbO.parse(isO);
+                docO.normalize();
+                NodeList nodeLstO = docO.getElementsByTagName("ordner");
+
+                for (int sO = 0; sO < nodeLstO.getLength(); sO++) {
+                    Node dateiNodeO = nodeLstO.item(sO);
+
+                    NodeIterator nlO = XPathAPI.selectNodeIterator(dateiNodeO, "name");
+                    Node nameNodeO = nlO.nextNode();
+                    String pathO = nameNodeO.getTextContent();
+                                       
+                    boolean topReachedO = false;
+
+                    while (!topReachedO) {
+
+                        Node parentNodeO = dateiNodeO.getParentNode();
+                        if (parentNodeO.getNodeName().equals("inhaltsverzeichnis")) {
+                            topReachedO = true;
+                            break;
+                        }
+
+                        NodeList childrenNodesO = parentNodeO.getChildNodes();
+                        for (int xO = 0; xO < childrenNodesO.getLength(); xO++) {
+                            Node childNodeO = childrenNodesO.item(xO);
+
+                            if (childNodeO.getNodeName().equals("name")) {
+                                pathO = childNodeO.getTextContent() + "/" + pathO;
+                                if (dateiNodeO.getParentNode() != null) {
+                                    dateiNodeO = dateiNodeO.getParentNode();
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    filesInMetadataO.put(pathO, pathO);
+                    pathO = "";
+
+                }
+            } catch (Exception e) {
+                getMessageService().logError(
+                    getTextResourceService().getText(MESSAGE_MODULE_Bc) + 
+                    getTextResourceService().getText(MESSAGE_DASHES) + 
+                    e.getMessage());                                
+                return false;
+            }
+
+            // entfernt in filesInSipFileO alle Einträge die in MetadataO aufgeführt sind --> Rest sind zusätzliche
+            Set<String> keysInMetadataO = filesInMetadataO.keySet();
+
+            for (Iterator<String> iterator = keysInMetadataO.iterator(); iterator.hasNext();) {
+                String keyMetadataO = iterator.next();
+                filesInSipFileO.remove(keyMetadataO);
+            }
+           
+
+            Set<String> keysInSipfileO = filesInSipFileO.keySet();
+            for (Iterator<String> iterator = keysInSipfileO.iterator(); iterator.hasNext();) {
+                String keySipfileO = iterator.next();
+
+                getMessageService().logError(
+                        getTextResourceService().getText(MESSAGE_MODULE_Bc) + 
+                        getTextResourceService().getText(MESSAGE_DASHES) + 
+                        getTextResourceService().getText(MESSAGE_MODULE_BC_FILEMISSINGO, keySipfileO));
+                valid = false; 
+            }
+
             
             zipfile.close();
             is.close();
