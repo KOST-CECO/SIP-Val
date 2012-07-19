@@ -1,0 +1,38 @@
+Komponente																Version
+----------                                -------
+
+commons-logging-1.1.1.jar									1.1.1
+log4j-1.2.12.jar													1.2.12
+jhove-1.5.jar															1.5
+jhove-handler-1.5.jar											1.5
+jhove-module-1.5.jar											1.5
+spring-core-3.0.0.RELEASE.jar							3.0.0
+spring-asm-3.0.0.RELEASE.jar							3.0.0
+spring-orm-3.0.0.RELEASE.jar							3.0.0
+spring-beans-3.0.0.RELEASE.jar						3.0.0
+spring-jdbc-3.0.0.RELEASE.jar							3.0.0
+spring-tx-3.0.0.RELEASE.jar								3.0.0
+spring-aop-3.0.0.RELEASE.jar							3.0.0
+spring-context-3.0.0.RELEASE.jar					3.0.0
+spring-expression-3.0.0.RELEASE.jar				3.0.0
+spring-security-core-3.0.0.RELEASE.jar		3.0.0
+spring-test-3.0.0.RELEASE.jar							3.0.0
+junit-4.4.jar															4.4
+xalan-j_2.7.0.jar													2.7.0
+xercesImpl-2.7.1.jar											2.7.1
+xml-apis-2.7.1.jar												2.7.1
+commons-configuration-1.6.jar							1.6
+commons-collections-3.2.1.jar							3.2.1
+commons-lang-2.4.jar											2.4
+commons-digester-1.8.jar									1.8
+droid-core-5.0.3.jar											5.0.3
+droid-export-5.0.3.jar										5.0.3
+droid-export-interfaces-5.0.3.jar					5.0.3
+droid-help-5.0.3.jar											5.0.3
+droid-report-5.0.3.jar										5.0.3
+droid-report-interfaces-5.0.3.jar					5.0.3
+droid-results-5.0.3.jar										5.0.3
+zip64-1.0.jar															1.0
+zip64file-1.0.jar													1.0
+
+
