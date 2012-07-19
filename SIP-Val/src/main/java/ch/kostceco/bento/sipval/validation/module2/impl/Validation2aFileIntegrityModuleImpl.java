@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation2aFileIntegrityModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -40,6 +41,9 @@ import ch.kostceco.bento.sipval.validation.module2.Validation2aFileIntegrityModu
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
+/**
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl implements
         Validation2aFileIntegrityModule {
@@ -121,20 +125,6 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
                     String keyInMetadata = iterator.next();
                     if (!filesInSipFile.containsKey(keyInMetadata)) {
                         
-                        // TODO: der TextResourceService scheint in einem eigenen Thread zu laufen!!!
-                        // Die Ausgaben im Log sind jedenfalls nicht synchron.
-                       
-                        /**
-                         * 
-                         * logError mit MESSAGE_MODULE_BA_FILEMISSING ergänzt
-                         * 
-                         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 06.04.2011
-                         *
-                         * getMessageService().logError(
-                         *       getTextResourceService().getText(MESSAGE_MODULE_Ba) + 
-                         *       getTextResourceService().getText(MESSAGE_DASHES) + keyInMetadata);
-                         *       
-                         */         
                         getMessageService().logError(
                                 getTextResourceService().getText(MESSAGE_MODULE_Ba) + 
                                 getTextResourceService().getText(MESSAGE_DASHES) + 

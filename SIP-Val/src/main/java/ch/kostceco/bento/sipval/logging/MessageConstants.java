@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: MessageConstants.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -16,32 +17,38 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
+   /**
+   * 
+   * Komplettüberarbeitung der Message- und Error-Meldungen (De & Fr)
+   * d.h. 26 nicht gebrauchte Meldungen in src/main/resources/messages.properties (De & Fr)
+   * und in MessageConstants.java wurden gelöscht
+   * 
+   * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.9.2, date 23.05.2011
+   *
+   */
+
+
 package ch.kostceco.bento.sipval.logging;
 /**
  * Interface für den Zugriff auf Resourcen aus dem ResourceBundle.
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 public interface MessageConstants {
 
-    // Initialisierung und Parameter-Ueberprüfung
+    // Initialisierung und Parameter-Ueberpruefung
+	String MESSAGE_WAIT                                 = "message.wait";
     String ERROR_PARAMETER_USAGE                        = "error.parameter.usage";
-    String ERROR_CONFIGURATION_CANNOTCREATECONFIGDIR    = "error.configuration.cannotcreateconfigdir";
     String ERROR_LOGDIRECTORY_NODIRECTORY               = "error.logdirectory.nodirectory";
     String ERROR_LOGDIRECTORY_NOTWRITABLE               = "error.logdirectory.notwritable";
-    String ERROR_SIPFILE_NOTAFILE                       = "error.sipfile.notafile";
     String ERROR_SIPFILE_FILENOTEXISTING                = "error.sipfile.filenotexisting";
     String ERROR_LOGGING_NOFILEAPPENDER                 = "error.logging.nofileappender";
     String ERROR_CANNOTCREATEZIP                        = "error.cannotcreatezip";
     String ERROR_PARAMETER_OPTIONAL_1                   = "error.parameter.optional.1";
     String ERROR_PARAMETER_OPTIONAL_2                   = "error.parameter.optional.2";
-    String ERROR_DECOMPRESSING                          = "error.decompressing";
     String ERROR_JHOVEAPP_MISSING                       = "error.jhoveapp.missing";
     String ERROR_JHOVECONF_MISSING                      = "error.jhoveconf.missing";
     
     String ERROR_WRONG_JRE                              = "error.wrong.jdk";
-    String ERROR_JRE_VERSION_UNREADABLE                 = "error.jre.version.unreadable";
     
     String MESSAGE_TOTAL_VALID                          = "message.total.valid";
     String MESSAGE_TOTAL_INVALID                        = "message.total.invalid";
@@ -57,8 +64,7 @@ public interface MessageConstants {
     String MESSAGE_SIPVALIDATION                        = "message.sipvalidation";
     String MESSAGE_VALIDATION_INTERRUPTED               = "message.validation.interrupted";
     String MESSAGE_VALIDATION_FINISHED                  = "message.validation.finished";
-    String MESSAGE_VALIDATION_TOTAL                     = "message.validation.total";
-    String MESSAGE_LOGGING_CANNOTCREATE                 = "message.logging.cannotcreate";
+	String MESSAGE_MODULE_WAIT                          = "message.module.wait";
     String MESSAGE_MODULE_VALID                         = "message.module.valid";
     String MESSAGE_MODULE_INVALID                       = "message.module.invalid";
     String MESSAGE_MODULE_INVALID_2ARGS                 = "message.module.invalid.2args";
@@ -77,8 +83,6 @@ public interface MessageConstants {
     String MESSAGE_MODULE_Cb                            = "message.module.cb";
     String MESSAGE_MODULE_Cc                            = "message.module.cc";
     String MESSAGE_MODULE_Cd                            = "message.module.cd";
-    String MESSAGE_MODULE_Ce                            = "message.module.ce";
-    String MESSAGE_MODULE_Cf                            = "message.module.cf";
     
     String MESSAGE_STEPERGEBNIS_Aa                      = "message.stepergebnis.aa";
     String MESSAGE_STEPERGEBNIS_Ab                      = "message.stepergebnis.ab";
@@ -110,9 +114,6 @@ public interface MessageConstants {
     
     // Modul 1 Meldungen
     String ERROR_MODULE_A_INCORRECTFILEENDING           = "error.module.a.incorrectfileending";
-    String MESSAGE_MODULE_A_DEFLATED                    = "message.module.a.deflated";
-    String MESSAGE_MODULE_A_STORED                      = "message.module.a.stored";
-    String ERROR_MODULE_A_NOTREADABLE                   = "message.module.a.notreadable";
 
     // Modul 1c Meldungen
     String MESSAGE_MODULE_AC_NOTALLOWEDFILE             = "message.module.ac.notallowedfile";
@@ -120,10 +121,10 @@ public interface MessageConstants {
     String MESSAGE_MODULE_AC_PATHTOOLONG                = "message.module.ac.pathtoolong";
     String MESSAGE_MODULE_AC_FILENAMETOOLONG            = "message.module.ac.filenametoolong";
     String MESSAGE_MODULE_AC_INVALIDCHARACTERS          = "message.module.ac.invalidcharacters";
+    String MESSAGE_MODULE_AC_INVALIDREGEX               = "message.module.ac.invalidregex";
     String MESSAGE_MODULE_AC_INVALIDFILENAME            = "message.module.ac.invalidfilename";
     
     // Modul 1d Meldungen
-    String ERROR_MODULE_AD_CANNOTCREATEOUTPUTFOLDER     = "error.module.ad.cannotcreateoutputfolder";
     String ERROR_MODULE_AD_WRONGNUMBEROFXSDS            = "error.module.ad.wrongnumberofxsds";
     String ERROR_MODULE_AD_METADATA_ERRORS              = "error.module.ad.metadata.errors";
     
@@ -141,65 +142,34 @@ public interface MessageConstants {
     String MESSAGE_MODULE_BA_FILEMISSING                = "message.module.ba.filemissing";
     
     // Modul 2b Meldungen
-    String ERROR_MODULE_BB_WRONGCHECKSUM                = "error.module.bb.wrongchecksum";
-    /**
-     * 
-     * String ERROR_MODULE_BB_MISSINGINSIP als Kommentarmarkiert, da diese bereits beim
-     * 2a ausgegeben wird und nicht eine Fehlermeldung von 2b ist
-     * 
-     * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 06.04.2011
-     *
-     * String ERROR_MODULE_BB_MISSINGINSIP                 = "error.module.bb.missinginsip";
-     *       
-     */         
     String ERROR_MODULE_BB_CANNOTPROCESSMD5             = "error.module.bb.cannotprocessmd5";
     String ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5         = "error.module.bb.cannotclosestreammd5";
+    String MESSAGE_MODULE_Bb_WRONGMD5                   = "error.module.bb.wrongmd5";
+    String MESSAGE_MODULE_Bb_NOTMD5                     = "error.module.bb.notmd5";
+    
     
     // Modul 2c Meldungen
     String MESSAGE_MODULE_BC_FILEMISSING                = "message.module.bc.filemissing";
     
     // Modul 2d Meldungen
     String MESSAGE_MODULE_BD_MISSINGINABLIEFERUNG       = "message.module.bd.missinginablieferung";
-    /**
-     * 
-     * String MESSAGE_MODULE_BD_MISSINGINCONTENT als Kommentar markiert, da dieser nicht einen
-     * Bestandteil von 2d ist (Diese Dateien wurden kassiert)
-     * 
-     * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 06.04.2011
-     *
-     * String MESSAGE_MODULE_BD_MISSINGINCONTENT           = "message.module.bd.missingincontent";
-     *       
-     */         
 
     // Modul 3a Meldungen
-    String MESSAGE_MODULE_CA_INVALIDPUID1               = "message.module.ca.invalidpuid1";
-    String MESSAGE_MODULE_CA_INVALIDPUID2               = "message.module.ca.invalidpuid2";
-    String MESSAGE_MODULE_CA_INVALIDPUID                = "message.module.ca.invalidpuid";
-    String MESSAGE_MODULE_CA_INVALIDEXT                 = "message.module.ca.invalidext";
-    String MESSAGE_MODULE_CA_UNIDENTIFIED               = "message.module.ca.unidentified";
     String MESSAGE_MODULE_CA_FILES                      = "message.module.ca.files";
     
     // Modul 3c Meldungen
     String MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT     = "message.module.cc.cannotwritejhovereport";
     String MESSAGE_MODULE_CC_INVALID                    = "message.module.cc.invalid";
     String MESSAGE_MODULE_CC_ERRORS_IN                  = "message.module.cc.errors.in";
-    String MESSAGE_MODULE_CC_JHOVE_REPORT_MISSING       = "message.module.cc.jhove.report.missing";
+    String MESSAGE_MODULE_CC_NOJHOVEVAL                 = "message.module.cc.nojhoveval";
     
     // Modul 3d Meldungen
-    String ERROR_MODULE_CD_DATUM_VON_AFTER_DATUM_BIS    = "error.module.cd.datum.von.after.datum.bis";
-    String ERROR_MODULE_CD_REGISTRIERDATUM_IN_FUTURE    = "error.module.cd.registrierdatum.in.future";
-    String ERROR_MODULE_CD_DATUM_ENTSTEHUNG_VON_IN_FUTURE    = "error.module.cd.datum.entstehung.von.in.future";
-    String ERROR_MODULE_CD_DATUM_ENTSTEHUNG_BIS_IN_FUTURE    = "error.module.cd.datum.entstehung.bis.in.future";
-    String ERROR_MODULE_CD_DATUM_VON_IN_FUTURE          = "error.module.cd.datum.von.in.future";
-    String ERROR_MODULE_CD_DATUM_BIS_IN_FUTURE          = "error.module.cd.datum.bis.in.future";
-    String ERROR_MODULE_CD_DATUM_VON_NOT_EXISTING       = "error.module.cd.datum.von.not.existing";
-    String ERROR_MODULE_CD_DATUM_BIS_NOT_EXISTING       = "error.module.cd.datum.bis.not.existing";
+    String ERROR_MODULE_CD_DATUM_ENTSTEHUNG_IN_FUTURE    = "error.module.cd.datum.entstehung.in.future";
+    String ERROR_MODULE_CD_DATUM_IN_FUTURE              = "error.module.cd.datum.in.future";
     
     String ERROR_MODULE_CD_INVALID_ABLIEFERUNG_RANGE    = "error.module.cd.invalid.ablieferung.range";
-    String ERROR_MODULE_CD_INVALID_DOSSIER_RANGE        = "error.module.cd.invalid.dossier.range";
     String ERROR_MODULE_CD_INVALID_DOSSIER_RANGE_CA     = "error.module.cd.invalid.dossier.range.ca";
     String ERROR_MODULE_CD_INVALID_DOSSIER_RANGE_CA_ABL = "error.module.cd.invalid.dossier.range.ca.abl";
-    String ERROR_MODULE_CD_INVALID_DOKUMENT_RANGE       = "error.module.cd.invalid.dokument.range";
     String ERROR_MODULE_CD_INVALID_DOKUMENT_RANGE_CA    = "error.module.cd.invalid.dokument.range.ca";
     String MESSAGE_MODULE_CD_NUMBER_OF_CONTENT_FILES    = "message.module.cd.numberofcontentfiles";
     String ERROR_MODULE_CD_UNPARSEABLE_DATE             = "error.module.cd.unparseable.date";

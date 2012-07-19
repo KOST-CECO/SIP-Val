@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: LogConfigurator.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -27,6 +28,10 @@ import org.apache.log4j.Logger;
 import ch.kostceco.bento.sipval.service.TextResourceService;
 
 public class LogConfigurator implements MessageConstants {
+
+    /**
+     * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+     */
 
     private static final ch.kostceco.bento.sipval.logging.Logger LOGGER = new ch.kostceco.bento.sipval.logging.Logger(
             LogConfigurator.class);

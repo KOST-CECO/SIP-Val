@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val v1.0.4 application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: SipValidator.java 20 2011-07-26 09:16:33Z u1942 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -34,9 +35,7 @@ import ch.kostceco.bento.sipval.util.Zip64Archiver;
 /**
  * Dies ist die Starter-Klasse, verantwortlich für das Initialisieren
  * des Controllers, des Loggings und das Parsen der Start-Parameter.
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 public class SipValidator implements MessageConstants {
 
@@ -75,48 +74,48 @@ public class SipValidator implements MessageConstants {
      * java -jar C:\ludin\A6Z-SIP-Validator\SIP-Beispiele etc\1.1.1.a)_SIP_20101018_RIS_4.zip C:\ludin\sipvalidator-logs +3d
      * 
      * @param args
-     * 
-     * 
      */
     public static void main(String[] args) {
-                
         
-        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:config/applicationContext.xml");
+         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:config/applicationContext.xml");
         
         // TODO: siehe Bemerkung im applicationContext-services.xml bezüglich Injection in der Superklasse aller Impl-Klassen
         //ValidationModuleImpl validationModuleImpl = (ValidationModuleImpl) context.getBean("validationmoduleimpl");
         
        
         SipValidator sipValidator = (SipValidator) context.getBean("sipvalidator");
+    	System.out.print(sipValidator.getTextResourceService().getText(MESSAGE_WAIT));
+        System.out.flush();
+
 
         // Ist die Anzahl Parameter (2) korrekt?
         if (args.length < 2) {
-            LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_PARAMETER_USAGE));
-            /**
-             * 
-             * MESSAGE_VALIDATION_INTERRUPTED als Kommentar maskiert, da unnötig
-             * 
-             * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 07.04.2011
-             * 
-             * LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_VALIDATION_INTERRUPTED));
-             * 
-             */
+            System.out.print("\r                                                                                                  ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+    		LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_PARAMETER_USAGE));
             System.exit(1);
         }
         
-        /**
-         * 
-         * MESSAGE_SIPVALIDATION mit sipDatei ergänzt
-         * 
-         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 31.03.2011
-         * 
-         */
         File sipDatei = new File(args[0]);
+        System.out.print("\r                                                                                                  ");
+		System.out.flush();
+        System.out.print("\r");
+		System.out.flush();
+
         LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_SIPVALIDATION, sipDatei.getName()));
+    	System.out.print(sipValidator.getTextResourceService().getText(MESSAGE_WAIT));
+        System.out.flush();
 
         // die Anwendung muss mindestens unter Java 6 laufen
         String javaRuntimeVersion = System.getProperty ("java.vm.version");        
         if (javaRuntimeVersion.compareTo ("1.6.0") < 0) {
+            System.out.print("\r                                                                                                  ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_WRONG_JRE));
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_VALIDATION_INTERRUPTED));
             System.exit(1);
@@ -126,6 +125,11 @@ public class SipValidator implements MessageConstants {
         File directoryOfLogfile = new File(args[1]);
         
         if (! directoryOfLogfile.isDirectory()) {
+            System.out.print("\r                                                                                                  ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_LOGDIRECTORY_NODIRECTORY));
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_VALIDATION_INTERRUPTED));
             System.exit(1);
@@ -133,23 +137,23 @@ public class SipValidator implements MessageConstants {
         
         // Im Logverzeichnis besteht kein Schreibrecht
         if (! directoryOfLogfile.canWrite()) {
+            System.out.print("\r                                                                                                  ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_LOGDIRECTORY_NOTWRITABLE));
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_VALIDATION_INTERRUPTED));
             System.exit(1);
         }
 
         // Ueberprüfung des 1. Parameters (SIP-Datei): existiert die Datei?
-        /**
-         * 
-         * File sipDatei = new File(args[0]); als Kommentarmarkiert, da diese neu bereits beim
-         * Start (MESSAGE_SIPVALIDATION) aufgerufen wird
-         * 
-         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 31.03.2011
-         *
-         * File sipDatei = new File(args[0]);
-         *       
-         */         
         if (! sipDatei.exists()) {
+            System.out.print("\r                                                                                                  ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_SIPFILE_FILENOTEXISTING));
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_VALIDATION_INTERRUPTED));
             System.exit(1);
@@ -162,7 +166,7 @@ public class SipValidator implements MessageConstants {
         // Archive gleichartig behandelt werden können, egal ob es sich um eine Verzeichnisstruktur oder ein 
         // Zip-File handelt.
         String originalSipName = sipDatei.getAbsolutePath();
-        if (sipDatei.isDirectory()) {            
+        if (sipDatei.isDirectory()) {
             String workDir = sipValidator.getConfigurationService().getPathToWorkDir();          
             File tmpDir = new File(workDir);
             if (tmpDir.exists()) {
@@ -176,21 +180,45 @@ public class SipValidator implements MessageConstants {
                 sipDatei = targetFile;
             
             } catch (Exception e) {
+                System.out.print("\r                                                                                                  ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_CANNOTCREATEZIP));
                 System.exit(1);
+            } 
+
+
+        } else {
+                // Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+                String pathToWorkDir = sipValidator.getConfigurationService().getPathToWorkDir();
+                File workDir = new File(pathToWorkDir);
+                if (workDir.exists()) {
+                    Util.deleteDir(workDir);
+                }
+                workDir.mkdir();
             }
             
-        }
-       
         
         // Ueberprüfung der optionalen Parameter (3. und 4.)
         if (args.length == 3 && !(args[2].equals("+3c") || args[2].equals("+3d")) ) {
+            System.out.print("\r                                                                                                  ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_PARAMETER_OPTIONAL_1));
             System.exit(1);
         }
         
         if (args.length == 4 && !(args[2].equals("+3c") && args[3].equals("+3d")) ) {
-            LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_PARAMETER_OPTIONAL_2));
+            System.out.print("\r                                                             ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
+    		LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_PARAMETER_OPTIONAL_2));
             System.exit(1);
         }
         
@@ -199,6 +227,11 @@ public class SipValidator implements MessageConstants {
             String jhoveApp = sipValidator.getConfigurationService().getPathToJhoveJar();
             File fJhoveApp = new File(jhoveApp);
             if (!fJhoveApp.exists() || !fJhoveApp.getName().equals("JhoveApp.jar")) {
+                System.out.print("\r                                                                                                  ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_JHOVEAPP_MISSING));
                 System.exit(1);            
             }
@@ -208,6 +241,11 @@ public class SipValidator implements MessageConstants {
             String jhoveConf = sipValidator.getConfigurationService().getPathToJhoveConfiguration();
             File fJhoveConf = new File(jhoveConf);
             if (!fJhoveConf.exists() || !fJhoveConf.getName().equals("jhove.conf")) {
+                System.out.print("\r                                                                                                  ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 LOGGER.logInfo(sipValidator.getTextResourceService().getText(ERROR_JHOVECONF_MISSING));
                 System.exit(1);            
             }
@@ -217,13 +255,11 @@ public class SipValidator implements MessageConstants {
         LogConfigurator logConfigurator = (LogConfigurator) context.getBean("logconfigurator");
         String logFileName = logConfigurator.configure(directoryOfLogfile.getAbsolutePath(), sipDatei.getName());
 
-        /**
-         * 
-         * MESSAGE_SIPVALIDATION mit sipDatei ergänzt
-         * 
-         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 31.03.2011
-         * 
-         */
+        System.out.print("\r                                                                                                  ");
+		System.out.flush();
+        System.out.print("\r");
+		System.out.flush();
+
         LOGGER.logError(sipValidator.getTextResourceService().getText(MESSAGE_SIPVALIDATION, sipDatei.getName()));
 
         Controller controller = (Controller) context.getBean("controller");        
@@ -273,8 +309,6 @@ public class SipValidator implements MessageConstants {
             LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_FOOTER_REPORTPDFTRON, Util.getPathToReportPdftron()));
         }
         
-        
-        
         LOGGER.logInfo("");
         LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_FOOTER_SIP, originalSipName));
         LOGGER.logInfo(sipValidator.getTextResourceService().getText(MESSAGE_FOOTER_LOG, logFileName));
@@ -287,6 +321,7 @@ public class SipValidator implements MessageConstants {
         }
 
         // Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+        
         String pathToWorkDir = sipValidator.getConfigurationService().getPathToWorkDir();
         File workDir = new File(pathToWorkDir);
         if (workDir.exists()) {
@@ -294,8 +329,20 @@ public class SipValidator implements MessageConstants {
         }
         if (ok) {
             System.exit(0);            
+            // Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+            if (workDir.exists()) {
+                Util.deleteDir(workDir);
+            }
+
         } else {
             System.exit(2);            
+            // Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+            if (workDir.exists()) {
+                Util.deleteDir(workDir);
+            }
+        if (workDir.exists()) {
+            Util.deleteDir(workDir);
+        	}
         }
         
         

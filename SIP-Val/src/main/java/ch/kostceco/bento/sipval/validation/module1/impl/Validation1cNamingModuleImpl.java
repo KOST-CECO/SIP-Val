@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation1cNamingModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -35,11 +36,8 @@ import ch.kostceco.bento.sipval.validation.module1.Validation1cNamingModule;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 /**
- * 
  * Diverse Validierungen zu den Namen der Files und Ordner, erlaubte Längen, verwendete Zeichen usw.
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 public class Validation1cNamingModuleImpl extends ValidationModuleImpl implements Validation1cNamingModule {
 
@@ -89,6 +87,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
                     }
                 }
                 
+                zipfile2.close();
+    
                 
             }
         } catch (Exception e) {
@@ -101,11 +101,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
         
         // II.) Validierung des Formats des Dateinamen
         
-        // TODO: nach dem Test muss die Variante mit dem "^" aktiviert werden!!!!
-        patternStr = "^SIP_[0-9]*_\\w*"; 
-        //patternStr = "SIP_[0-9]*_\\w*"; 
-        pattern = Pattern.compile(patternStr); 
-        Matcher matcher = pattern.matcher(fileName);
+        patternStr = getConfigurationService().getAllowedSipName();  
+        Pattern p = Pattern.compile(patternStr); 
+        Matcher matcher = p.matcher(fileName);
         
         boolean matchFound = matcher.find(); 
         if (!matchFound) {

@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation2bChecksumModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -44,6 +45,9 @@ import ch.kostceco.bento.sipval.validation.module2.Validation2bChecksumModule;
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
+/**
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public class Validation2bChecksumModuleImpl extends ValidationModuleImpl implements Validation2bChecksumModule {
 
@@ -61,6 +65,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
         Map<String, String> filesInMetadata = new HashMap<String, String>();
 
         try {
+        	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
+            System.out.flush();
+
             Zip64File zipfile = new Zip64File(sipDatei);
             List<FileEntry> fileEntryList = zipfile.getListFileEntries();
             for (FileEntry fileEntry : fileEntryList) {
@@ -98,13 +105,17 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                         
                         filesInSipFile.put(fileName, output);
                         
-                        //filesInSipFile.put(fileEntry.getName(), output);
-
                     } catch (IOException e) {
                         getMessageService().logError(
                                 getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
                                 getTextResourceService().getText(MESSAGE_DASHES) + 
                                 getTextResourceService().getText(ERROR_MODULE_BB_CANNOTPROCESSMD5));                                
+                        
+                        System.out.print("\r                                                                                                                                     ");
+                		System.out.flush();
+                        System.out.print("\r");
+                		System.out.flush();
+
                         return false;
 
                     } finally {
@@ -116,6 +127,12 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                                     getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
                                     getTextResourceService().getText(MESSAGE_DASHES) + 
                                     getTextResourceService().getText(ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5));                                
+                            
+                            System.out.print("\r                                                                                                                                     ");
+                    		System.out.flush();
+                            System.out.print("\r");
+                    		System.out.flush();
+
                             return false;
                         }
                     }
@@ -128,6 +145,12 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                         getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         getTextResourceService().getText(ERROR_MODULE_AE_NOMETADATAFOUND));                                
+                
+                System.out.print("\r                                                                                                                                     ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 return false;
             }
 
@@ -150,7 +173,31 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                     NodeIterator nl2 = XPathAPI.selectNodeIterator(dateiNode, "pruefsumme");
                     Node pruefsummeNode = nl2.nextNode();                    
                     String pruefsumme = pruefsummeNode.getTextContent();
+
+                    NodeIterator nl3 = XPathAPI.selectNodeIterator(dateiNode, "pruefalgorithmus");
+                    Node pruefalgorithmusNode = nl3.nextNode();                    
+                    String pruefalgorithmus = pruefalgorithmusNode.getTextContent();
                     
+                    String pruefalgorithmusMD5 = "MD5";
+
+                	if (!pruefalgorithmus.equals(pruefalgorithmusMD5)) {
+                		// pruefalgorithmus ist nicht MD5 und wird von SIP-Val noch nicht unterstützt
+                        System.out.print("\r                                                                                                                                     ");
+                		System.out.flush();
+                        System.out.print("\r");
+                		System.out.flush();
+
+                        valid = false;
+
+                        getMessageService().logError(
+                                getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
+                                getTextResourceService().getText(MESSAGE_DASHES) + 
+                                getTextResourceService().getText(MESSAGE_MODULE_Bb_NOTMD5, pruefalgorithmus, path));     
+                        pruefsumme = "123";
+                        path = "123";
+
+                	}
+
                     boolean topReached = false;
 
                     while (!topReached) {
@@ -185,6 +232,12 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                         getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         e.getMessage());                                
+                
+                System.out.print("\r                                                                                                                                     ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 return false;
             }
 
@@ -197,26 +250,20 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
 
                 if (pruefsummeSip == null) {
                     // Die Datei wird im metadata.xml aufgeführt, befindet sich aber nicht in der SIP Datei:
-                    /**
-                     * 
-                     * String ERROR_MODULE_BB_MISSINGINSIP als Kommentarmarkiert, da diese bereits beim
-                     * 2a ausgegeben wird und nicht eine Fehlermeldung von 2b ist
-                     * 
-                     * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 06.04.2011
-                     *
-                     * getMessageService().logError(
-                     *       getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
-                     *       getTextResourceService().getText(MESSAGE_DASHES) + 
-                     *       getTextResourceService().getText(ERROR_MODULE_BB_MISSINGINSIP, keyMetadata));
-                     *       
-                     */         
                 } else {
-                    if (!pruefsummeSip.equals(pruefsummeMetadata)) {
-                        getMessageService().logError(
+                		if (!pruefsummeSip.equals(pruefsummeMetadata)) {
+                			getMessageService().logError(
                                 getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
-                                getTextResourceService().getText(MESSAGE_DASHES) + keyMetadata);
+                                getTextResourceService().getText(MESSAGE_DASHES) + 
+                                getTextResourceService().getText(MESSAGE_MODULE_Bb_WRONGMD5, keyMetadata));
+                        
+                        System.out.print("\r                                                                                                                                     ");
+                		System.out.flush();
+                        System.out.print("\r");
+                		System.out.flush();
+
                         valid = false;
-                    }
+                		}
                 }
             }
 
@@ -228,8 +275,18 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl impleme
                     getTextResourceService().getText(MESSAGE_MODULE_Bb) + 
                     getTextResourceService().getText(MESSAGE_DASHES) + 
                     e.getMessage());                                
+            
+            System.out.print("\r                                                                                                                                     ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             return false;
         }
+        System.out.print("\r                                                                                                                                     ");
+		System.out.flush();
+        System.out.print("\r");
+		System.out.flush();
 
         return valid;
 

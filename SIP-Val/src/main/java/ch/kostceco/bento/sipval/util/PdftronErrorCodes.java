@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: PdftronErrorCodes.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -22,17 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  * Mit dieser Klasse werden die Error Codes, welche von Pdftron generiert werden, übersetzt.
  * Bsp: 
  * <Error Code="e_PDFA173" Message="The value of Length does not match the number of bytes" ...
  * wobei die erste Ziffer nach e_PDFA den Code darstellt.
- * 
  * Als Code kann auch "e_PDF_Unknown" zurückgegeben werden, dies wird dann als Code 0 / General 
  * interpretiert.
- * 
  */
 
 public class PdftronErrorCodes {

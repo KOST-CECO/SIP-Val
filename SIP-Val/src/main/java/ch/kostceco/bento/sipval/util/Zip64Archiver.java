@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Zip64Archiver.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -30,9 +31,7 @@ import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  * Diese Klasse benutzt die Zip64File Library zum Komprimieren und Archivieren von Dateien, welche grösser
  * als 4 G sein können. Es gibt momentan keine andere Software ausser pkzip, welche ein kommerzielles Produkt ist,
  * die dazu in der Lage wäre. Bspw. führt Izarc die Archivierung zwar durch, aber erzeugt fehlerhafte Metadaten,
@@ -122,29 +121,5 @@ public class Zip64Archiver {
         zip64File.close();            
     }
 
-    public static void main(String[] args) {
-
-        // C:\ludin\A6Z-SIP-Validator\SIP-Beispiele etc\SIP_20101018_RIS_4
-        String sInputDir = "C:\\ludin\\A6Z-SIP-Validator\\SIP-Beispiele etc\\SIP_20101018_RIS_4";
-        //String sInputDir = "C:\\ludin\\A6Z-SIP-Validator\\SIP-Beispiele 20110112\\SIP_20110112_KOST_1a-2d.3c.3d(sehrGROSS)";
-        //String sInputDir = "C:\\ludin\\tmp10\\ArchivierungFehlersuche";
-        File inputDir = new File(sInputDir);
-
-        //String sOutpuFile = new String("C:\\ludin\\tmp10\\ArchivierungFehlersuche.zip");
-        //String sOutpuFile = new String("C:\\ludin\\tmp10\\SIP_20110112_KOST_1a-2d.3c.3d(sehrGROSS).zip");
-        String sOutpuFile = new String("C:\\ludin\\tmp2\\SIP_20101018_RIS_4.zip");
-        File outputFile = new File(sOutpuFile);
-
-        try {
-            Zip64Archiver.archivate(inputDir, outputFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ZipException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 }

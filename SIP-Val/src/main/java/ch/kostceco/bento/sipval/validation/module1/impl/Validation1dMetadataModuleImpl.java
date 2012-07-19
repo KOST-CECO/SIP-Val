@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation1dMetadataModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -49,6 +50,9 @@ import ch.kostceco.bento.sipval.validation.module1.Validation1dMetadataModule;
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
+/**
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public class Validation1dMetadataModuleImpl extends ValidationModuleImpl implements Validation1dMetadataModule {
 
@@ -101,6 +105,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
             Zip64File zipfile = new Zip64File(sipDatei);
             
             List<FileEntry> fileEntryList = zipfile.getListFileEntries();
+        	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
+            System.out.flush();
             for (FileEntry fileEntry : fileEntryList) {
                                 
                 if (fileEntry.getName().equals("header/" + METADATA) || 
@@ -159,17 +165,22 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                     builder.setErrorHandler(handler);
                     builder.parse(xmlToValidate.getAbsolutePath());
                     if (handler.validationError == true){
+                        System.out.print("\r                                                                                                                                     ");
+                		System.out.flush();
+                        System.out.print("\r");
+                		System.out.flush();
+
                         return false;
                     }
                     
                 } catch (java.io.IOException ioe) {
-                    getMessageService().logError(
+            		getMessageService().logError(
                             getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                             getTextResourceService().getText(MESSAGE_DASHES) + 
                             "IOException " + 
                             ioe.getMessage());                
                 } catch (SAXException e) {
-                    getMessageService().logError(
+                   getMessageService().logError(
                             getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                             getTextResourceService().getText(MESSAGE_DASHES) + 
                             "SAXException " + 
@@ -188,6 +199,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                         getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         getTextResourceService().getText(ERROR_MODULE_AE_NOMETADATAFOUND));                
+                
+                System.out.print("\r                                                                                                                                     ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 return false;
             }
             
@@ -220,10 +237,17 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                 }
                 
             } catch (Exception e) {
+
                 getMessageService().logError(
                         getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         e.getMessage());                
+                
+                System.out.print("\r                                                                                                                                     ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 return false;
             }
             
@@ -240,6 +264,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                         getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         getTextResourceService().getText(ERROR_MODULE_AD_WRONGNUMBEROFXSDS));
+                
+                System.out.print("\r                                                                                                                                     ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 return false;
             } else {
                 Set keys = xsdsInZip.keySet();
@@ -254,6 +284,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                                 getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                                 getTextResourceService().getText(MESSAGE_DASHES) + 
                                 getTextResourceService().getText(ERROR_MODULE_AD_WRONGNUMBEROFXSDS));
+                        
+                        System.out.print("\r                                                                                                                                     ");
+                		System.out.flush();
+                        System.out.print("\r");
+                		System.out.flush();
+
                         return false;
                     } 
                     xsdsInZipControl.remove(key);
@@ -263,6 +299,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                             getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                             getTextResourceService().getText(MESSAGE_DASHES) + 
                             getTextResourceService().getText(ERROR_MODULE_AD_WRONGNUMBEROFXSDS));
+                    
+                    System.out.print("\r                                                                                                                                     ");
+            		System.out.flush();
+                    System.out.print("\r");
+            		System.out.flush();
+
                     return false;
                 }
                 
@@ -274,9 +316,20 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
                     getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
                     getTextResourceService().getText(MESSAGE_DASHES) + 
                     e.getMessage());                
+            
+            System.out.print("\r                                                                                                                                     ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             return false;
 
         }
+        System.out.print("\r                                                                                                                                     ");
+		System.out.flush();
+        System.out.print("\r");
+		System.out.flush();
+
 
         return true;
     }

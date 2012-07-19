@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: JhoveServiceImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -19,6 +20,7 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 package ch.kostceco.bento.sipval.service.impl;
 
 import java.io.File;
+//import java.util.Date;
 
 import ch.kostceco.bento.sipval.exception.SystemException;
 import ch.kostceco.bento.sipval.logging.Logger;
@@ -26,11 +28,11 @@ import ch.kostceco.bento.sipval.service.ConfigurationService;
 import ch.kostceco.bento.sipval.service.JhoveService;
 import ch.kostceco.bento.sipval.util.StreamGobbler;
 import ch.kostceco.bento.sipval.util.Util;
+
+
 /**
  * Dieser Service stellt die Schnittstelle zur JHove Software dar.
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 public class JhoveServiceImpl implements JhoveService {
     
@@ -57,28 +59,28 @@ public class JhoveServiceImpl implements JhoveService {
         String jhoveConfig = getConfigurationService().getPathToJhoveConfiguration();
         
         // das passende Modul zur jeweiligen File-Extension auswählen
-        if (extension.equals("txt")) {
-            command.append("-m ascii-hul ");             
-        } else if (extension.equals("gif")) {
-            command.append("-m gif-hul ");             
-        } else if (extension.equals("html")) {
-            command.append("-m html-hul ");             
-        } else if (extension.equals("jpg") || extension.equals("jpeg")) {
-            command.append("-m jpeg-hul ");             
-        } else if (extension.equals("jp2") || extension.equals("jpf") || extension.equals("jpx")) {
-            command.append("-m jpeg2000-hul ");             
+
+        if (extension.equals("gif")) {
+            command.append("-m gif-hul "); 
+        } else if (extension.equals("html") || extension.equals("htm")) {
+            command.append("-m html-hul "); 
+        } else if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("jpe") || extension.equals("jfif") || extension.equals("jfi") || extension.equals("jif") || extension.equals("jls") || extension.equals("spf")) {
+            command.append("-m jpeg-hul ");
+        } else if (extension.equals("jp2") || extension.equals("jpg2") || extension.equals("j2c") || extension.equals("jpf") || extension.equals("jpx")) {
+            command.append("-m jpeg2000-hul ");
         } else if (extension.equals("pdf")) {
-            command.append("-m pdf-hul ");             
+            command.append("-m pdf-hul ");
         } else if (extension.equals("tif") || extension.equals("tiff") || extension.equals("tfx")) {
-            command.append("-m tiff-hul ");             
-        } else if (extension.equals("wav") || extension.equals("bwf")) {
-            command.append("-m wave-hul ");             
-        } else if (extension.equals("xml")) {
-            command.append("-m xml-hul ");             
+            command.append("-m tiff-hul ");
+        } else if (extension.equals("wav") || extension.equals("wave") || extension.equals("bwf")) {
+            command.append("-m wave-hul ");
+        } else if (extension.equals("xml") || extension.equals("xsd")) {
+            command.append("-m xml-hul ");
         } else {
-            command.append("-m bytestream ");             
+            // wird in "Validation3cFormatValidationModuleImpl.java" abgefangen
         }
-        
+
+
         command.append(" -c "); 
         command.append("\""); 
         command.append(jhoveConfig); 
@@ -112,13 +114,6 @@ public class JhoveServiceImpl implements JhoveService {
             // Warte, bis wget fertig ist
             proc.waitFor();
             
-            /**
-            * Wird nicht verwendet und wurde entsprechend als Kommentar markiert. 
-            * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 21.03.2011
-            * 
-            * int exitValue = proc.exitValue();  
-            *  
-            */
             Util.switchOnConsole();
                                  
            

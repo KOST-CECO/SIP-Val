@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Controller.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -53,7 +54,6 @@ import ch.kostceco.bento.sipval.validation.module3.Validation3cFormatValidationM
 import ch.kostceco.bento.sipval.validation.module3.Validation3dPeriodModule;
 
 /**
- * 
  * Der Controller ruft die benötigten Module zur Validierung des SIP-Archivs in
  * der benötigten Reihenfolge auf.
  * 
@@ -61,7 +61,6 @@ import ch.kostceco.bento.sipval.validation.module3.Validation3dPeriodModule;
  * eingebunden.
  * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- * 
  */
 public class Controller implements MessageConstants {
 
@@ -225,17 +224,6 @@ public class Controller implements MessageConstants {
     
     public boolean executeMandatory(File sipDatei) {
         boolean valid = true;
-        /* */
-
-        /*
-        File inputzipfile = new File("C:\\ludin\\A6Z-SIP-Validator\\SIP-Beispiele 20110112\\SIP_20101018_RIS_4.zip");
-        File targetdir = new File("C:\\ludin\\tmp9\\SIP_20101018_RIS_4");
-        try {
-            Decompress.decompress(inputzipfile, targetdir);
-        } catch (SipValidatorException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }*/
         
         // Validation Step Aa
         try {
@@ -355,8 +343,6 @@ public class Controller implements MessageConstants {
     
     public boolean executeOptional(File sipDatei) {
         boolean valid = true;
-        /* */
-
         
         // Validation Step Ae
         try {

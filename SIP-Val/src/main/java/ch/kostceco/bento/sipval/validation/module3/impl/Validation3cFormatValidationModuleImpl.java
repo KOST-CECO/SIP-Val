@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation3cFormatValidationModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -56,6 +57,9 @@ import ch.kostceco.bento.sipval.util.PdftronErrorCodes;
 import ch.kostceco.bento.sipval.util.Util;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
 import ch.kostceco.bento.sipval.validation.module3.Validation3cFormatValidationModule;
+/**
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl implements Validation3cFormatValidationModule {
 
@@ -93,6 +97,8 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
     public boolean validate(File sipDatei) throws Validation3cFormatValidationException {
         
         boolean isValid = true;
+    	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
+        System.out.flush();
         
         Map<String, File> filesInSipFile = new HashMap<String, File>();
         
@@ -103,16 +109,6 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
             mapValidatedFormats.put(validatedFormat.getPronomUniqueId(), validatedFormat);
         }
         
-        /**
-         * 
-         * getNameOfDroidSignatureFile wird durch getPathToDroidSignatureFile ersetzt und wurde entsprechend als Kommentar markiert.
-         * Maskierte Lösung funktioniert nur wenn es die Bedag kompiliert.
-         * 
-         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 28.03.2011
-         *
-         * String nameOfSignature = getConfigurationService().getNameOfDroidSignatureFile();  
-         *       
-         */
         String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
         if (nameOfSignature == null) {
             getMessageService().logError(
@@ -141,11 +137,6 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
         }
         
        
-        
-        // TODO: es wäre viel besser, wenn die DROID Identifikation auch über Streams statt über Files
-        // durchgeführt werden könnte. Noch keine Ahnung, ob und wie das möglich ist. Die Dokumentation
-        // zu Droid ist quasi nicht vorhanden.
-        
         // Die Archivdatei wurde bereits vom Schritt 1d in das Arbeitsverzeichnis entpackt
         int countContentFiles = 0;
         String pathToWorkDir = getConfigurationService().getPathToWorkDir();
@@ -203,7 +194,7 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 
             // die PUID des SIP-Files wurde in der Liste der zu validierenden Formate (gemäss Konfigurationsdatei) gefunden
             if (selected) {
-                // in der Konfiguration wird bestimmt, welcher PUID-Typ mit welchem Validator (JHOVe oder Pdftron)
+                // in der Konfiguration wird bestimmt, welcher PUID-Typ mit welchem Validator (JHOVE oder Pdftron)
                 // untersucht wird
                 if (value.getValidator().equals(PronomUniqueIdEnum.PDFTRON.name())) {                                        
                     filesToProcessWithPdftron.add(fileKey);
@@ -249,7 +240,8 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
         for (String extMapKey : extMapKeys) {
             
             StringBuffer pathsJhove = extensionsMap.get(extMapKey);
-                    
+            String extension = extMapKey;        
+            if (extension.equals("gif") || extension.equals("html") || extension.equals("htm") || extension.equals("jpg") || extension.equals("jpeg") || extension.equals("jpe") || extension.equals("jfif") || extension.equals("jfi") || extension.equals("jif") || extension.equals("jls") || extension.equals("spf") || extension.equals("jp2") || extension.equals("jpg2") || extension.equals("j2c") || extension.equals("jpf") || extension.equals("jpx") || extension.equals("pdf") || extension.equals("tif") || extension.equals("tiff") || extension.equals("tfx") || extension.equals("wav") || extension.equals("wave") || extension.equals("bwf") || extension.equals("xml") || extension.equals("xsd")) {
             try {
                 jhoveReport = getJhoveService().executeJhove(
                         pathToJhoveJar, pathsJhove.toString(), pathToJhoveOutput, sipDatei.getName(), extMapKey);
@@ -261,6 +253,7 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
                     concatenatedOutputs.append(line);
                     concatenatedOutputs.append(NEWLINE);
                     
+ 
                     // die Status-Zeile enthält eine von diesen beiden Möglichkeiten:
                     // Status: Well-Formed and valid
                     // Status: Not well-formed 
@@ -276,24 +269,34 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
                             isValid = false;
                             
                         } else {
-                            Integer countValid = countPerExtensionValid.get(extMapKey);
-                            if (countValid == null) {
-                                countPerExtensionValid.put(extMapKey, new Integer(1));
-                            } else {
-                                countValid = countValid + 1;
-                                countPerExtensionValid.put(extMapKey, countValid);
+                            }if (line.contains("Well-Formed and valid")) {
+                        		Integer countValid = countPerExtensionValid.get(extMapKey);
+                        		if (countValid == null) {
+                        			countPerExtensionValid.put(extMapKey, new Integer(1));
+                        		} else {
+                        			countValid = countValid + 1;
+                        			countPerExtensionValid.put(extMapKey, countValid);
+                        		}
                             }
                         }
-                    }
                 }
                 in.close();
-                
+               
             } catch (Exception e) {
                 getMessageService().logError(
                         getTextResourceService().getText(MESSAGE_MODULE_Cc) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         e.getMessage());                                
                 return false;
+            }
+                                            
+                
+            } else {
+            	getMessageService().logError(
+                        getTextResourceService().getText(MESSAGE_MODULE_Cc) + 
+                        getTextResourceService().getText(MESSAGE_DASHES) + 
+                        getTextResourceService().getText(MESSAGE_MODULE_CC_NOJHOVEVAL) + 
+                        extension);
             }
 
         }
@@ -434,19 +437,6 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
                     }
                 }
 
-                /**
-                 * 
-                 * Ausgabe total aller invalider Dokumente und nicht die Summe aller Fehler bei pdftron
-                 * iValidPdfs = Anzahl "pass"
-                 * totalInvalid =/ totalErrors sondern totalInvalid = Anzahl "Fail" respektive "totalPdftron" - iValidPdfs
-                 * alte Version wurde entsprechend als Kommentar markiert.
-                 * 
-                 * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.3.1, date 11.04.2011
-                 *
-                 * int iValidPdfs = filesToProcessWithPdftron.size() - totalErrors;
-                 * String sValidPdfs = "pdf Valid = " + iValidPdfs + ", ";
-                 *
-                 */
 
                 Integer passCount = new Integer(0);
 
@@ -494,10 +484,21 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
                         getTextResourceService().getText(MESSAGE_MODULE_Cc) + 
                         getTextResourceService().getText(MESSAGE_DASHES) + 
                         e.getMessage());                                
+                
+                System.out.print("\r                                                                                                                                     ");
+        		System.out.flush();
+                System.out.print("\r");
+        		System.out.flush();
+
                 return false;
             }
         }
        
+        System.out.print("\r                                                                                                                                     ");
+		System.out.flush();
+        System.out.print("\r");
+		System.out.flush();
+
         return isValid;
     }
 

@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Util.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -28,9 +29,7 @@ import java.util.Map;
  * - Some of the third party libraries we use in this project write stuff into the console with System.out
  *   This Utility can switch this on and off.
  * - Java cannot delete directories that are not empty. Here's a method to do that.
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 
 public class Util {

@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: ConfigurationServiceImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -102,6 +103,29 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         return null;
     }
 
+    /**
+     * Neu soll die Einschränkung des SIP-Namen konfigurierbar sein -> getAllowedSipName.
+     * LOGGER.logError bei else eingefügt
+     * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.9.1, date 16.05.2011
+     */
+    @Override
+    public String getAllowedSipName() {
+        Object prop = getConfig().getProperty("allowedsipname");
+        
+        if (prop instanceof String) {
+        	String value = (String) prop;
+            return value;
+        } else {
+        	LOGGER.logError(getTextResourceService().getText(MESSAGE_MODULE_Ac) + 
+            getTextResourceService().getText(MESSAGE_DASHES) + 
+        	getTextResourceService().getText(MESSAGE_MODULE_AC_INVALIDREGEX));
+        	
+        }
+        return null;
+
+    }
+    
+    
     private XMLConfiguration getConfig(){
         if (this.config == null) {
             
@@ -135,26 +159,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
         String pathSignature = getPathToDroidSignatureFile(); 
         
-        /**
-         * 
-         * getNameOfDroidSignatureFile wird durch getPathToDroidSignatureFile ersetzt und wurde entsprechend als Kommentar markiert.
-         * Maskierte Lösung funktioniert nur wenn es die Bedag kompiliert.
-         * 
-         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 28.03.2011
-         *
-         * String pathSignature = "configuration/" + getNameOfDroidSignatureFile(); 
-         *
-         * URL locationOfJar = SipValidator.class.getProtectionDomain().getCodeSource().getLocation();
-         * String locationOfJarPath = locationOfJar.getPath();
-         *
-         * if (locationOfJarPath.endsWith(".jar")) {
-         *     File file = new File(locationOfJarPath);
-         *     String fileParent = file.getParent();
-         *     pathSignature = fileParent + "/" + pathSignature;
-         * }  
-         *       
-         */
-        
         File fileSigfile = new File(pathSignature);        
         URL urlSigfile = fileSigfile.toURI().toURL();
         String result = urlSigfile.getFile();
@@ -162,16 +166,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         return result;
     }
 
-/*    @Override
-    public String getNameOfDroidSignatureFile() {
-        Object prop = getConfig().getProperty("nameofdroidsignature");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }*/
 
     @Override
     public String getPathToDroidSignatureFile() {

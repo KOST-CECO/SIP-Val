@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation3bUnspecifiedFormatModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -33,6 +34,9 @@ import ch.kostceco.bento.sipval.service.ConfigurationService;
 import ch.kostceco.bento.sipval.util.Util;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
 import ch.kostceco.bento.sipval.validation.module3.Validation3bUnspecifiedFormatModule;
+/**
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImpl implements Validation3bUnspecifiedFormatModule {
     
@@ -52,22 +56,21 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
         
         Map<String, File> filesInSipFile = new HashMap<String, File>();
 
-        /**
-         * 
-         * getNameOfDroidSignatureFile wird durch getPathToDroidSignatureFile ersetzt und wurde entsprechend als Kommentar markiert.
-         * Maskierte Lösung funktioniert nur wenn es die Bedag kompiliert.
-         * 
-         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 28.03.2011
-         *
-         * String nameOfSignature = getConfigurationService().getNameOfDroidSignatureFile();  
-         *       
-         */
         String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+    	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
+        System.out.flush();
+
         if (nameOfSignature == null) {
             getMessageService().logError(
                     getTextResourceService().getText(MESSAGE_MODULE_Cb) + 
                     getTextResourceService().getText(MESSAGE_DASHES) + 
                     getTextResourceService().getText(MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE));                                
+            
+            System.out.print("\r                                                                                                                                     ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             return false;
         }
 
@@ -86,16 +89,18 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
             getMessageService().logError(
                     getTextResourceService().getText(MESSAGE_MODULE_Cb) + 
                     getTextResourceService().getText(MESSAGE_DASHES) + 
-                    getTextResourceService().getText(ERROR_CANNOT_INITIALIZE_DROID));                                
+                    getTextResourceService().getText(ERROR_CANNOT_INITIALIZE_DROID));  
+            
+            System.out.print("\r                                                                                                                                     ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             return false;
         } finally {
             Util.switchOnConsole();            
         }
         
-        // TODO: es wäre viel besser, wenn die DROID Identifikation auch über Streams statt über Files
-        // durchgeführt werden könnte. Noch keine Ahnung, ob und wie das möglich ist. Die Dokumentation
-        // zu Droid ist quasi nicht vorhanden.
-       
         // Die Archivdatei wurde bereits vom Schritt 1d in das Arbeitsverzeichnis entpackt
         String pathToWorkDir = getConfigurationService().getPathToWorkDir();
         File workDir = new File(pathToWorkDir);
@@ -150,18 +155,11 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
             }
             
         }
-        /*
-        Set<String> keysExt = counterPuid.keySet();
-        for (Iterator<String> iterator = keysExt.iterator(); iterator.hasNext();) {
-            String keyExt = iterator.next();
-            Integer value = counterPuid.get(keyExt);
-            getMessageService().logError(
-                    getTextResourceService().getText(MESSAGE_MODULE_Cb) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + keyExt + " = " + value.toString() + 
-                    getTextResourceService().getText(MESSAGE_MODULE_CA_FILES));
-            valid = false;
-        }
-        */
+        System.out.print("\r                                                                                                                                     ");
+		System.out.flush();
+        System.out.print("\r");
+		System.out.flush();
+
         return valid;
     }
 

@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: TextResourceServiceImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -25,9 +26,7 @@ import java.util.ResourceBundle;
 import ch.kostceco.bento.sipval.service.TextResourceService;
 /**
  * Dieser Service managt die Zugriffe auf die Resource Bundles.
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 public class TextResourceServiceImpl implements TextResourceService {
     // Per Default ist es dieser Name, kann jedoch auch mittels Dependency
@@ -36,7 +35,6 @@ public class TextResourceServiceImpl implements TextResourceService {
 
     /**
      * Gibt den Wert des Attributs <code>bundleBaseName</code> zurück.
-     * 
      * @return Wert des Attributs bundleBaseName.
      */
     public String getBundleBaseName() {
@@ -45,7 +43,6 @@ public class TextResourceServiceImpl implements TextResourceService {
 
     /**
      * Setzt den Wert des Attributs <code>bundleBaseName</code>.
-     * 
      * @param bundleBaseName
      *            Wert für das Attribut bundleBaseName.
      */
@@ -60,16 +57,6 @@ public class TextResourceServiceImpl implements TextResourceService {
 
         // For the time being, we use the VM Default Locale
         Locale locale = Locale.getDefault();
-        /*
-        Locale locale = null;
-        UserContext userContext = UserContextHolder.getUserContext();
-        if (userContext != null) {
-            locale = userContext.getLocale();
-        }
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-        */
 
         return this.getText(locale, aKey, values);
     }

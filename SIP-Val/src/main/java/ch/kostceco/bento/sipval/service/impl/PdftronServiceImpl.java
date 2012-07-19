@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: PdftronServiceImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -27,9 +28,7 @@ import ch.kostceco.bento.sipval.util.StreamGobbler;
 import ch.kostceco.bento.sipval.util.Util;
 /**
  * Dieser Service stellt die Schnittstelle zur Pdftron Software dar.
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 public class PdftronServiceImpl implements PdftronService {
     
@@ -58,14 +57,8 @@ public class PdftronServiceImpl implements PdftronService {
         command.append(output.getAbsolutePath()); 
         command.append("\""); 
         command.append(" "); 
-        //command.append("\""); 
         command.append(pathToInputFile); 
-        //command.append("\""); 
-       
-       
                 
-        //LOGGER.logDebug("Using pdftron command: " + command.toString());
-
         try {
             
             Runtime rt = Runtime.getRuntime();
@@ -87,13 +80,6 @@ public class PdftronServiceImpl implements PdftronService {
             // Warte, bis wget fertig ist
             proc.waitFor();
             
-            /**
-             * Wird nicht verwendet und wurde entsprechend als Kommentar markiert. 
-             * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 21.03.2011
-             * 
-             * int exitValue = proc.exitValue();  
-             *  
-             */
             Util.switchOnConsole();
             
             //System.out.println("exit value: " + exitValue);
@@ -135,22 +121,18 @@ public class PdftronServiceImpl implements PdftronService {
     
     @Override
     public String getPathToInputFile() {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public String getPathToPdftronExe() {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public void setPathToInputFile(String pathToInputFile) {
-        // TODO Auto-generated method stub
         
     }
     @Override
     public void setPathToPdftronExe(String pathToPdftronExe) {
-        // TODO Auto-generated method stub
         
     }
 

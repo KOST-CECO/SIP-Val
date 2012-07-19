@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation3aFormatRecognitionModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -33,6 +34,9 @@ import ch.kostceco.bento.sipval.service.ConfigurationService;
 import ch.kostceco.bento.sipval.util.Util;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
 import ch.kostceco.bento.sipval.validation.module3.Validation3aFormatRecognitionModule;
+/**
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImpl implements Validation3aFormatRecognitionModule {
 
@@ -52,22 +56,21 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
         
         Map<String, File> filesInSipFile = new HashMap<String, File>();
 
-        /**
-         * 
-         * getNameOfDroidSignatureFile wird durch getPathToDroidSignatureFile ersetzt und wurde entsprechend als Kommentar markiert.
-         * Maskierte Lösung funktioniert nur wenn es die Bedag kompiliert.
-         * 
-         * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 28.03.2011
-         *
-         * String nameOfSignature = getConfigurationService().getNameOfDroidSignatureFile();  
-         *       
-         */
         String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+    	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
+        System.out.flush();
+
         if (nameOfSignature == null) {
             getMessageService().logError(
                     getTextResourceService().getText(MESSAGE_MODULE_Ca) + 
                     getTextResourceService().getText(MESSAGE_DASHES) + 
                     getTextResourceService().getText(MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE));                                
+            
+            System.out.print("\r                                                                                                                                     ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             return false;
         }
 
@@ -76,7 +79,7 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
             // kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche
             // den Output stören
             
-        	// Util.switchOffConsole() und on als Kommentar markieren wenn man die Fehlermeldung 
+        	// Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung 
         	// erhalten möchte  @Rc
         	Util.switchOffConsole();
             droid = new Droid();
@@ -90,15 +93,18 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
                     getTextResourceService().getText(MESSAGE_MODULE_Ca) + 
                     getTextResourceService().getText(MESSAGE_DASHES) + 
                     getTextResourceService().getText(ERROR_CANNOT_INITIALIZE_DROID));                                
+            
+            System.out.print("\r                                                                                                                                     ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             return false;
         } 
         finally {
             Util.switchOnConsole();            
         }
         
-        // TODO: es wäre viel besser, wenn die DROID Identifikation auch über Streams statt über Files
-        // durchgeführt werden könnte. Noch keine Ahnung, ob und wie das möglich ist. Die Dokumentation
-        // zu Droid ist quasi nicht vorhanden.
        
         // Die Archivdatei wurde bereits vom Schritt 1d in das Arbeitsverzeichnis entpackt
         String pathToWorkDir = getConfigurationService().getPathToWorkDir();
@@ -135,11 +141,6 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
                     String extensionConfig = hPuids.get(ff.getPUID());
                     
                     if (extensionConfig == null) {
-                        /*
-                        getMessageService().logError(
-                                getTextResourceService().getText(MESSAGE_MODULE_Ca) + 
-                                getTextResourceService().getText(MESSAGE_DASHES) +  fileKey + " (" + ff.getPUID() + ")");
-                        */
                         valid = false;
                         
                         if (counterPuid.get(ff.getPUID()) == null) {
@@ -164,9 +165,20 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
                     getTextResourceService().getText(MESSAGE_MODULE_Ca) + 
                     getTextResourceService().getText(MESSAGE_DASHES) + keyExt + " = " + value.toString() + 
                     getTextResourceService().getText(MESSAGE_MODULE_CA_FILES));
+            
+            System.out.print("\r                                                                                                                                     ");
+    		System.out.flush();
+            System.out.print("\r");
+    		System.out.flush();
+
             valid = false;
         }
     
+        System.out.print("\r                                                                                                                                     ");
+		System.out.flush();
+        System.out.print("\r");
+		System.out.flush();
+
         return valid;
     }
 

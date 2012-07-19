@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Logger.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -25,12 +26,7 @@ import org.apache.log4j.NDC;
 /**
  * Logging Klasse. Sämtliche Log Aufrufe werden an Jakarta Commons Logging
  * delegiert, welches diese wiederum an Log4j delegiert.
- * 
- * <p>
- * (c) Copyright Bedag Informatik 2010
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 public class Logger {
 
@@ -53,7 +49,6 @@ public class Logger {
 
     /**
      * Logt einen Fehler der die Stabilität des Programms beeinflusst.
-     * 
      * @param message
      *            Fehlermeldung.
      */
@@ -64,7 +59,6 @@ public class Logger {
 
     /**
      * Logt einen Fehler der die Stabilität des Programms beeinflusst.
-     * 
      * @param message
      *            Fehlermeldung.
      * @param t
@@ -76,7 +70,6 @@ public class Logger {
 
     /**
      * Logt einen Fehler, der nicht automatisch behoben werden kann.
-     * 
      * @param message
      *            Fehlermeldung.
      */
@@ -86,7 +79,6 @@ public class Logger {
 
     /**
      * Logt einen Fehler, der nicht automatisch behoben werden kann.
-     * 
      * @param message
      *            Fehlermeldung.
      * @param t
@@ -98,7 +90,6 @@ public class Logger {
 
     /**
      * Logt einen Fehler, der behoben oder übergangen werden konnte.
-     * 
      * @param message
      *            Meldung.
      */
@@ -108,7 +99,6 @@ public class Logger {
 
     /**
      * Logt einen Fehler, der behoben oder übergangen werden konnte.
-     * 
      * @param message
      *            Meldung.
      * @param t
@@ -120,7 +110,6 @@ public class Logger {
 
     /**
      * Logt eine Information zum Programmablauf.
-     * 
      * @param message
      *            Meldung.
      */
@@ -130,7 +119,6 @@ public class Logger {
 
     /**
      * Logt eine Information zum Programmablauf.
-     * 
      * @param message
      *            Meldung.
      * @param t
@@ -142,7 +130,6 @@ public class Logger {
 
     /**
      * Logt eine Information zum Nachvollziehen des Programmstatus.
-     * 
      * @param message
      *            Meldung.
      */
@@ -152,7 +139,6 @@ public class Logger {
 
     /**
      * Logt eine Information zum Nachvollziehen des Programmstatus.
-     * 
      * @param message
      *            Meldung.
      * @param t
@@ -164,7 +150,6 @@ public class Logger {
 
     /**
      * Ist Logging auf Level Fatal aktiv?
-     * 
      * @return true, falls aktiv, ansonsten false.
      */
     public boolean isFatalEnabled() {
@@ -173,7 +158,6 @@ public class Logger {
 
     /**
      * Ist Logging auf Level Error aktiv?
-     * 
      * @return true, falls aktiv, ansonsten false.
      */
     public boolean isErrorEnabled() {
@@ -182,7 +166,6 @@ public class Logger {
 
     /**
      * Ist Logging auf Level Warn aktiv?
-     * 
      * @return true, falls aktiv, ansonsten false.
      */
     public boolean isWarnEnabled() {
@@ -191,7 +174,6 @@ public class Logger {
 
     /**
      * Ist Logging auf Level Info aktiv?
-     * 
      * @return true, falls aktiv, ansonsten false.
      */
     public boolean isInfoEnabled() {
@@ -200,7 +182,6 @@ public class Logger {
 
     /**
      * Ist Logging auf Level Debug aktiv?
-     * 
      * @return true, falls aktiv, ansonsten false.
      */
     public boolean isDebugEnabled() {
@@ -209,7 +190,6 @@ public class Logger {
 
     /**
      * Setzen des aktuellen Debug - Contextes ( Log4J ).
-     * 
      * @param theRemoteUser
      *            das aktuell angemeldete Benutzer
      */

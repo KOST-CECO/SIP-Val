@@ -1,6 +1,7 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v0.9.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+$Id: Validation3dPeriodModule.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -24,18 +25,12 @@ import ch.kostceco.bento.sipval.exception.module3.Validation3dPeriodException;
 import ch.kostceco.bento.sipval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 3d
- * 
- * (einschaltbar) 
- * 
+ * Validierungsschritt 3d (einschaltbar) 
  * Zeitraum-Validierung. Ältestes und Jüngstes Datum in einer Ordnungssystem Einheit (Dossier, Rubrik) 
  * müssen ohne Überlappung nach oben aggregierbar sein, Lehrräume sind aber erlaubt. 
  * Dies bedeutet, dass die Dokumente im Zeitraum des Dossiers sein müssen, 
  * diese wiederum in der Rubrik und entsprechend auch im SIP. 
- * 
- * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- *
  */
 
 public interface Validation3dPeriodModule extends ValidationModule {

@@ -1,6 +1,98 @@
+Changelog seit der Version 1.0.4 (Stand 25.07.2011)
+===================================================
+ 
+
+Changelog seit der Version 1.0.3 (Stand 20.07.2011)
+===================================================
+25.07.2011 by Rc
+ - Version auf 1.0.4 erhöht! 
+ - aus external-sources Test- und Workbench-Verzeichnisse entfernt, diese Verursachten SVN-Probleme
+   betreffend der Pfadlänge und sind zudem unnötig 
+ 
+Changelog seit der Version 1.0.2 (Stand 07.07.2011)
+===================================================
+20.07.2011 by Rc
+ - Version auf 1.0.3 erhöht
+ - Versionen aus src entnommen ausser bei der Starterklasse (SipValidator.java)
+ - zipfile2.close() in Validation1cNamingModuleImpl eingefügt, damit das Work-Verzeichnis auch 
+   gelöscht werden kann
+
+Changelog seit der Version 1.0.1 (Stand 06.06.2011)
+===================================================
+07.07.2011 by Rc
+ - Version auf 1.0.2 erhöht
+ - SVN-Id in src eingefügt
+ - Kommentare (alte Versionen) bereinigt
+
+
+Changelog seit der Version 1.0.0 (Stand 01.06.2011)
+===================================================
+06.06.2011 by Rc
+ - Version auf 1.0.1 erhöht
+ - Ermittlung und Ausgabe einer zusätzlichen Fehlermeldung (message.module.cc.nojhoveval), wenn für 
+   diese Extension keine sinnvolle Validierung mit JHOVE realiisert werden kann. Zusätzlich wurde die 
+   Liste mit der Zuordnung Extension zu JHOVE-Module in JhoveServiceImpl.java verbessert. 
+   message.module.cc.nojhoveval eingefügt in
+    - src/main/resources/messages.properties (De & Fr)
+    - MessageConstants.java
+    - Validation3cFormatValidationModuleImpl.java
+
+Changelog seit der Version 0.9.1 (Stand 23.05.2011)
+===================================================
+31.05.2011 by RC
+ - Version auf 1.0.0 erhöht
+
+30.05.20111 by Rc
+ - Fehlermeldung "message.module.cc.errors.in" in src/main/resources/messages.properties 
+   (De & Fr) verdeutlicht 
+
+26.05.2011 by Rc
+ - Ausgabe einer zusätzlichen Fehlermeldung (error.module.bb.notmd5), wenn der Prüfalgorithmus nicht  
+   MD5 ist. SHA1 und SHA256 sind von der Spez her erlaubt wurde im SIP-Val jedoch noch nicht realisiert.
+   Ensprechend wurde auch eine genauere Fehlermeldung (error.module.bb.wrongmd5) eingefügt, wenn die 
+   MD5 nicht übereinstimmt.
+   error.module.bb.notmd5 und error.module.bb.wrongmd5 eingefügt in
+    - src/main/resources/messages.properties (De & Fr)
+    - MessageConstants.java
+    - Validation2bChecksumModuleImpl.java
+ 
+25.05.2011 by Rc
+ - message.(module.)wait eingefügt inkl. der Ueberschreibung der Wait-Ausgabe in
+    - src/main/resources/messages.properties (De & Fr)
+    - MessageConstants.java
+    - SipValidator.java (message.wait)
+    - sowie in ValidationModuleImpl 1d, 2b, 3a, 3b und 3c (message.module.wait)
+
+23.05.2011 by Rc
+ - Löschen des Work-Verzeichnisses auch wenn es ein ZIP-SIP ist in SipValidator.java
+   (Damit soll das Workverzeichniss immer zuerst gelöscht werden, falls es existiert)
+ - Message- und Error-Meldungen bereinigt (De & Fr)
+   d.h. 26 nicht gebrauchte Meldungen in src/main/resources/messages.properties (De & Fr)
+   und in MessageConstants.java wurden gelöscht
+
 Changelog seit der Version 0.9.0 (Stand 11.04.2011)
 ===================================================
+18.-23.05.2011 by Rc
+ - Komplettüberarbeitung des Validierungsschrittes 3d!
+   Insbesonder sollen immer die Effektiven und nicht die in ein Datumsformat übertragenen Werte 
+   ausgegeben werden (z.B. ca. 2010 und nicht 31.12.2010). Zudem wurde die Logik im Bereich der
+   Umwandlung der Werte in ein Datum verfeinert (siehe Ende dieser Datei), damit nicht Aufgrund
+   der Umwandlung seltene Invalide SIPs rauskommen, obwohl sie Valid sind.
+ 
+16.05.2011 by Rc
+ - Fehlermeldung wenn Fehler beim Lesen der regex-Wertes 
+    - message.module.ac.invalidregex in src/main/resources/messages.properties (De & Fr)
+    - message.module.ac.invalidregex in MessageConstants.java
+    - MESSAGE_MODULE_AC_INVALIDREGEX in ConfigurationServiceImpl.java
+ - Einschränkung des SIP-Namen (getAllowedSipName und allowedsipname) konfigurierbar
+    - Herauslesen des Wertes in ConfigurationService(Impl).java
+    - Überprüfen des Namen mit diesem gelesenen Wert in Validation1cNamingModuleImpl
+ - SIP-Name besser nach Spezifikation überprüfen in Validation1cNamingModuleImpl
+   patternStr = "^SIP_[0-9]*_\\w*" auf "^SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3,27}" eingeschränkt
 
+18.04.20011 by Rc
+ - Usage-Meldung verdeutlicht
+    - error.parameter.usage in src/main/resources/messages.properties (De & Fr) "ausgedeutscht"
 
 Changelog seit der Version 0.3.0 (Stand 07.04.2011)
 ===================================================
