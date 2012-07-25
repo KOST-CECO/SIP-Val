@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation1dMetadataModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
+Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -50,320 +49,389 @@ import ch.kostceco.bento.sipval.validation.module1.Validation1dMetadataModule;
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
+
 /**
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public class Validation1dMetadataModuleImpl extends ValidationModuleImpl implements Validation1dMetadataModule {
+public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
+		implements Validation1dMetadataModule
+{
 
-    private ConfigurationService configurationService;
-    
-    public ConfigurationService getConfigurationService() {
-        return configurationService;
-    }
+	private ConfigurationService	configurationService;
 
-    public void setConfigurationService(ConfigurationService configurationService) {
-        this.configurationService = configurationService;
-    }
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
 
-    final int BUFFER = 2048;
+	public void setConfigurationService(
+			ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean validate(File sipDatei) throws Validation1dMetadataException {
+	final int	BUFFER	= 2048;
 
-        // fetch the metadata.xml file from the zip. There's no need to check
-        // for the existence of the metadata.xml file anymore, because this is
-        // already done in the previous validation step.
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean validate( File sipDatei )
+			throws Validation1dMetadataException
+	{
 
-        //ZipEntry metadataxml = null;
-        FileEntry metadataxml = null;
-        Map<String,String> xsdsInZip = new HashMap<String,String>();
-        Map<String,String> xsdsInMetadata = new HashMap<String,String>();
-        
-        File xmlToValidate = null;
-        File xsdToValidate = null;
-        
-        // Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-        String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-        File tmpDir = new File(pathToWorkDir);
-        if (!tmpDir.exists()) {
-            tmpDir.mkdir();
-        } 
-        
-        String toplevelDir = sipDatei.getName();
-        int lastDotIdx = toplevelDir.lastIndexOf(".");
-        toplevelDir = toplevelDir.substring(0, lastDotIdx);
+		// fetch the metadata.xml file from the zip. There's no need to check
+		// for the existence of the metadata.xml file anymore, because this is
+		// already done in the previous validation step.
 
-        
-        try {
-            // Das metadata.xml und seine xsd's müssen in das Filesystem extrahiert werden, weil bei
-            // bei Verwendung eines Inputstreams bei der Validierung ein Problem mit
-            // den xs:include Statements besteht, die includes können so nicht aufgelöst werden.
-            // Es werden hier jedoch nicht nur diese Files extrahiert, sondern gleich die ganze Zip-Datei,
-            // weil auch spätere Validierungen (3a - 3c) nur mit den extrahierten Files arbeiten können.
-            Zip64File zipfile = new Zip64File(sipDatei);
-            
-            List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-        	System.out.print(getTextResourceService().getText(MESSAGE_MODULE_WAIT));
-            System.out.flush();
-            for (FileEntry fileEntry : fileEntryList) {
-                                
-                if (fileEntry.getName().equals("header/" + METADATA) || 
-                    fileEntry.getName().equals(toplevelDir + "/" + "header/" + METADATA)) {
-                    metadataxml = fileEntry;
-                }
-                if (fileEntry.getName().startsWith("header/xsd/") && fileEntry.getName().endsWith(".xsd")) {
-                    xsdsInZip.put(fileEntry.getName().split("/")[2], fileEntry.getName().split("/")[2]);
-                } else if (fileEntry.getName().startsWith(toplevelDir + "/" + "header/xsd/") && fileEntry.getName().endsWith(".xsd")) {
-                    xsdsInZip.put(fileEntry.getName().split("/")[3], fileEntry.getName().split("/")[3]);
-                }
-                                
-                if (!fileEntry.isDirectory()) {
-    
-                    byte[] buffer = new byte[8192];
-    
-                    // Write the file to the original position in the fs.
-                    EntryInputStream eis = zipfile.openEntryInputStream(fileEntry.getName());
-                    
-                    File newFile = new File(tmpDir, fileEntry.getName());
-                    File parent = newFile.getParentFile();
-                    if (!parent.exists()) {
-                        parent.mkdirs();
-                    }
-                    
-                    FileOutputStream fos = new FileOutputStream(newFile);
-                    for (int iRead = eis.read(buffer); iRead >= 0; iRead = eis.read(buffer)){
-                        fos.write(buffer, 0, iRead);
-                    }
-                    eis.close();
-                    fos.close();
-                    
-                    if (newFile.getName().endsWith("metadata.xml")) {
-                        xmlToValidate = newFile;
-                    }
-                    if (newFile.getName().endsWith(XSD_ARELDA)) {
-                        xsdToValidate = newFile;
-                    } else {
-                    	if (newFile.getName().endsWith("arelda.xsd")) {
-                            xsdToValidate = newFile;
-                    	}
-                    }
-                    
-                }
-            }
-            
-            if (xmlToValidate != null && xsdToValidate != null) {
-                
-                try {
-                    System.setProperty("javax.xml.parsers.DocumentBuilderFactory",
-                            "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
-                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                    factory.setNamespaceAware(true);
-                    factory.setValidating(true);
-                    factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                            "http://www.w3.org/2001/XMLSchema");
-                    factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaSource", xsdToValidate.getAbsolutePath());
-                    DocumentBuilder builder = factory.newDocumentBuilder();
-                    Validator handler = new Validator();
-                    builder.setErrorHandler(handler);
-                    builder.parse(xmlToValidate.getAbsolutePath());
-                    if (handler.validationError == true){
-                        System.out.print("\r                                                                                                                                     ");
-                		System.out.flush();
-                        System.out.print("\r");
-                		System.out.flush();
+		// ZipEntry metadataxml = null;
+		FileEntry metadataxml = null;
+		Map<String, String> xsdsInZip = new HashMap<String, String>();
+		Map<String, String> xsdsInMetadata = new HashMap<String, String>();
 
-                        return false;
-                    }
-                    
-                } catch (java.io.IOException ioe) {
-            		getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            "IOException " + 
-                            ioe.getMessage());                
-                } catch (SAXException e) {
-                   getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            "SAXException " + 
-                            e.getMessage());                
-                } catch (ParserConfigurationException e) {
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            "ParserConfigurationException " + 
-                            e.getMessage());                
-                }
-            }
+		File xmlToValidate = null;
+		File xsdToValidate = null;
 
-            if (metadataxml == null) {
-                getMessageService().logError(
-                        getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                        getTextResourceService().getText(ERROR_MODULE_AE_NOMETADATAFOUND));                
-                
-                System.out.print("\r                                                                                                                                     ");
-        		System.out.flush();
-                System.out.print("\r");
-        		System.out.flush();
+		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		File tmpDir = new File( pathToWorkDir );
+		if ( !tmpDir.exists() ) {
+			tmpDir.mkdir();
+		}
 
-                return false;
-            }
-            
-            EntryInputStream eis = zipfile.openEntryInputStream(metadataxml.getName());
-            BufferedInputStream is = new BufferedInputStream(eis);
+		String toplevelDir = sipDatei.getName();
+		int lastDotIdx = toplevelDir.lastIndexOf( "." );
+		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-            try {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                DocumentBuilder db = dbf.newDocumentBuilder();
-                Document doc = db.parse(is);
-                                        
-                XPath xpath = XPathFactory.newInstance().newXPath();
-                Element elementName = (Element)xpath.evaluate("/paket/inhaltsverzeichnis/ordner/ordner/name", doc, XPathConstants.NODE);
-                
-                Node parentNode = elementName.getParentNode();
-                NodeList nodeLst = parentNode.getChildNodes();
-                
-                
-                for (int s = 0; s < nodeLst.getLength(); s++) {
+		try {
+			// Das metadata.xml und seine xsd's müssen in das Filesystem
+			// extrahiert werden, weil bei
+			// bei Verwendung eines Inputstreams bei der Validierung ein Problem
+			// mit
+			// den xs:include Statements besteht, die includes können so nicht
+			// aufgelöst werden.
+			// Es werden hier jedoch nicht nur diese Files extrahiert, sondern
+			// gleich die ganze Zip-Datei,
+			// weil auch spätere Validierungen (3a - 3c) nur mit den
+			// extrahierten Files arbeiten können.
+			Zip64File zipfile = new Zip64File( sipDatei );
 
-                    Node fstNode = nodeLst.item(s);
+			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
+			System.out.print( getTextResourceService().getText(
+					MESSAGE_MODULE_WAIT ) );
+			System.out.flush();
+			for ( FileEntry fileEntry : fileEntryList ) {
 
-                    if (fstNode.getNodeType() == Node.ELEMENT_NODE && fstNode.getNodeName().equals("datei")) {
-                        Element fstElmnt = (Element) fstNode;
-                        NodeList fstElmntList = fstElmnt.getElementsByTagName("originalName");
-                        Node wantedNode = fstElmntList.item(0);
-                        xsdsInMetadata.put(wantedNode.getTextContent(), wantedNode.getTextContent());
-                    }
-                    
-                }
-                
-            } catch (Exception e) {
+				if ( fileEntry.getName().equals( "header/" + METADATA )
+						|| fileEntry.getName().equals(
+								toplevelDir + "/" + "header/" + METADATA ) ) {
+					metadataxml = fileEntry;
+				}
+				if ( fileEntry.getName().startsWith( "header/xsd/" )
+						&& fileEntry.getName().endsWith( ".xsd" ) ) {
+					xsdsInZip.put( fileEntry.getName().split( "/" )[2],
+							fileEntry.getName().split( "/" )[2] );
+				} else if ( fileEntry.getName().startsWith(
+						toplevelDir + "/" + "header/xsd/" )
+						&& fileEntry.getName().endsWith( ".xsd" ) ) {
+					xsdsInZip.put( fileEntry.getName().split( "/" )[3],
+							fileEntry.getName().split( "/" )[3] );
+				}
 
-                getMessageService().logError(
-                        getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                        e.getMessage());                
-                
-                System.out.print("\r                                                                                                                                     ");
-        		System.out.flush();
-                System.out.print("\r");
-        		System.out.flush();
+				if ( !fileEntry.isDirectory() ) {
 
-                return false;
-            }
-            
-            eis.close();
-            is.close();
-            zipfile.close();
+					byte[] buffer = new byte[8192];
 
-            // alle Files, die in metadata.xml unter <header><xsd>
-            // aufgelistet sind, müssen im Folder
-            // /header/xsd vorhanden sein, und umgekehrt
+					// Write the file to the original position in the fs.
+					EntryInputStream eis = zipfile
+							.openEntryInputStream( fileEntry.getName() );
 
-            if (xsdsInZip.size() != xsdsInMetadata.size()) {
-                getMessageService().logError(
-                        getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                        getTextResourceService().getText(ERROR_MODULE_AD_WRONGNUMBEROFXSDS));
-                
-                System.out.print("\r                                                                                                                                     ");
-        		System.out.flush();
-                System.out.print("\r");
-        		System.out.flush();
+					File newFile = new File( tmpDir, fileEntry.getName() );
+					File parent = newFile.getParentFile();
+					if ( !parent.exists() ) {
+						parent.mkdirs();
+					}
 
-                return false;
-            } else {
-                Set keys = xsdsInZip.keySet();
-                Map xsdsInZipControl = new HashMap<String,String>();
-                xsdsInZipControl.putAll(xsdsInZip);
-                
-                for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
-                    String key = iterator.next();
-                    String removedKey = xsdsInMetadata.remove(key);
-                    if (removedKey == null) {
-                        getMessageService().logError(
-                                getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                                getTextResourceService().getText(MESSAGE_DASHES) + 
-                                getTextResourceService().getText(ERROR_MODULE_AD_WRONGNUMBEROFXSDS));
-                        
-                        System.out.print("\r                                                                                                                                     ");
-                		System.out.flush();
-                        System.out.print("\r");
-                		System.out.flush();
+					FileOutputStream fos = new FileOutputStream( newFile );
+					for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis
+							.read( buffer ) ) {
+						fos.write( buffer, 0, iRead );
+					}
+					eis.close();
+					fos.close();
 
-                        return false;
-                    } 
-                    xsdsInZipControl.remove(key);
-                }
-                if (xsdsInZipControl.size() != 0) {
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(ERROR_MODULE_AD_WRONGNUMBEROFXSDS));
-                    
-                    System.out.print("\r                                                                                                                                     ");
-            		System.out.flush();
-                    System.out.print("\r");
-            		System.out.flush();
+					if ( newFile.getName().endsWith( "metadata.xml" ) ) {
+						xmlToValidate = newFile;
+					}
+					if ( newFile.getName().endsWith( XSD_ARELDA ) ) {
+						xsdToValidate = newFile;
+					} else {
+						if ( newFile.getName().endsWith( "arelda.xsd" ) ) {
+							xsdToValidate = newFile;
+						}
+					}
 
-                    return false;
-                }
-                
-            }
-            
+				}
+			}
 
-        } catch (Exception e) {
-            getMessageService().logError(
-                    getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + 
-                    e.getMessage());                
-            
-            System.out.print("\r                                                                                                                                     ");
-    		System.out.flush();
-            System.out.print("\r");
-    		System.out.flush();
+			if ( xmlToValidate != null && xsdToValidate != null ) {
 
-            return false;
+				try {
+					System.setProperty(
+							"javax.xml.parsers.DocumentBuilderFactory",
+							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+					DocumentBuilderFactory factory = DocumentBuilderFactory
+							.newInstance();
+					factory.setNamespaceAware( true );
+					factory.setValidating( true );
+					factory.setAttribute(
+							"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+							"http://www.w3.org/2001/XMLSchema" );
+					factory.setAttribute(
+							"http://java.sun.com/xml/jaxp/properties/schemaSource",
+							xsdToValidate.getAbsolutePath() );
+					DocumentBuilder builder = factory.newDocumentBuilder();
+					Validator handler = new Validator();
+					builder.setErrorHandler( handler );
+					builder.parse( xmlToValidate.getAbsolutePath() );
+					if ( handler.validationError == true ) {
+						System.out
+								.print( "\r                                                                                                                                     " );
+						System.out.flush();
+						System.out.print( "\r" );
+						System.out.flush();
 
-        }
-        System.out.print("\r                                                                                                                                     ");
+						return false;
+					}
+
+				} catch ( java.io.IOException ioe ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "IOException "
+									+ ioe.getMessage() );
+				} catch ( SAXException e ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "SAXException "
+									+ e.getMessage() );
+				} catch ( ParserConfigurationException e ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "ParserConfigurationException "
+									+ e.getMessage() );
+				}
+			}
+
+			if ( metadataxml == null ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Ad )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+
+				System.out
+						.print( "\r                                                                                                                                     " );
+				System.out.flush();
+				System.out.print( "\r" );
+				System.out.flush();
+
+				return false;
+			}
+
+			EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
+					.getName() );
+			BufferedInputStream is = new BufferedInputStream( eis );
+
+			try {
+				DocumentBuilderFactory dbf = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document doc = db.parse( is );
+
+				XPath xpath = XPathFactory.newInstance().newXPath();
+				Element elementName = (Element) xpath.evaluate(
+						"/paket/inhaltsverzeichnis/ordner/ordner/name", doc,
+						XPathConstants.NODE );
+
+				Node parentNode = elementName.getParentNode();
+				NodeList nodeLst = parentNode.getChildNodes();
+
+				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+
+					Node fstNode = nodeLst.item( s );
+
+					if ( fstNode.getNodeType() == Node.ELEMENT_NODE
+							&& fstNode.getNodeName().equals( "datei" ) ) {
+						Element fstElmnt = (Element) fstNode;
+						NodeList fstElmntList = fstElmnt
+								.getElementsByTagName( "originalName" );
+						Node wantedNode = fstElmntList.item( 0 );
+						xsdsInMetadata.put( wantedNode.getTextContent(),
+								wantedNode.getTextContent() );
+					}
+
+				}
+
+			} catch ( Exception e ) {
+
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Ad )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES ) + e.getMessage() );
+
+				System.out
+						.print( "\r                                                                                                                                     " );
+				System.out.flush();
+				System.out.print( "\r" );
+				System.out.flush();
+
+				return false;
+			}
+
+			eis.close();
+			is.close();
+			zipfile.close();
+
+			// alle Files, die in metadata.xml unter <header><xsd>
+			// aufgelistet sind, müssen im Folder
+			// /header/xsd vorhanden sein, und umgekehrt
+
+			if ( xsdsInZip.size() != xsdsInMetadata.size() ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Ad )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+
+				System.out
+						.print( "\r                                                                                                                                     " );
+				System.out.flush();
+				System.out.print( "\r" );
+				System.out.flush();
+
+				return false;
+			} else {
+				Set keys = xsdsInZip.keySet();
+				Map xsdsInZipControl = new HashMap<String, String>();
+				xsdsInZipControl.putAll( xsdsInZip );
+
+				for ( Iterator<String> iterator = keys.iterator(); iterator
+						.hasNext(); ) {
+					String key = iterator.next();
+					String removedKey = xsdsInMetadata.remove( key );
+					if ( removedKey == null ) {
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_MODULE_Ad )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_DASHES )
+												+ getTextResourceService()
+														.getText(
+																ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+
+						System.out
+								.print( "\r                                                                                                                                     " );
+						System.out.flush();
+						System.out.print( "\r" );
+						System.out.flush();
+
+						return false;
+					}
+					xsdsInZipControl.remove( key );
+				}
+				if ( xsdsInZipControl.size() != 0 ) {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ad )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+
+					System.out
+							.print( "\r                                                                                                                                     " );
+					System.out.flush();
+					System.out.print( "\r" );
+					System.out.flush();
+
+					return false;
+				}
+
+			}
+
+		} catch ( Exception e ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Ad )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ e.getMessage() );
+
+			System.out
+					.print( "\r                                                                                                                                     " );
+			System.out.flush();
+			System.out.print( "\r" );
+			System.out.flush();
+
+			return false;
+
+		}
+		System.out
+				.print( "\r                                                                                                                                     " );
 		System.out.flush();
-        System.out.print("\r");
+		System.out.print( "\r" );
 		System.out.flush();
 
+		return true;
+	}
 
-        return true;
-    }
-    
-    private class Validator extends DefaultHandler {
-        public boolean validationError = false;
+	private class Validator extends DefaultHandler
+	{
+		public boolean				validationError		= false;
 
-        public SAXParseException saxParseException = null;
+		public SAXParseException	saxParseException	= null;
 
-        public void error(SAXParseException exception) throws SAXException {
-            validationError = true;
-            saxParseException = exception;            
-            getMessageService().logError(
-                    getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + 
-                    getTextResourceService().getText(ERROR_MODULE_AD_METADATA_ERRORS, saxParseException.getLineNumber()));                
+		public void error( SAXParseException exception ) throws SAXException
+		{
+			validationError = true;
+			saxParseException = exception;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Ad )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ getTextResourceService().getText(
+									ERROR_MODULE_AD_METADATA_ERRORS,
+									saxParseException.getLineNumber() ) );
 
-        }
+		}
 
-        public void fatalError(SAXParseException exception) throws SAXException {
-            validationError = true;
-            saxParseException = exception;
-            getMessageService().logError(
-                    getTextResourceService().getText(MESSAGE_MODULE_Ad) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + 
-                    getTextResourceService().getText(ERROR_MODULE_AD_METADATA_ERRORS, saxParseException.getLineNumber()));                
-        }
+		public void fatalError( SAXParseException exception )
+				throws SAXException
+		{
+			validationError = true;
+			saxParseException = exception;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Ad )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ getTextResourceService().getText(
+									ERROR_MODULE_AD_METADATA_ERRORS,
+									saxParseException.getLineNumber() ) );
+		}
 
-        public void warning(SAXParseException exception) throws SAXException {
-        }
-    }
+		public void warning( SAXParseException exception ) throws SAXException
+		{
+		}
+	}
 
 }

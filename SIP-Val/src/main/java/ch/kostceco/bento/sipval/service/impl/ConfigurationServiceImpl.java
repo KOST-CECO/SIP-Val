@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: ConfigurationServiceImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -38,232 +37,262 @@ import ch.kostceco.bento.sipval.service.ConfigurationService;
 import ch.kostceco.bento.sipval.service.TextResourceService;
 import ch.kostceco.bento.sipval.service.vo.ValidatedFormat;
 
-public class ConfigurationServiceImpl implements ConfigurationService {
-    
-    private static final Logger LOGGER = new Logger(ConfigurationServiceImpl.class);
-    XMLConfiguration config = null;
-    private TextResourceService textResourceService;
+public class ConfigurationServiceImpl implements ConfigurationService
+{
 
-    public TextResourceService getTextResourceService() {
-        return textResourceService;
-    }
-    public void setTextResourceService(TextResourceService textResourceService) {
-        this.textResourceService = textResourceService;
-    }
+	private static final Logger	LOGGER	= new Logger(
+												ConfigurationServiceImpl.class );
+	XMLConfiguration			config	= null;
+	private TextResourceService	textResourceService;
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<String> getAllowedXsdFileNames() {
-        List<String> result = new ArrayList<String>();
+	public TextResourceService getTextResourceService()
+	{
+		return textResourceService;
+	}
 
-        Object prop = getConfig().getProperty("allowedxsdfiles.allowedxsdfile.filename");
-        
-        if (prop instanceof ArrayList<?>) {
-            result = (List<String>) prop;
-        }
-        return result;
-    }
+	public void setTextResourceService( TextResourceService textResourceService )
+	{
+		this.textResourceService = textResourceService;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public Map<String, String> getAllowedPuids() {
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getAllowedXsdFileNames()
+	{
+		List<String> result = new ArrayList<String>();
 
-        Map<String, String> result = new HashMap<String, String>();
-       
-        List<HierarchicalConfiguration> fields = getConfig().configurationsAt("allowedformats.allowedformat");
-        for(Iterator<HierarchicalConfiguration> it = fields.iterator(); it.hasNext();) {
-            HierarchicalConfiguration sub = it.next();
-            // sub contains now all data about a single field
-            String fieldPuid = sub.getString("puid");
-            String fieldExt  = sub.getString("extension");
-            result.put(fieldPuid, fieldExt);
-        }
-        return result;
-    }
+		Object prop = getConfig().getProperty(
+				"allowedxsdfiles.allowedxsdfile.filename" );
 
-    @Override
-    public Integer getMaximumPathLength() {
-        Object prop = getConfig().getProperty("allowedlengthofpaths");
-        if (prop instanceof String) {
-            String value = (String) prop;
-            Integer intValue = new Integer(value);
-            return intValue;
-        }
-        return null;
-    }
+		if ( prop instanceof ArrayList<?> ) {
+			result = (List<String>) prop;
+		}
+		return result;
+	}
 
-    @Override
-    public Integer getMaximumFileLength() {
-        Object prop = getConfig().getProperty("allowedlengthoffiles");
-        if (prop instanceof String) {
-            String value = (String) prop;
-            Integer intValue = new Integer(value);
-            return intValue;
-        }
-        return null;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, String> getAllowedPuids()
+	{
 
-    /**
-     * Neu soll die Einschränkung des SIP-Namen konfigurierbar sein -> getAllowedSipName.
-     * LOGGER.logError bei else eingefügt
-     * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.9.1, date 16.05.2011
-     */
-    @Override
-    public String getAllowedSipName() {
-        Object prop = getConfig().getProperty("allowedsipname");
-        
-        if (prop instanceof String) {
-        	String value = (String) prop;
-            return value;
-        } else {
-        	LOGGER.logError(getTextResourceService().getText(MESSAGE_MODULE_Ac) + 
-            getTextResourceService().getText(MESSAGE_DASHES) + 
-        	getTextResourceService().getText(MESSAGE_MODULE_AC_INVALIDREGEX));
-        	
-        }
-        return null;
+		Map<String, String> result = new HashMap<String, String>();
 
-    }
-    
-    
-    private XMLConfiguration getConfig(){
-        if (this.config == null) {
-            
-            try {
-                
-                String path = "configuration/sipvalidator.conf.xml";
+		List<HierarchicalConfiguration> fields = getConfig().configurationsAt(
+				"allowedformats.allowedformat" );
+		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it
+				.hasNext(); ) {
+			HierarchicalConfiguration sub = it.next();
+			// sub contains now all data about a single field
+			String fieldPuid = sub.getString( "puid" );
+			String fieldExt = sub.getString( "extension" );
+			result.put( fieldPuid, fieldExt );
+		}
+		return result;
+	}
 
-                URL locationOfJar = SipValidator.class.getProtectionDomain().getCodeSource().getLocation();
-                String locationOfJarPath = locationOfJar.getPath();
-                
-                if (locationOfJarPath.endsWith(".jar")) {
-                    File file = new File(locationOfJarPath);
-                    String fileParent = file.getParent();
-                    path = fileParent + "/" + path;
-                }
-                
-                config = new XMLConfiguration(path);
+	@Override
+	public Integer getMaximumPathLength()
+	{
+		Object prop = getConfig().getProperty( "allowedlengthofpaths" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
 
-            } catch (ConfigurationException e) {                
-                LOGGER.logError(getTextResourceService().getText(MESSAGE_CONFIGURATION_ERROR_1));
-                LOGGER.logError(getTextResourceService().getText(MESSAGE_CONFIGURATION_ERROR_2));
-                LOGGER.logError(getTextResourceService().getText(MESSAGE_CONFIGURATION_ERROR_3));
-                System.exit(0);
-            }
-        }
-        return config;
-    }
+	@Override
+	public Integer getMaximumFileLength()
+	{
+		Object prop = getConfig().getProperty( "allowedlengthoffiles" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
 
-    @Override
-    public String getPathOfDroidSignatureFile() throws MalformedURLException {
+	/**
+	 * Neu soll die Einschränkung des SIP-Namen konfigurierbar sein ->
+	 * getAllowedSipName. LOGGER.logError bei else eingefügt
+	 * 
+	 * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.9.1, date
+	 *         16.05.2011
+	 */
+	@Override
+	public String getAllowedSipName()
+	{
+		Object prop = getConfig().getProperty( "allowedsipname" );
 
-        String pathSignature = getPathToDroidSignatureFile(); 
-        
-        File fileSigfile = new File(pathSignature);        
-        URL urlSigfile = fileSigfile.toURI().toURL();
-        String result = urlSigfile.getFile();
-        
-        return result;
-    }
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		} else {
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_MODULE_Ac )
+					+ getTextResourceService().getText( MESSAGE_DASHES )
+					+ getTextResourceService().getText(
+							MESSAGE_MODULE_AC_INVALIDREGEX ) );
 
+		}
+		return null;
 
-    @Override
-    public String getPathToDroidSignatureFile() {
-        Object prop = getConfig().getProperty("pathtodroidsignature");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }
-    
-    
-    @Override
-    public String getPathToPdftronExe() {
-        Object prop = getConfig().getProperty("pathtopdftronexe");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }
-    
-    @Override
-    public String getPathToPdftronOutputFolder() {
-        Object prop = getConfig().getProperty("pathtopdftronoutput");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }
-    
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<ValidatedFormat> getValidatedFormats() {
+	}
 
-        List<ValidatedFormat> result = new ArrayList<ValidatedFormat>();
+	private XMLConfiguration getConfig()
+	{
+		if ( this.config == null ) {
 
-        List<HierarchicalConfiguration> fields = getConfig().configurationsAt("validatedformats.validatedformat");
-        for(Iterator<HierarchicalConfiguration> it = fields.iterator(); it.hasNext();) {
-            HierarchicalConfiguration sub = it.next();
-            String pronomuniqueid = sub.getString("pronomuniqueid");
-            String validator = sub.getString("validator");
-            String extension = sub.getString("extension");
-            String description = sub.getString("description");
-            
-            result.add(new ValidatedFormat(pronomuniqueid, validator, extension, description));
-            
-        }
+			try {
 
-        
-        return result;
-    }
-    
-    @Override
-    public String getPathToWorkDir() {
-        Object prop = getConfig().getProperty("pathtoworkdir");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }
-    
-    @Override
-    public String getPathToJhoveJar() {
-        Object prop = getConfig().getProperty("pathtojhovejar");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }
-    
-    @Override
-    public String getPathToJhoveOutput() {
-        Object prop = getConfig().getProperty("pathtojhoveoutput");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }
+				String path = "configuration/sipvalidator.conf.xml";
 
-    @Override
-    public String getPathToJhoveConfiguration() {
-        Object prop = getConfig().getProperty("pathtojhoveconfig");
-        
-        if (prop instanceof String) {
-            String value = (String) prop;
-            return value;
-        }
-        return null;
-    }
+				URL locationOfJar = SipValidator.class.getProtectionDomain()
+						.getCodeSource().getLocation();
+				String locationOfJarPath = locationOfJar.getPath();
+
+				if ( locationOfJarPath.endsWith( ".jar" ) ) {
+					File file = new File( locationOfJarPath );
+					String fileParent = file.getParent();
+					path = fileParent + "/" + path;
+				}
+
+				config = new XMLConfiguration( path );
+
+			} catch ( ConfigurationException e ) {
+				LOGGER.logError( getTextResourceService().getText(
+						MESSAGE_CONFIGURATION_ERROR_1 ) );
+				LOGGER.logError( getTextResourceService().getText(
+						MESSAGE_CONFIGURATION_ERROR_2 ) );
+				LOGGER.logError( getTextResourceService().getText(
+						MESSAGE_CONFIGURATION_ERROR_3 ) );
+				System.exit( 0 );
+			}
+		}
+		return config;
+	}
+
+	@Override
+	public String getPathOfDroidSignatureFile() throws MalformedURLException
+	{
+
+		String pathSignature = getPathToDroidSignatureFile();
+
+		File fileSigfile = new File( pathSignature );
+		URL urlSigfile = fileSigfile.toURI().toURL();
+		String result = urlSigfile.getFile();
+
+		return result;
+	}
+
+	@Override
+	public String getPathToDroidSignatureFile()
+	{
+		Object prop = getConfig().getProperty( "pathtodroidsignature" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToPdftronExe()
+	{
+		Object prop = getConfig().getProperty( "pathtopdftronexe" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToPdftronOutputFolder()
+	{
+		Object prop = getConfig().getProperty( "pathtopdftronoutput" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ValidatedFormat> getValidatedFormats()
+	{
+
+		List<ValidatedFormat> result = new ArrayList<ValidatedFormat>();
+
+		List<HierarchicalConfiguration> fields = getConfig().configurationsAt(
+				"validatedformats.validatedformat" );
+		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it
+				.hasNext(); ) {
+			HierarchicalConfiguration sub = it.next();
+			String pronomuniqueid = sub.getString( "pronomuniqueid" );
+			String validator = sub.getString( "validator" );
+			String extension = sub.getString( "extension" );
+			String description = sub.getString( "description" );
+
+			result.add( new ValidatedFormat( pronomuniqueid, validator,
+					extension, description ) );
+
+		}
+
+		return result;
+	}
+
+	@Override
+	public String getPathToWorkDir()
+	{
+		Object prop = getConfig().getProperty( "pathtoworkdir" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToJhoveJar()
+	{
+		Object prop = getConfig().getProperty( "pathtojhovejar" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToJhoveOutput()
+	{
+		Object prop = getConfig().getProperty( "pathtojhoveoutput" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToJhoveConfiguration()
+	{
+		Object prop = getConfig().getProperty( "pathtojhoveconfig" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
 }

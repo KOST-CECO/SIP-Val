@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Zip64Archiver.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -31,95 +30,111 @@ import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- * Diese Klasse benutzt die Zip64File Library zum Komprimieren und Archivieren von Dateien, welche grösser
- * als 4 G sein können. Es gibt momentan keine andere Software ausser pkzip, welche ein kommerzielles Produkt ist,
- * die dazu in der Lage wäre. Bspw. führt Izarc die Archivierung zwar durch, aber erzeugt fehlerhafte Metadaten,
- * die das Dekomprimieren dann verunmöglichen. Uebrigens werden von IZArc auch die Zeichenkodierungen nicht richtig 
- * abgehandelt.
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0 Diese Klasse benutzt die
+ *         Zip64File Library zum Komprimieren und Archivieren von Dateien,
+ *         welche grösser als 4 G sein können. Es gibt momentan keine andere
+ *         Software ausser pkzip, welche ein kommerzielles Produkt ist, die dazu
+ *         in der Lage wäre. Bspw. führt Izarc die Archivierung zwar durch, aber
+ *         erzeugt fehlerhafte Metadaten, die das Dekomprimieren dann
+ *         verunmöglichen. Uebrigens werden von IZArc auch die
+ *         Zeichenkodierungen nicht richtig abgehandelt.
  */
 
-public class Zip64Archiver {
+public class Zip64Archiver
+{
 
-    static byte[] buffer = new byte[8192];
+	static byte[]	buffer	= new byte[8192];
 
-    // Process only directories under dir
-    private static void visitAllDirs(File dir, Zip64File zip64File, File originalDir) 
-        throws FileNotFoundException, ZipException, IOException {
-        if (dir.isDirectory()) {
-            String sDirToCreate = dir.getAbsolutePath();
+	// Process only directories under dir
+	private static void visitAllDirs( File dir, Zip64File zip64File,
+			File originalDir ) throws FileNotFoundException, ZipException,
+			IOException
+	{
+		if ( dir.isDirectory() ) {
+			String sDirToCreate = dir.getAbsolutePath();
 
-            sDirToCreate = sDirToCreate.replace(originalDir.getAbsolutePath(), "");
-            if (sDirToCreate.startsWith("/") || sDirToCreate.startsWith("\\")) {
-                sDirToCreate = sDirToCreate.substring(1);
-            }
-            if (!sDirToCreate.endsWith("/") && sDirToCreate.length() > 0) {
-                sDirToCreate = sDirToCreate + "/";
-            }
-            sDirToCreate = sDirToCreate.replaceAll("\\\\", "/");
+			sDirToCreate = sDirToCreate.replace( originalDir.getAbsolutePath(),
+					"" );
+			if ( sDirToCreate.startsWith( "/" )
+					|| sDirToCreate.startsWith( "\\" ) ) {
+				sDirToCreate = sDirToCreate.substring( 1 );
+			}
+			if ( !sDirToCreate.endsWith( "/" ) && sDirToCreate.length() > 0 ) {
+				sDirToCreate = sDirToCreate + "/";
+			}
+			sDirToCreate = sDirToCreate.replaceAll( "\\\\", "/" );
 
-            if (sDirToCreate.length() > 0) {
+			if ( sDirToCreate.length() > 0 ) {
 
-                buffer = new byte[0];
-                Date dateModified = new Date(dir.lastModified());
-                EntryOutputStream eos = zip64File.openEntryOutputStream(sDirToCreate, FileEntry.iMETHOD_STORED,
-                        dateModified);
-                eos.write(buffer, 0, buffer.length);
-                eos.close();
-                
-            }
+				buffer = new byte[0];
+				Date dateModified = new Date( dir.lastModified() );
+				EntryOutputStream eos = zip64File.openEntryOutputStream(
+						sDirToCreate, FileEntry.iMETHOD_STORED, dateModified );
+				eos.write( buffer, 0, buffer.length );
+				eos.close();
 
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                visitAllDirs(new File(dir, children[i]), zip64File, originalDir);
-            }
-        }
-    }
+			}
 
-    // Process only files under dir
-    private static void visitAllFiles(File dir, Zip64File zip64File, File originalDir) 
-        throws FileNotFoundException, ZipException, IOException {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                visitAllFiles(new File(dir, children[i]), zip64File, originalDir);
-            }
-        } else {
+			String[] children = dir.list();
+			for ( int i = 0; i < children.length; i++ ) {
+				visitAllDirs( new File( dir, children[i] ), zip64File,
+						originalDir );
+			}
+		}
+	}
 
-            String sFileToCreate = dir.getAbsolutePath();
+	// Process only files under dir
+	private static void visitAllFiles( File dir, Zip64File zip64File,
+			File originalDir ) throws FileNotFoundException, ZipException,
+			IOException
+	{
+		if ( dir.isDirectory() ) {
+			String[] children = dir.list();
+			for ( int i = 0; i < children.length; i++ ) {
+				visitAllFiles( new File( dir, children[i] ), zip64File,
+						originalDir );
+			}
+		} else {
 
-            sFileToCreate = sFileToCreate.replace(originalDir.getAbsolutePath(), "");
-            if (sFileToCreate.startsWith("/") || sFileToCreate.startsWith("\\")) {
-                sFileToCreate = sFileToCreate.substring(1);
-            }
-            sFileToCreate = sFileToCreate.replaceAll("\\\\", "/");
+			String sFileToCreate = dir.getAbsolutePath();
 
-            if (sFileToCreate.length() > 0) {
-                buffer = new byte[8192];
-                Date dateModified = new Date(dir.lastModified());
-                FileInputStream fis = new FileInputStream(dir);
-                EntryOutputStream eos = zip64File.openEntryOutputStream(sFileToCreate, FileEntry.iMETHOD_DEFLATED,
-                        dateModified);
-                for (int iRead = fis.read(buffer); iRead >= 0; iRead = fis.read(buffer)) {
-                    eos.write(buffer, 0, iRead);
-                }
-                fis.close();
-                eos.close();
-               
-            }
+			sFileToCreate = sFileToCreate.replace(
+					originalDir.getAbsolutePath(), "" );
+			if ( sFileToCreate.startsWith( "/" )
+					|| sFileToCreate.startsWith( "\\" ) ) {
+				sFileToCreate = sFileToCreate.substring( 1 );
+			}
+			sFileToCreate = sFileToCreate.replaceAll( "\\\\", "/" );
 
-        }
-    }
+			if ( sFileToCreate.length() > 0 ) {
+				buffer = new byte[8192];
+				Date dateModified = new Date( dir.lastModified() );
+				FileInputStream fis = new FileInputStream( dir );
+				EntryOutputStream eos = zip64File
+						.openEntryOutputStream( sFileToCreate,
+								FileEntry.iMETHOD_DEFLATED, dateModified );
+				for ( int iRead = fis.read( buffer ); iRead >= 0; iRead = fis
+						.read( buffer ) ) {
+					eos.write( buffer, 0, iRead );
+				}
+				fis.close();
+				eos.close();
 
-    public static void archivate(File inputDir, File outpFile) throws FileNotFoundException, ZipException, IOException {
-        Zip64File zip64File = new Zip64File(outpFile);
-        // create all necessary folders first
-        Zip64Archiver.visitAllDirs(inputDir, zip64File, inputDir);
-        // then create the file entries
-        Zip64Archiver.visitAllFiles(inputDir, zip64File, inputDir);
+			}
 
-        zip64File.close();            
-    }
+		}
+	}
 
+	public static void archivate( File inputDir, File outpFile )
+			throws FileNotFoundException, ZipException, IOException
+	{
+		Zip64File zip64File = new Zip64File( outpFile );
+		// create all necessary folders first
+		Zip64Archiver.visitAllDirs( inputDir, zip64File, inputDir );
+		// then create the file entries
+		Zip64Archiver.visitAllFiles( inputDir, zip64File, inputDir );
+
+		zip64File.close();
+	}
 
 }

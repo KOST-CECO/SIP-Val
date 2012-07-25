@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation2dGeverFileIntegrityModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -44,187 +43,250 @@ import ch.kostceco.bento.sipval.validation.module2.Validation2dGeverFileIntegrit
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
+
 /**
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleImpl implements Validation2dGeverFileIntegrityModule {
+public class Validation2dGeverFileIntegrityModuleImpl extends
+		ValidationModuleImpl implements Validation2dGeverFileIntegrityModule
+{
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean validate(File sipDatei) throws Validation2dGeverFileIntegrityException {
-        Map<String, String> dateiRefContent = new HashMap<String, String>();
-        Map<String, String> dateiRefOrdnungssystem = new HashMap<String, String>();
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean validate( File sipDatei )
+			throws Validation2dGeverFileIntegrityException
+	{
+		Map<String, String> dateiRefContent = new HashMap<String, String>();
+		Map<String, String> dateiRefOrdnungssystem = new HashMap<String, String>();
 
-        String toplevelDir = sipDatei.getName();
-        int lastDotIdx = toplevelDir.lastIndexOf(".");
-        toplevelDir = toplevelDir.substring(0, lastDotIdx);
+		String toplevelDir = sipDatei.getName();
+		int lastDotIdx = toplevelDir.lastIndexOf( "." );
+		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-        FileEntry metadataxml = null;        
-        boolean valid = true;
-        
-        try {
-            Zip64File zipfile = new Zip64File(sipDatei);
-            List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-            for (FileEntry fileEntry : fileEntryList) {
-                if (fileEntry.getName().equals("header/" + METADATA) || 
-                        fileEntry.getName().equals(toplevelDir + "/header/" + METADATA)) {
-                    metadataxml = fileEntry;
-                    break;
-                }
-            }
+		FileEntry metadataxml = null;
+		boolean valid = true;
 
-            // keine metadata.xml in der SIP-Datei gefunden
-            if (metadataxml == null) {
-                getMessageService().logError(
-                        getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                        getTextResourceService().getText(ERROR_MODULE_AE_NOMETADATAFOUND));                                
-                return false;
-            }
-            
-            EntryInputStream eis = zipfile.openEntryInputStream(metadataxml.getName());
-            BufferedInputStream is = new BufferedInputStream(eis);
+		try {
+			Zip64File zipfile = new Zip64File( sipDatei );
+			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
+			for ( FileEntry fileEntry : fileEntryList ) {
+				if ( fileEntry.getName().equals( "header/" + METADATA )
+						|| fileEntry.getName().equals(
+								toplevelDir + "/header/" + METADATA ) ) {
+					metadataxml = fileEntry;
+					break;
+				}
+			}
 
-            try {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                DocumentBuilder db = dbf.newDocumentBuilder();
-                Document doc = db.parse(is);
-                doc.getDocumentElement().normalize();
-                
-                XPath xpath = XPathFactory.newInstance().newXPath();
-                Element elementName = (Element)xpath.evaluate("/paket/ablieferung", doc, XPathConstants.NODE);
-            
-                if (elementName == null) {
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED));                                
-                    return false;
-                }
-                
-                if (elementName.getAttribute("xsi:type").equals("ablieferungGeverSIP")) {                    
-                    
-                    NodeList nodeLst = doc.getElementsByTagName("dateiRef");
-                    
-                    for (int s = 0; s < nodeLst.getLength(); s++) {
-                        Node fstNode = nodeLst.item(s);
-                        
-                        Element fstElement = (Element)fstNode;
-                        Node parentNode = fstElement.getParentNode();
-                        Element parentElement = (Element)parentNode;
-                        NodeList titelList = parentElement.getElementsByTagName("titel");
-                        
-                        Node titelNode = titelList.item(0);
-                        dateiRefOrdnungssystem.put(fstNode.getTextContent(), titelNode.getTextContent());
-                    }
+			// keine metadata.xml in der SIP-Datei gefunden
+			if ( metadataxml == null ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Bd )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+				return false;
+			}
 
-                    
-                    // alle datei ids aus header/content holen
-                    NodeList nameNodes = (NodeList)xpath.evaluate("//ordner/name", doc, XPathConstants.NODESET);
-                    for (int s = 0; s < nameNodes.getLength(); s++) {
-                        Node dateiNode = nameNodes.item(s);
-                        if (dateiNode.getTextContent().equals("content")) {
-                            Element dateiElement = (Element) dateiNode;
-                            Element parentElement = (Element) dateiElement.getParentNode();
-                            
-                            NodeList dateiNodes = parentElement.getElementsByTagName("datei");
-                            for (int x = 0; x < dateiNodes.getLength(); x++) {
-                                Node dateiNode2 = dateiNodes.item(x);
-                                Node id = dateiNode2.getAttributes().getNamedItem("id");
-                                
-                                Element dateiElement2 = (Element)dateiNode2;
-                                NodeList nameList = dateiElement2.getElementsByTagName("name");
-                                Node titelNode = nameList.item(0);
-                                
-                                Node dateiParentNode = dateiElement2.getParentNode();
-                                Element dateiParentElement = (Element)dateiParentNode;
-                                NodeList nameNodes2 = dateiParentElement.getElementsByTagName("name");
-                                Node contentName = nameNodes2.item(0);
-                                
-                                dateiRefContent.put(
-                                        id.getNodeValue(), 
-                                        "content/"+ contentName.getTextContent() + "/" + titelNode.getTextContent());
-                            }
-                        }
-                    }
-                    
-                    Set<String> keysContent = dateiRefContent.keySet();
-                    boolean titlePrinted = false;
-                    for (Iterator<String> iterator = keysContent.iterator(); iterator.hasNext();) {
-                        String keyContent = iterator.next();
-                        String deleted = dateiRefOrdnungssystem.remove(keyContent);
-                        if (deleted == null) {
-                            if (!titlePrinted) {
-                                getMessageService().logError(
-                                        getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                                        getTextResourceService().getText(MESSAGE_MODULE_BD_MISSINGINABLIEFERUNG));
-                                titlePrinted = true;
-                            }                         
-                            // Die folgende DateiRef ist vorhanden in metadata/paket/inhaltsverzeichnis/content
-                            // aber nicht in metadata/paket/ablieferung/ordnungssystem
-                            getMessageService().logError(
-                                    getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                                    getTextResourceService().getText(MESSAGE_INDENT) + 
-                                    keyContent + 
-                                    getTextResourceService().getText(MESSAGE_SLASH) + 
-                                    dateiRefContent.get(keyContent));
-                            valid = false;
-                        }
-                    }
-                    
-                    Set<String> keysRefOrd = dateiRefOrdnungssystem.keySet();
-                    for (Iterator<String> iterator = keysRefOrd.iterator(); iterator.hasNext();) {
-                        String keyOrd = iterator.next();
-                        // Die folgende DateiRef vorhanden in metadata/paket/ablieferung/ordnungssystem, 
-                        // aber nicht in metadata/paket/inhaltsverzeichnis/content
-                        getMessageService().logError(
-                                getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                                getTextResourceService().getText(MESSAGE_INDENT) + 
-                                keyOrd + 
-                                getTextResourceService().getText(MESSAGE_SLASH) + 
-                                dateiRefOrdnungssystem.get(keyOrd));
-                        valid = false;
-                    }
-                    
-                    
-                } else if (elementName.getAttribute("xsi:type").equals("ablieferungFilesSIP")) {
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(MESSAGE_MODULE_AE_ABLIEFERUNGSTYPFILE));   
-                    // im Falle Ablieferungstyp FILE macht die Validierung nichts
-                    valid = true;
-                    
-                } else{
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED));                                
-                    return false;
-                }
-                
-            } catch (Exception e){
-                getMessageService().logError(
-                        getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                        e.getMessage());                                
-                return false;
-            }
-            
-            zipfile.close();
-            is.close();
-            
-        } catch (Exception e) {
-            getMessageService().logError(
-                    getTextResourceService().getText(MESSAGE_MODULE_Bd) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + 
-                    e.getMessage());                                
-            return false;
-        } 
-        
-        return valid;
-    }
+			EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
+					.getName() );
+			BufferedInputStream is = new BufferedInputStream( eis );
+
+			try {
+				DocumentBuilderFactory dbf = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document doc = db.parse( is );
+				doc.getDocumentElement().normalize();
+
+				XPath xpath = XPathFactory.newInstance().newXPath();
+				Element elementName = (Element) xpath.evaluate(
+						"/paket/ablieferung", doc, XPathConstants.NODE );
+
+				if ( elementName == null ) {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Bd )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+					return false;
+				}
+
+				if ( elementName.getAttribute( "xsi:type" ).equals(
+						"ablieferungGeverSIP" ) ) {
+
+					NodeList nodeLst = doc.getElementsByTagName( "dateiRef" );
+
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node fstNode = nodeLst.item( s );
+
+						Element fstElement = (Element) fstNode;
+						Node parentNode = fstElement.getParentNode();
+						Element parentElement = (Element) parentNode;
+						NodeList titelList = parentElement
+								.getElementsByTagName( "titel" );
+
+						Node titelNode = titelList.item( 0 );
+						dateiRefOrdnungssystem.put( fstNode.getTextContent(),
+								titelNode.getTextContent() );
+					}
+
+					// alle datei ids aus header/content holen
+					NodeList nameNodes = (NodeList) xpath.evaluate(
+							"//ordner/name", doc, XPathConstants.NODESET );
+					for ( int s = 0; s < nameNodes.getLength(); s++ ) {
+						Node dateiNode = nameNodes.item( s );
+						if ( dateiNode.getTextContent().equals( "content" ) ) {
+							Element dateiElement = (Element) dateiNode;
+							Element parentElement = (Element) dateiElement
+									.getParentNode();
+
+							NodeList dateiNodes = parentElement
+									.getElementsByTagName( "datei" );
+							for ( int x = 0; x < dateiNodes.getLength(); x++ ) {
+								Node dateiNode2 = dateiNodes.item( x );
+								Node id = dateiNode2.getAttributes()
+										.getNamedItem( "id" );
+
+								Element dateiElement2 = (Element) dateiNode2;
+								NodeList nameList = dateiElement2
+										.getElementsByTagName( "name" );
+								Node titelNode = nameList.item( 0 );
+
+								Node dateiParentNode = dateiElement2
+										.getParentNode();
+								Element dateiParentElement = (Element) dateiParentNode;
+								NodeList nameNodes2 = dateiParentElement
+										.getElementsByTagName( "name" );
+								Node contentName = nameNodes2.item( 0 );
+
+								dateiRefContent.put(
+										id.getNodeValue(),
+										"content/"
+												+ contentName.getTextContent()
+												+ "/"
+												+ titelNode.getTextContent() );
+							}
+						}
+					}
+
+					Set<String> keysContent = dateiRefContent.keySet();
+					boolean titlePrinted = false;
+					for ( Iterator<String> iterator = keysContent.iterator(); iterator
+							.hasNext(); ) {
+						String keyContent = iterator.next();
+						String deleted = dateiRefOrdnungssystem
+								.remove( keyContent );
+						if ( deleted == null ) {
+							if ( !titlePrinted ) {
+								getMessageService()
+										.logError(
+												getTextResourceService()
+														.getText(
+																MESSAGE_MODULE_Bd )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_BD_MISSINGINABLIEFERUNG ) );
+								titlePrinted = true;
+							}
+							// Die folgende DateiRef ist vorhanden in
+							// metadata/paket/inhaltsverzeichnis/content
+							// aber nicht in
+							// metadata/paket/ablieferung/ordnungssystem
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_MODULE_Bd )
+													+ getTextResourceService()
+															.getText(
+																	MESSAGE_INDENT )
+													+ keyContent
+													+ getTextResourceService()
+															.getText(
+																	MESSAGE_SLASH )
+													+ dateiRefContent
+															.get( keyContent ) );
+							valid = false;
+						}
+					}
+
+					Set<String> keysRefOrd = dateiRefOrdnungssystem.keySet();
+					for ( Iterator<String> iterator = keysRefOrd.iterator(); iterator
+							.hasNext(); ) {
+						String keyOrd = iterator.next();
+						// Die folgende DateiRef vorhanden in
+						// metadata/paket/ablieferung/ordnungssystem,
+						// aber nicht in
+						// metadata/paket/inhaltsverzeichnis/content
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_MODULE_Bd )
+										+ getTextResourceService().getText(
+												MESSAGE_INDENT )
+										+ keyOrd
+										+ getTextResourceService().getText(
+												MESSAGE_SLASH )
+										+ dateiRefOrdnungssystem.get( keyOrd ) );
+						valid = false;
+					}
+
+				} else if ( elementName.getAttribute( "xsi:type" ).equals(
+						"ablieferungFilesSIP" ) ) {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Bd )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															MESSAGE_MODULE_AE_ABLIEFERUNGSTYPFILE ) );
+					// im Falle Ablieferungstyp FILE macht die Validierung
+					// nichts
+					valid = true;
+
+				} else {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Bd )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+					return false;
+				}
+
+			} catch ( Exception e ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Bd )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES ) + e.getMessage() );
+				return false;
+			}
+
+			zipfile.close();
+			is.close();
+
+		} catch ( Exception e ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Bd )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ e.getMessage() );
+			return false;
+		}
+
+		return valid;
+	}
 
 }

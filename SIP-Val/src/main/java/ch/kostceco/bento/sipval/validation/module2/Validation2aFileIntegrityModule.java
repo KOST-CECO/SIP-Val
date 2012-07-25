@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation2aFileIntegrityModule.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -25,14 +24,16 @@ import ch.kostceco.bento.sipval.exception.module2.Validation2aFileIntegrityExcep
 import ch.kostceco.bento.sipval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 2b
- * Dateien mit Prüfsumme in (metadata.xml) //pruefsumme validieren.
+ * Validierungsschritt 2b Dateien mit Prüfsumme in (metadata.xml) //pruefsumme
+ * validieren.
+ * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public interface Validation2aFileIntegrityModule extends ValidationModule {
+public interface Validation2aFileIntegrityModule extends ValidationModule
+{
 
-    
-    public boolean validate(File sipDatei) throws Validation2aFileIntegrityException;
+	public boolean validate( File sipDatei )
+			throws Validation2aFileIntegrityException;
 
 }

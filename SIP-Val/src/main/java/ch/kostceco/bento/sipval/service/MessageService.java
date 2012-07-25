@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: MessageService.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -19,24 +18,31 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.bento.sipval.service;
 
-
 /**
  * Interface für den Message Stack Service.
+ * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
-public interface MessageService extends Service {
-    
-    final static String ERROR = "0";
-    final static String FATAL = "1";
-    final static String INFO = "2";
-    final static String WARN = "3";
-    final static String DEBUG = "4";
+public interface MessageService extends Service
+{
 
-    void logInfo(String message);
-    void logDebug(String message);
-    void logWarning(String message);
-    void logError(String message);
-    void logFatal(String message);
-    void clear();
-    void print();
+	final static String	ERROR	= "0";
+	final static String	FATAL	= "1";
+	final static String	INFO	= "2";
+	final static String	WARN	= "3";
+	final static String	DEBUG	= "4";
+
+	void logInfo( String message );
+
+	void logDebug( String message );
+
+	void logWarning( String message );
+
+	void logError( String message );
+
+	void logFatal( String message );
+
+	void clear();
+
+	void print();
 }

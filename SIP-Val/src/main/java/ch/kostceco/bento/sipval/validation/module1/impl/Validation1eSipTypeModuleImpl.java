@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation1eSipTypeModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -40,100 +39,135 @@ import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
- * Der SIP Typ wird angezeigt: GEVER oder FILE (ermittelt aus dem metadata.xml, element ablieferung)
+ * Der SIP Typ wird angezeigt: GEVER oder FILE (ermittelt aus dem metadata.xml,
+ * element ablieferung)
+ * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
-public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implements Validation1eSipTypeModule {
+public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
+		implements Validation1eSipTypeModule
+{
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean validate( File sipDatei )
+			throws Validation1eSipTypeException
+	{
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean validate(File sipDatei) throws Validation1eSipTypeException {
+		FileEntry metadataxml = null;
 
-        FileEntry metadataxml = null;
+		String toplevelDir = sipDatei.getName();
+		int lastDotIdx = toplevelDir.lastIndexOf( "." );
+		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-        String toplevelDir = sipDatei.getName();
-        int lastDotIdx = toplevelDir.lastIndexOf(".");
-        toplevelDir = toplevelDir.substring(0, lastDotIdx);
+		try {
+			Zip64File zipfile = new Zip64File( sipDatei );
+			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
+			for ( FileEntry fileEntry : fileEntryList ) {
 
-        try {
-            Zip64File zipfile = new Zip64File(sipDatei);
-            List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-            for (FileEntry fileEntry : fileEntryList) {
-                
-                if (fileEntry.getName().equals("header/" + METADATA) || 
-                    fileEntry.getName().equals(toplevelDir + "/header/" + METADATA)) {
-                    metadataxml = fileEntry;
-                    break;
-                }
-            }
-            
-            // keine metadata.xml in der SIP-Datei gefunden
-            if (metadataxml == null) {
-                getMessageService().logError(
-                        getTextResourceService().getText(MESSAGE_MODULE_Ae) + 
-                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                        getTextResourceService().getText(ERROR_MODULE_AE_NOMETADATAFOUND));  
-                return false;
-            }
-            
-            EntryInputStream eis = zipfile.openEntryInputStream(metadataxml.getName());
-            BufferedInputStream is = new BufferedInputStream(eis);
+				if ( fileEntry.getName().equals( "header/" + METADATA )
+						|| fileEntry.getName().equals(
+								toplevelDir + "/header/" + METADATA ) ) {
+					metadataxml = fileEntry;
+					break;
+				}
+			}
 
-            try {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                DocumentBuilder db = dbf.newDocumentBuilder();
-                Document doc = db.parse(is);
-                                        
-                XPath xpath = XPathFactory.newInstance().newXPath();
-                Element elementName = (Element)xpath.evaluate("/paket/ablieferung", doc, XPathConstants.NODE);
-            
-                if (elementName == null) {
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ae) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED));  
-                    return false;
-                }
-                
-                if (elementName.getAttribute("xsi:type").equals("ablieferungGeverSIP")) {
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ae) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(MESSAGE_MODULE_AE_ABLIEFERUNGSTYPGEVER));                
+			// keine metadata.xml in der SIP-Datei gefunden
+			if ( metadataxml == null ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Ae )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+				return false;
+			}
 
-                } else if (elementName.getAttribute("xsi:type").equals("ablieferungFilesSIP")) {
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ae) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(MESSAGE_MODULE_AE_ABLIEFERUNGSTYPFILE));                
-                } else{
-                    getMessageService().logError(
-                            getTextResourceService().getText(MESSAGE_MODULE_Ae) + 
-                            getTextResourceService().getText(MESSAGE_DASHES) + 
-                            getTextResourceService().getText(ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED));  
-                    return false;
-                }
-                
-            } catch (Exception e){
-                getMessageService().logError(
-                        getTextResourceService().getText(MESSAGE_MODULE_Ae) + 
-                        getTextResourceService().getText(MESSAGE_DASHES) + 
-                        e.getMessage());                                
-                return false;
-            }
-            
-            zipfile.close();
-            is.close();
-            
-        } catch (Exception e) {
-            getMessageService().logError(getTextResourceService().getText(MESSAGE_MODULE_Ae) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + e.toString());                                
-            return false;
+			EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
+					.getName() );
+			BufferedInputStream is = new BufferedInputStream( eis );
 
-        } 
-        
-        return true;
-    }
+			try {
+				DocumentBuilderFactory dbf = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document doc = db.parse( is );
+
+				XPath xpath = XPathFactory.newInstance().newXPath();
+				Element elementName = (Element) xpath.evaluate(
+						"/paket/ablieferung", doc, XPathConstants.NODE );
+
+				if ( elementName == null ) {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ae )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+					return false;
+				}
+
+				if ( elementName.getAttribute( "xsi:type" ).equals(
+						"ablieferungGeverSIP" ) ) {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ae )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															MESSAGE_MODULE_AE_ABLIEFERUNGSTYPGEVER ) );
+
+				} else if ( elementName.getAttribute( "xsi:type" ).equals(
+						"ablieferungFilesSIP" ) ) {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ae )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															MESSAGE_MODULE_AE_ABLIEFERUNGSTYPFILE ) );
+				} else {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ae )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+					return false;
+				}
+
+			} catch ( Exception e ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Ae )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES ) + e.getMessage() );
+				return false;
+			}
+
+			zipfile.close();
+			is.close();
+
+		} catch ( Exception e ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Ae )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ e.toString() );
+			return false;
+
+		}
+
+		return true;
+	}
 
 }

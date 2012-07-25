@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: LogConfigurator.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -27,45 +26,52 @@ import org.apache.log4j.Logger;
 
 import ch.kostceco.bento.sipval.service.TextResourceService;
 
-public class LogConfigurator implements MessageConstants {
+public class LogConfigurator implements MessageConstants
+{
 
-    /**
-     * @author razm Daniel Ludin, Bedag AG @version 0.2.0
-     */
+	/**
+	 * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+	 */
 
-    private static final ch.kostceco.bento.sipval.logging.Logger LOGGER = new ch.kostceco.bento.sipval.logging.Logger(
-            LogConfigurator.class);
+	private static final ch.kostceco.bento.sipval.logging.Logger	LOGGER	= new ch.kostceco.bento.sipval.logging.Logger(
+																					LogConfigurator.class );
 
-    private TextResourceService textResourceService;
+	private TextResourceService										textResourceService;
 
-    
-    public TextResourceService getTextResourceService() {
-        return textResourceService;
-    }
-    public void setTextResourceService(TextResourceService textResourceService) {
-        this.textResourceService = textResourceService;
-    }
+	public TextResourceService getTextResourceService()
+	{
+		return textResourceService;
+	}
 
-    public String configure(String directoryOfLogfile, String nameOfLogfile) {
-        
-        String logFileName = directoryOfLogfile + File.separator + nameOfLogfile + ".validationlog.log"; 
-        //String logFileName = directoryOfLogfile + File.separator + "sipvalidator-TEST.log";
-        Logger rootLogger = Logger.getRootLogger();
-        
-        MessageOnlyLayout layout = new MessageOnlyLayout();
-        try {
-            FileAppender logfile = new FileAppender(layout, logFileName);
-            logfile.setName("logfile");
-            logfile.setAppend(false);
-            logfile.activateOptions();
-            
-            rootLogger.addAppender(logfile);
-            
-        } catch (IOException e) {
-            LOGGER.logInfo(getTextResourceService().getText(ERROR_LOGGING_NOFILEAPPENDER));            
-        }
-        
-        return logFileName;
-    }
+	public void setTextResourceService( TextResourceService textResourceService )
+	{
+		this.textResourceService = textResourceService;
+	}
+
+	public String configure( String directoryOfLogfile, String nameOfLogfile )
+	{
+
+		String logFileName = directoryOfLogfile + File.separator
+				+ nameOfLogfile + ".validationlog.log";
+		// String logFileName = directoryOfLogfile + File.separator +
+		// "sipvalidator-TEST.log";
+		Logger rootLogger = Logger.getRootLogger();
+
+		MessageOnlyLayout layout = new MessageOnlyLayout();
+		try {
+			FileAppender logfile = new FileAppender( layout, logFileName );
+			logfile.setName( "logfile" );
+			logfile.setAppend( false );
+			logfile.activateOptions();
+
+			rootLogger.addAppender( logfile );
+
+		} catch ( IOException e ) {
+			LOGGER.logInfo( getTextResourceService().getText(
+					ERROR_LOGGING_NOFILEAPPENDER ) );
+		}
+
+		return logFileName;
+	}
 
 }

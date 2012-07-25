@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: SystemException.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -23,25 +22,29 @@ package ch.kostceco.bento.sipval.exception;
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public class SystemException extends Exception {
+public class SystemException extends Exception
+{
 
-    private static final long serialVersionUID = -5675144395744241578L;
+	private static final long	serialVersionUID	= -5675144395744241578L;
 
-    
-    public SystemException() {
-        super();
-    }
+	public SystemException()
+	{
+		super();
+	}
 
-    public SystemException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public SystemException( String message, Throwable cause )
+	{
+		super( message, cause );
+	}
 
-    public SystemException(String message) {
-        super(message);
-    }
+	public SystemException( String message )
+	{
+		super( message );
+	}
 
-    public SystemException(Throwable cause) {
-        super(cause);
-    }
+	public SystemException( Throwable cause )
+	{
+		super( cause );
+	}
 
 }

@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: ConfigurationService.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -29,79 +28,97 @@ import ch.kostceco.bento.sipval.service.vo.ValidatedFormat;
 
 /**
  * Service Interface für die Konfigurationsdatei.
+ * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
-public interface ConfigurationService extends Service {
-    
-    /**
-     * Gibt eine Liste mit den Namen der XSD-files aus, welche im header/xsd/ Verzeichnis liegen müssen.
-     * @return Liste mit den Namen der XSD-files aus, welche im header/xsd/ Verzeichnis liegen müssen.
-     */
-    List<String> getAllowedXsdFileNames();
-    
-    /**
-     * Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
-     * @return Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
-     */
-    Map<String, String> getAllowedPuids();
-    
-    /**
-     * Gibt die Maximal erlaubte Länge eines Pfades in der SIP-Datei aus.
-     * @return Maximal erlaubte Länge eines Pfades in der SIP-Datei
-     */
-    Integer getMaximumPathLength();
-    
-    /**
-     * Gibt die Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei aus.
-     * @return Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei
-     */
-    Integer getMaximumFileLength();
-    
-    /**
-     * Neu soll die Einschränkung des SIP-Namen konfigurierbar sein -> getAllowedSipName.
-     * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.9.1, date 16.05.2011
-     */
-    String getAllowedSipName();
-    
-    /**
-     * Gibt den Namen des DROID Signature Files zurück. Die Signaturen werden laufend aktualisiert
-     * und müssen deshalb von Zeit zu Zeit ausgetauscht werden. Daher der konfigurierbare Name.
-     * @return Namen des DROID Signature Files
-     * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date 28.03.2011
-     */
-    String getPathToDroidSignatureFile();
-    
-    String getPathOfDroidSignatureFile() throws MalformedURLException; 
-    
-    /**
-     * Gibt den Pfad zum Pdftron Exe zurück.
-     * @return Pfad zum Pdftron Exe
-     */
-    String getPathToPdftronExe();
-    
-    /**
-     * Gibt den Pfad zum Output Folder des Pdftron zurück.
-     * @return Pfad zum Output Folder des Pdftron
-     */
-    String getPathToPdftronOutputFolder();
-    
-    
-    String getPathToJhoveJar();
-    
-    String getPathToJhoveOutput();
-    
-    String getPathToJhoveConfiguration();
-    
-    /**
-     * Gibt den Pfad des Arbeitsverzeichnisses zurück.
-     * Dieses Verzeichnis wird z.B. zum Entpacken des .zip-Files verwendet.
-     * @return Pfad des Arbeitsverzeichnisses
-     */
-    String getPathToWorkDir();
-    
-    /**
-     * Gibt eine Liste mit den zu validierenden Formaten zurück.
-     * @return Liste mit den zu validierenden Formaten
-     */
-    List<ValidatedFormat> getValidatedFormats();
+public interface ConfigurationService extends Service
+{
+
+	/**
+	 * Gibt eine Liste mit den Namen der XSD-files aus, welche im header/xsd/
+	 * Verzeichnis liegen müssen.
+	 * 
+	 * @return Liste mit den Namen der XSD-files aus, welche im header/xsd/
+	 *         Verzeichnis liegen müssen.
+	 */
+	List<String> getAllowedXsdFileNames();
+
+	/**
+	 * Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
+	 * 
+	 * @return Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
+	 */
+	Map<String, String> getAllowedPuids();
+
+	/**
+	 * Gibt die Maximal erlaubte Länge eines Pfades in der SIP-Datei aus.
+	 * 
+	 * @return Maximal erlaubte Länge eines Pfades in der SIP-Datei
+	 */
+	Integer getMaximumPathLength();
+
+	/**
+	 * Gibt die Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei
+	 * aus.
+	 * 
+	 * @return Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei
+	 */
+	Integer getMaximumFileLength();
+
+	/**
+	 * Neu soll die Einschränkung des SIP-Namen konfigurierbar sein ->
+	 * getAllowedSipName.
+	 * 
+	 * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.9.1, date
+	 *         16.05.2011
+	 */
+	String getAllowedSipName();
+
+	/**
+	 * Gibt den Namen des DROID Signature Files zurück. Die Signaturen werden
+	 * laufend aktualisiert und müssen deshalb von Zeit zu Zeit ausgetauscht
+	 * werden. Daher der konfigurierbare Name.
+	 * 
+	 * @return Namen des DROID Signature Files
+	 * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date
+	 *         28.03.2011
+	 */
+	String getPathToDroidSignatureFile();
+
+	String getPathOfDroidSignatureFile() throws MalformedURLException;
+
+	/**
+	 * Gibt den Pfad zum Pdftron Exe zurück.
+	 * 
+	 * @return Pfad zum Pdftron Exe
+	 */
+	String getPathToPdftronExe();
+
+	/**
+	 * Gibt den Pfad zum Output Folder des Pdftron zurück.
+	 * 
+	 * @return Pfad zum Output Folder des Pdftron
+	 */
+	String getPathToPdftronOutputFolder();
+
+	String getPathToJhoveJar();
+
+	String getPathToJhoveOutput();
+
+	String getPathToJhoveConfiguration();
+
+	/**
+	 * Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird
+	 * z.B. zum Entpacken des .zip-Files verwendet.
+	 * 
+	 * @return Pfad des Arbeitsverzeichnisses
+	 */
+	String getPathToWorkDir();
+
+	/**
+	 * Gibt eine Liste mit den zu validierenden Formaten zurück.
+	 * 
+	 * @return Liste mit den zu validierenden Formaten
+	 */
+	List<ValidatedFormat> getValidatedFormats();
 }

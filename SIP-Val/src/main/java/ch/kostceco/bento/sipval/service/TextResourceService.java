@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: TextResourceService.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -23,37 +22,39 @@ import java.util.Locale;
 
 /**
  * Service Interface für Text Ressourcen.
+ * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
-public interface TextResourceService extends Service {
-    /**
-     * Ermitteln eines ResourceValues anhand eines Keys. Es wird die Locale aus
-     * dem UserContext verwendet.
-     * 
-     * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die
-     * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
-     * 
-     * @param aKey
-     *            der Resourcenschlüssel
-     * @param values
-     *            die Werte für die Platzhalter
-     * @return das formatierte Ergebnis
-     */
-    String getText(String aKey, Object... values);
+public interface TextResourceService extends Service
+{
+	/**
+	 * Ermitteln eines ResourceValues anhand eines Keys. Es wird die Locale aus
+	 * dem UserContext verwendet.
+	 * 
+	 * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die
+	 * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
+	 * 
+	 * @param aKey
+	 *            der Resourcenschlüssel
+	 * @param values
+	 *            die Werte für die Platzhalter
+	 * @return das formatierte Ergebnis
+	 */
+	String getText( String aKey, Object... values );
 
-    /**
-     * Ermitteln eines ResourceValues anhand eines Keys.
-     * 
-     * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die
-     * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
-     * 
-     * @param locale
-     *            zu verwendende Locale
-     * @param aKey
-     *            der Resourcenschlüssel
-     * @param values
-     *            die Werte für die Platzhalter
-     * @return das formatierte Ergebnis
-     */
-    String getText(Locale locale, String aKey, Object... values);
+	/**
+	 * Ermitteln eines ResourceValues anhand eines Keys.
+	 * 
+	 * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die
+	 * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
+	 * 
+	 * @param locale
+	 *            zu verwendende Locale
+	 * @param aKey
+	 *            der Resourcenschlüssel
+	 * @param values
+	 *            die Werte für die Platzhalter
+	 * @return das formatierte Ergebnis
+	 */
+	String getText( Locale locale, String aKey, Object... values );
 }

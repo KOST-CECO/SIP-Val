@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: ValidationModule.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -26,16 +25,17 @@ import ch.kostceco.bento.sipval.service.MessageService;
 import ch.kostceco.bento.sipval.service.Service;
 
 /**
- * Dies ist das Interface für alle Validierungs-Module und 
- * vereinigt alle Funktionalitäten, die den jeweiligen Modulen
- * gemeinsam sind.
+ * Dies ist das Interface für alle Validierungs-Module und vereinigt alle
+ * Funktionalitäten, die den jeweiligen Modulen gemeinsam sind.
+ * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public interface ValidationModule extends Service {
+public interface ValidationModule extends Service
+{
 
-    public boolean validate(File sipDatei) throws SipValidatorException;
-    
-    public MessageService getMessageService();
+	public boolean validate( File sipDatei ) throws SipValidatorException;
+
+	public MessageService getMessageService();
 
 }

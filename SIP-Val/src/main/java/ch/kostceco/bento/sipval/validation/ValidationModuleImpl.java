@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: ValidationModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -21,34 +20,39 @@ package ch.kostceco.bento.sipval.validation;
 
 import ch.kostceco.bento.sipval.service.MessageService;
 import ch.kostceco.bento.sipval.service.TextResourceService;
+
 /**
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public abstract class ValidationModuleImpl {
-    
-    protected final String UNZIPDIRECTORY = "unzipped";
-    protected final String METADATA = "metadata.xml";
-    protected final String XSD_ARELDA = "arelda_v3.13.2.xsd";
-    
-    private TextResourceService textResourceService;
-    private MessageService messageService;
+public abstract class ValidationModuleImpl
+{
 
-    public TextResourceService getTextResourceService() {
-        return textResourceService;
-    }
+	protected final String		UNZIPDIRECTORY	= "unzipped";
+	protected final String		METADATA		= "metadata.xml";
+	protected final String		XSD_ARELDA		= "arelda_v3.13.2.xsd";
 
-    public void setTextResourceService(TextResourceService textResourceService) {
-        this.textResourceService = textResourceService;
-    }
+	private TextResourceService	textResourceService;
+	private MessageService		messageService;
 
-    public void setMessageService(MessageService messageService) {
-        this.messageService = messageService;
-    }
+	public TextResourceService getTextResourceService()
+	{
+		return textResourceService;
+	}
 
-    public MessageService getMessageService() {
-        return messageService;
-    }
+	public void setTextResourceService( TextResourceService textResourceService )
+	{
+		this.textResourceService = textResourceService;
+	}
 
+	public void setMessageService( MessageService messageService )
+	{
+		this.messageService = messageService;
+	}
+
+	public MessageService getMessageService()
+	{
+		return messageService;
+	}
 
 }

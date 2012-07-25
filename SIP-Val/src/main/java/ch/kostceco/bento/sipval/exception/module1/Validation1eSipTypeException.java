@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation1eSipTypeException.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -21,19 +20,22 @@ package ch.kostceco.bento.sipval.exception.module1;
 
 import ch.kostceco.bento.sipval.exception.SipValidatorException;
 
-public class Validation1eSipTypeException extends SipValidatorException {
+public class Validation1eSipTypeException extends SipValidatorException
+{
 
-    /**
-     * @author razm Daniel Ludin, Bedag AG @version 0.2.0
-     */
-    private static final long serialVersionUID = -6681985618731840810L;
+	/**
+	 * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+	 */
+	private static final long	serialVersionUID	= -6681985618731840810L;
 
-    public Validation1eSipTypeException() {
-        super();
-    }
+	public Validation1eSipTypeException()
+	{
+		super();
+	}
 
-    public Validation1eSipTypeException(String message) {
-        super(message);
-    }
+	public Validation1eSipTypeException( String message )
+	{
+		super( message );
+	}
 
 }

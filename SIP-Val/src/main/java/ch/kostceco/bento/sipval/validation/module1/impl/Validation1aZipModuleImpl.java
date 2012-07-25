@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: Validation1aZipModuleImpl.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -25,44 +24,50 @@ import ch.kostceco.bento.sipval.exception.module1.Validation1aZipException;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
 import ch.kostceco.bento.sipval.validation.module1.Validation1aZipModule;
 import ch.enterag.utils.zip.Zip64File;
+
 /**
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
-public class Validation1aZipModuleImpl extends ValidationModuleImpl implements Validation1aZipModule {
+public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
+		Validation1aZipModule
+{
 
-    @Override
-    public boolean validate(File sipDatei) throws Validation1aZipException {
+	@Override
+	public boolean validate( File sipDatei ) throws Validation1aZipException
+	{
 
-        
-        // wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
-        if (! (sipDatei.getAbsolutePath().toLowerCase().endsWith(".zip") || 
-               sipDatei.getAbsolutePath().toLowerCase().endsWith(".zip64") )) {
-            
-            getMessageService().logError(getTextResourceService().getText(MESSAGE_MODULE_Aa) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + 
-                    getTextResourceService().getText(ERROR_MODULE_A_INCORRECTFILEENDING));                
-            
-            return false;
-        }
-        
-        Zip64File zf = null;
-        
-        try { 
-            // Versuche das ZIP file zu öffnen
-            zf = new Zip64File(sipDatei);
-            // und wenn es klappt, gleich wieder schliessen
-            zf.close();
-            
-        } catch (Exception e) {
-            getMessageService().logError(getTextResourceService().getText(MESSAGE_MODULE_Aa) + 
-                    getTextResourceService().getText(MESSAGE_DASHES) + e.getMessage());                
-            
-            return false;
-        }
-        
-        return true;
-        
-    }
-    
+		// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
+		if ( !(sipDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || sipDatei
+				.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
+
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Aa )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ getTextResourceService().getText(
+									ERROR_MODULE_A_INCORRECTFILEENDING ) );
+
+			return false;
+		}
+
+		Zip64File zf = null;
+
+		try {
+			// Versuche das ZIP file zu öffnen
+			zf = new Zip64File( sipDatei );
+			// und wenn es klappt, gleich wieder schliessen
+			zf.close();
+
+		} catch ( Exception e ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Aa )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ e.getMessage() );
+
+			return false;
+		}
+
+		return true;
+
+	}
 
 }

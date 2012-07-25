@@ -1,7 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
-$Id: StreamGobbler.java 14 2011-07-21 07:07:28Z u2044 $
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -23,30 +22,34 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 /**
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public class StreamGobbler extends Thread {
-    InputStream is;
+public class StreamGobbler extends Thread
+{
+	InputStream	is;
 
-    String type;
+	String		type;
 
-    public StreamGobbler(InputStream is, String type) {
-        this.is = is;
-        this.type = type;
-    }
+	public StreamGobbler( InputStream is, String type )
+	{
+		this.is = is;
+		this.type = type;
+	}
 
-    @Override
-    public void run() {
-        try {
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            String line = null;
-            while ((line = br.readLine()) != null)
-                System.out.println(type + ">" + line);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
+	@Override
+	public void run()
+	{
+		try {
+			InputStreamReader isr = new InputStreamReader( is );
+			BufferedReader br = new BufferedReader( isr );
+			String line = null;
+			while ( (line = br.readLine()) != null )
+				System.out.println( type + ">" + line );
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
 }
