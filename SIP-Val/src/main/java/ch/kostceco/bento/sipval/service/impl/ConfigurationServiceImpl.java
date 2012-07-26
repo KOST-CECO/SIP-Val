@@ -55,21 +55,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		this.textResourceService = textResourceService;
 	}
 
-/*	@SuppressWarnings("unchecked")
-	@Override
-	public List<String> getAllowedXsdFileNames()
-	{
-		List<String> result = new ArrayList<String>();
-
-		Object prop = getConfig().getProperty(
-				"allowedxsdfiles.allowedxsdfile.filename" );
-
-		if ( prop instanceof ArrayList<?> ) {
-			result = (List<String>) prop;
-		}
-		return result;
-	}*/
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, String> getAllowedPuids()

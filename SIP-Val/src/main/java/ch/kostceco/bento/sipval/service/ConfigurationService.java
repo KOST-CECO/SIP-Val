@@ -35,15 +35,6 @@ public interface ConfigurationService extends Service
 {
 
 	/**
-	 * Gibt eine Liste mit den Namen der XSD-files aus, welche im header/xsd/
-	 * Verzeichnis liegen müssen.
-	 * 
-	 * @return Liste mit den Namen der XSD-files aus, welche im header/xsd/
-	 *         Verzeichnis liegen müssen.
-	 */
-//	List<String> getAllowedXsdFileNames();
-
-	/**
 	 * Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
 	 * 
 	 * @return Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.

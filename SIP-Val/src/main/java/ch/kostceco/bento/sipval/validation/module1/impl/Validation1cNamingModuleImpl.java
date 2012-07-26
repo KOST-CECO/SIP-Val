@@ -242,6 +242,16 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( name.endsWith( XSD_ARELDA ) ) {
 					// dann handelt es sich um die Version 1
 					version = 1;
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ac )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_AC_VERSION,
+													version ) );
+					// Ausgabe der Version als Information
 					if ( allowedV1 == 1 ) {
 						allowedXsdFiles.put( "header/xsd/ablieferung.xsd",
 								"header/xsd/ablieferung.xsd/" );
@@ -273,16 +283,14 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 								"header/xsd/provenienz.xsd/" );
 					} else {
 						// Version 1 ist nicht erlaubt
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_Ac )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_AC_NOTALLOWEDV1 ) );
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_MODULE_Ac )
+										+ getTextResourceService().getText(
+												MESSAGE_DASHES )
+										+ getTextResourceService().getText(
+												MESSAGE_MODULE_AC_NOTALLOWEDV,
+												version ) );
 						valid = false;
 
 					}
@@ -290,6 +298,17 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( name.endsWith( "arelda.xsd" ) ) {
 					// dann handelt es sich um die Version 4
 					version = 4;
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ac )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_AC_VERSION,
+													version ) );
+					// Ausgabe der Version als Information
+
 					if ( allowedV4 == 4 ) {
 
 						allowedXsdFiles.put( "header/xsd/ablieferung.xsd",
@@ -324,16 +343,14 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 								"header/xsd/zusatzDaten.xsd/" );
 					} else {
 						// Version 4 ist nicht erlaubt
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_Ac )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_AC_NOTALLOWEDV4 ) );
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_MODULE_Ac )
+										+ getTextResourceService().getText(
+												MESSAGE_DASHES )
+										+ getTextResourceService().getText(
+												MESSAGE_MODULE_AC_NOTALLOWEDV,
+												version ) );
 						valid = false;
 
 					}

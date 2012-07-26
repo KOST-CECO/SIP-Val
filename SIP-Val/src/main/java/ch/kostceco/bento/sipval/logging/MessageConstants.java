@@ -108,8 +108,8 @@ public interface MessageConstants
 
 	// Modul 1c Meldungen
 	String	MESSAGE_MODULE_AC_NOTALLOWEDFILE				= "message.module.ac.notallowedfile";
-	String	MESSAGE_MODULE_AC_NOTALLOWEDV1					= "message.module.ac.notallowedv1";
-	String	MESSAGE_MODULE_AC_NOTALLOWEDV4					= "message.module.ac.notallowedv4";
+	String	MESSAGE_MODULE_AC_NOTALLOWEDV					= "message.module.ac.notallowedv";
+	String	MESSAGE_MODULE_AC_VERSION						= "message.module.ac.version";
 	String	MESSAGE_MODULE_AC_MISSINGFILE					= "message.module.ac.missingfile";
 	String	MESSAGE_MODULE_AC_PATHTOOLONG					= "message.module.ac.pathtoolong";
 	String	MESSAGE_MODULE_AC_FILENAMETOOLONG				= "message.module.ac.filenametoolong";

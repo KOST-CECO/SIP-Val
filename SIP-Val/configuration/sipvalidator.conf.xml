@@ -1,179 +1,73 @@
 <?xml version="1.0"?>
 <configuration>
 	<allowedlengthofpaths>179</allowedlengthofpaths>
-	<allowedlengthoffiles>60</allowedlengthoffiles>
-	<pathtopdftronexe>C:\ludin\A6Z-SIP-Validator\3rdParty-Software\pdftron\pdfa\pdfa.exe</pathtopdftronexe>
-	<pathtopdftronoutput>C:\ludin\SipValidator-output-pdftron\</pathtopdftronoutput>
-	<pathtojhovejar>C:\Users\razm\jhove\bin\JhoveApp.jar</pathtojhovejar>
-	<pathtojhoveoutput>C:\ludin\SipValidator-output-jhove\</pathtojhoveoutput>
-	<pathtojhoveconfig>C:\Source\workspace\A6Z_SIP-Validator\configuration\jhove.conf</pathtojhoveconfig>
-	<pathtoworkdir>C:\ludin\work</pathtoworkdir>
-	<nameofdroidsignature>DROID_SignatureFile_V45.xml</nameofdroidsignature>
-	<allowedxsdfiles>
-		<allowedxsdfile>
-			<filename>ablieferung.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>archivischeNotiz.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>archivischerVorgang.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>arelda_v3.13.2.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>base.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>datei.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>dokument.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>dossier.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>ordner.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>ordnungssystem.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>ordnungssystemposition.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>paket.xsd</filename>
-		</allowedxsdfile>
-		<allowedxsdfile>
-			<filename>provenienz.xsd</filename>
-		</allowedxsdfile>
-	</allowedxsdfiles>
+	<allowedlengthoffiles>40</allowedlengthoffiles>
+	<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_[A-Za-z0-9_]*</allowedsipname>
+	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
+	<pathtopdftronoutput>logs\pdftron</pathtopdftronoutput>
+	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
+	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
+	<pathtojhoveoutput>logs\jhove</pathtojhoveoutput>
+	<pathtoworkdir>SIP-Val\work</pathtoworkdir>
+	<pathtodroidsignature>SIP-Val\configuration\DROID_SignatureFile_V59-kc.xml</pathtodroidsignature>
+	<allowedversion1>1</allowedversion1>
+	<allowedversion4>4</allowedversion4>
 	
 	<allowedformats>
 		<allowedformat>
-			<puid>x-fmt/111</puid>
-			<extension>txt</extension>
-			<description>Plain Text file</description>
-			<comment>Ueberprüfung der Zeichenkodierung nicht möglich</comment>
+			<puid>x-fmt/111</puid>	<extension>txt</extension>				<comment>Plain Text file</comment>
 		</allowedformat>
 		<allowedformat>
-			<puid>fmt/10</puid>
-			<extension>tif</extension>
-			<description/>
-			<comment>Revision 6.0</comment>
+			<puid>fmt/353</puid>		<extension>tif, tiff</extension>		<comment>keine Version Unterscheidung</comment>	
 		</allowedformat>
 		<allowedformat>
-			<puid>fmt/9</puid>
-			<extension>tif</extension>
-			<description/>
-			<comment>Revision 5.0</comment>
+			<puid>x-fmt/392</puid>	<extension>jp2, jpg2, j2c</extension>	<comment>JPEG2000</comment>		
 		</allowedformat>
 		<allowedformat>
-			<puid>fmt/8</puid>
-			<extension>tif</extension>
-			<description/>
-			<comment>Revision 4.0</comment>
+			<puid>fmt/95</puid>		<extension>pdf</extension>				<comment>Erkennung der PDF/A-Haupteigenschaften v1a</comment>		</allowedformat>
+		<allowedformat>
+			<puid>fmt/354</puid>	<extension>pdf</extension>				<comment>Erkennung der PDF/A-Haupteigenschaften v1b</comment>		
 		</allowedformat>
 		<allowedformat>
-			<puid>fmt/7</puid>
-			<extension>tif</extension>
-			<description/>
-			<comment>Revision 3.0</comment>
+			<puid>fmt/141</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio (PCMWAVEFORMAT)</comment>		</allowedformat>
+		<allowedformat>
+			<puid>fmt/142</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio (WAVEFORMATEX)</comment>		</allowedformat>
+		<allowedformat>
+			<puid>fmt/6</puid>		<extension>wav, wave</extension>		<comment>Waveform Audio</comment>
 		</allowedformat>
 		<allowedformat>
-			<puid>fmt/95</puid>
-			<extension>pdf</extension>
-			<description>PDF/A</description>
-			<comment>Wird in Validierungsschritt Ca und Cb nur auf die Haupteigenschaften von PDF/A überprüft</comment>
+			<puid>x-fmt/18</puid>	<extension>csv</extension>				<comment>Comma Separated Values</comment>
 		</allowedformat>
 		<allowedformat>
-			<puid>fmt/141</puid>
-			<extension>wav</extension>
-			<description>Waveform Audio (PCMWAVEFORMAT)</description>
-			<comment/>
-		</allowedformat>
-		<allowedformat>
-			<puid>fmt/6</puid>
-			<extension>wav</extension>
-			<description>Waveform Audio</description>
-			<comment/>
-		</allowedformat>
-		<allowedformat>
-			<puid>x-fmt/18</puid>
-			<extension>csv</extension>
-			<description/>
-			<comment>Ueberprüfung der Zeichenkodierung nicht möglich</comment>
-		</allowedformat>
-		<allowedformat>
-			<puid>fmt/161</puid>
-			<extension>siard</extension>
-			<description/>
-			<comment>Wird nur auf die Haupteigenschaft von SIARD überprüft</comment>
+			<puid>fmt/161</puid>	<extension>siard</extension>			<comment>Erkennung der SIARD-Haupteigenschaften</comment>
 		</allowedformat>
 	</allowedformats>
 	
 	<validatedformats>
 		<validatedformat>
-			<pronomuniqueid>x-fmt/111</pronomuniqueid>
-			<validator/>
-			<extension>txt</extension>
-			<description>Plain Text file</description>
+			<pronomuniqueid>x-fmt/111</pronomuniqueid>		<validator/>					<description>Plain Text file</description>
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/95</pronomuniqueid>
-			<validator>PDFTRON</validator>
-			<extension>pdf</extension>
-			<description>PDF/A</description>
+			<pronomuniqueid>fmt/95</pronomuniqueid>			<validator>PDFTRON</validator>	<description>PDF/A-1a</description>		</validatedformat>
+		<validatedformat>
+			<pronomuniqueid>fmt/354</pronomuniqueid>		<validator>PDFTRON</validator>	<description>PDF/A-1b</description>
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>x-fmt/18</pronomuniqueid>
-			<validator/>
-			<extension>csv</extension>
-			<description>Comma Separated Values</description>
+			<pronomuniqueid>x-fmt/18</pronomuniqueid>		<validator/>					<description>Comma Separated Values</description>
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/161</pronomuniqueid>
-			<validator/>
-			<extension>siard</extension>
-			<description>siard</description>
+			<pronomuniqueid>fmt/161</pronomuniqueid>		<validator/>					<description>siard</description>
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/10</pronomuniqueid>
-			<validator>JHOVE</validator>
-			<extension>tif</extension>
-			<description>tiff(6)</description>
+			<pronomuniqueid>fmt/353</pronomuniqueid>			<validator>JHOVE</validator>	<description>TIFF</description>	
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/9</pronomuniqueid>
-			<validator>JHOVE</validator>
-			<extension>tif</extension>
-			<description>tiff(5)</description>
+			<pronomuniqueid>x-fmt/392</pronomuniqueid>		<validator>JHOVE</validator>	<description>JPEG2000</description>		
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/8</pronomuniqueid>
-			<validator>JHOVE</validator>
-			<extension>tif</extension>
-			<description>tiff(4)</description>
-		</validatedformat>
+			<pronomuniqueid>fmt/141</pronomuniqueid>		<validator>JHOVE</validator>	<description>Waveform Audio (PCMWAVEFORMAT)</description>		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/7</pronomuniqueid>
-			<validator>JHOVE</validator>
-			<extension>tif</extension>
-			<description>tiff(3)</description>
-		</validatedformat>
-		<validatedformat>
-			<pronomuniqueid>fmt/141</pronomuniqueid>
-			<validator>JHOVE</validator>
-			<extension>wav</extension>
-			<description>Waveform Audio (PCMWAVEFORMAT)</description>
-		</validatedformat>
-		<validatedformat>
-			<pronomuniqueid>fmt/6</pronomuniqueid>
-			<validator>JHOVE</validator>
-			<extension>wav</extension>
-			<description>Waveform Audio</description>
+			<pronomuniqueid>fmt/6</pronomuniqueid>			<validator>JHOVE</validator>	<description>Waveform Audio</description>
 		</validatedformat>
 	</validatedformats>
 </configuration>
