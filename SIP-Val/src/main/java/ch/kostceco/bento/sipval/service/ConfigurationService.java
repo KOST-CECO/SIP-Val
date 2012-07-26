@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -41,7 +41,7 @@ public interface ConfigurationService extends Service
 	 * @return Liste mit den Namen der XSD-files aus, welche im header/xsd/
 	 *         Verzeichnis liegen müssen.
 	 */
-	List<String> getAllowedXsdFileNames();
+//	List<String> getAllowedXsdFileNames();
 
 	/**
 	 * Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
@@ -121,4 +121,12 @@ public interface ConfigurationService extends Service
 	 * @return Liste mit den zu validierenden Formaten
 	 */
 	List<ValidatedFormat> getValidatedFormats();
+	
+	/**
+	 * Gibt aus ob die Version 1 und 4 erlaubt ist oder nicht.
+	 * 
+	 * @return Version 1 respektive 4, welche erlaubt sind
+	 */
+	Integer getAllowedVersion1();
+	Integer getAllowedVersion4();
 }

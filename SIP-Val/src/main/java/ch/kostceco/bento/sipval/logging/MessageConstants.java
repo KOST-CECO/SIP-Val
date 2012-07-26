@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -108,6 +108,8 @@ public interface MessageConstants
 
 	// Modul 1c Meldungen
 	String	MESSAGE_MODULE_AC_NOTALLOWEDFILE				= "message.module.ac.notallowedfile";
+	String	MESSAGE_MODULE_AC_NOTALLOWEDV1					= "message.module.ac.notallowedv1";
+	String	MESSAGE_MODULE_AC_NOTALLOWEDV4					= "message.module.ac.notallowedv4";
 	String	MESSAGE_MODULE_AC_MISSINGFILE					= "message.module.ac.missingfile";
 	String	MESSAGE_MODULE_AC_PATHTOOLONG					= "message.module.ac.pathtoolong";
 	String	MESSAGE_MODULE_AC_FILENAMETOOLONG				= "message.module.ac.filenametoolong";

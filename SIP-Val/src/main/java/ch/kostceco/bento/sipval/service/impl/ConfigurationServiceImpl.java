@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -55,7 +55,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		this.textResourceService = textResourceService;
 	}
 
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getAllowedXsdFileNames()
 	{
@@ -68,7 +68,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			result = (List<String>) prop;
 		}
 		return result;
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -106,6 +106,30 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	public Integer getMaximumFileLength()
 	{
 		Object prop = getConfig().getProperty( "allowedlengthoffiles" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
+
+	@Override
+	public Integer getAllowedVersion1()
+	{
+		Object prop = getConfig().getProperty( "allowedversion1" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
+
+	@Override
+	public Integer getAllowedVersion4()
+	{
+		Object prop = getConfig().getProperty( "allowedversion4" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			Integer intValue = new Integer( value );
