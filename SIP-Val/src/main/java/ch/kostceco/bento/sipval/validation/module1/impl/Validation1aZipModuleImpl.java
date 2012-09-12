@@ -18,7 +18,10 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.bento.sipval.validation.module1.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.util.Arrays;
 
 import ch.kostceco.bento.sipval.exception.module1.Validation1aZipException;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
@@ -36,9 +39,59 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 	public boolean validate( File sipDatei ) throws Validation1aZipException
 	{
 
-		// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
-		if ( !(sipDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || sipDatei
+		boolean valid = false;
+
+		// Eine ZIP Datei muss mit PK.. beginnen
+		if ( (sipDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || sipDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
+
+			FileReader fr = null;
+
+			try {
+				fr = new FileReader( sipDatei );
+				BufferedReader read = new BufferedReader( fr );
+
+				// Hex 03 in Char umwandeln
+				String str3 = "03";
+				int i3 = Integer.parseInt( str3, 16 );
+				char c3 = (char) i3;
+				// Hex 04 in Char umwandeln
+				String str4 = "04";
+				int i4 = Integer.parseInt( str4, 16 );
+				char c4 = (char) i4;
+
+				// auslesen der ersten 4 Zeichen der Datei
+				int length;
+				int i;
+				char[] buffer = new char[4];
+				length = read.read( buffer );
+				for ( i = 0; i != length; i++ )
+					;
+
+				// die beiden charArrays (soll und ist) mit einander
+				// vergleichen
+				char[] charArray1 = buffer;
+				char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
+
+				if ( Arrays.equals( charArray1, charArray2 ) ) {
+					// höchstwahrscheinlich ein ZIP da es mit
+					// 504B0304 respektive
+					// PK.. beginnt
+					valid = true;
+				}
+			} catch ( Exception e ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Aa )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES ) + e.getMessage() );
+				return false;
+			}
+		}
+
+		// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
+		if ( (!(sipDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || sipDatei
+				.getAbsolutePath().toLowerCase().endsWith( ".zip64" )))
+				|| valid == false ) {
 
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_Aa )
@@ -69,5 +122,4 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 		return true;
 
 	}
-
 }

@@ -297,6 +297,11 @@ public class Validation3cFormatValidationModuleImpl extends
 						concatenatedOutputs.append( line );
 						concatenatedOutputs.append( NEWLINE );
 
+						/* TODO: 3. Status : Well-Formed, but not valid existiert
+						 * entsprechend Logik umstellen
+						 * if Well-Formed and valid --> isValid=true
+						 * else --> is Valid=false
+						 */
 						// die Status-Zeile enthält eine von diesen beiden
 						// Möglichkeiten:
 						// Status: Well-Formed and valid

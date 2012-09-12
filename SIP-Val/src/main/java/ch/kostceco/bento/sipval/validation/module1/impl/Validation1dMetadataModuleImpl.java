@@ -261,6 +261,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				Element elementName = (Element) xpath.evaluate(
 						"/paket/inhaltsverzeichnis/ordner/ordner/name", doc,
 						XPathConstants.NODE );
+				
+				// TODO: Gewährleisten, dass /paket/inhaltsverzeichnis/ordner/name = header ist
 
 				Node parentNode = elementName.getParentNode();
 				NodeList nodeLst = parentNode.getChildNodes();
