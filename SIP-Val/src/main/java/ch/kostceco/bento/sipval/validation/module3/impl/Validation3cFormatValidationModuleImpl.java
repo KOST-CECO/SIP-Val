@@ -297,17 +297,14 @@ public class Validation3cFormatValidationModuleImpl extends
 						concatenatedOutputs.append( line );
 						concatenatedOutputs.append( NEWLINE );
 
-						/* TODO: 3. Status : Well-Formed, but not valid existiert
-						 * entsprechend Logik umstellen
-						 * if Well-Formed and valid --> isValid=true
-						 * else --> is Valid=false
-						 */
-						// die Status-Zeile enthält eine von diesen beiden
-						// Möglichkeiten:
-						// Status: Well-Formed and valid
-						// Status: Not well-formed
+						// die Status-Zeile enthält diese Möglichkeiten:
+						// Valider Status: "Well-Formed and valid"
+						// Invalider Status: "Not well-formed" oder
+						// "Well-Formed, but not valid" möglicherweise
+						// existieren weitere Ausgabemöglichkeiten
 						if ( line.contains( "Status:" ) ) {
-							if ( line.contains( "Not well-formed" ) ) {
+							if ( !line.contains( "Well-Formed and valid" ) ) {
+								// Invalider Status
 								Integer countInvalid = countPerExtensionInvalid
 										.get( extMapKey );
 								if ( countInvalid == null ) {
@@ -323,6 +320,7 @@ public class Validation3cFormatValidationModuleImpl extends
 							} else {
 							}
 							if ( line.contains( "Well-Formed and valid" ) ) {
+								// Valider Status
 								Integer countValid = countPerExtensionValid
 										.get( extMapKey );
 								if ( countValid == null ) {
@@ -407,26 +405,6 @@ public class Validation3cFormatValidationModuleImpl extends
 			}
 
 			String msg = validKey + " Valid = " + valid.toString()
-					+ ", Invalid = " + invalid.toString();
-
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cc )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ msg );
-		}
-
-		Set<String> invalidKeys = countPerExtensionInvalid.keySet();
-		for ( String invalidKey : invalidKeys ) {
-			Integer invalid = countPerExtensionInvalid.get( invalidKey );
-			if ( invalid == null ) {
-				invalid = new Integer( 0 );
-			}
-			Integer valid = countPerExtensionValid.get( invalidKey );
-			if ( valid == null ) {
-				valid = new Integer( 0 );
-			}
-
-			String msg = invalidKey + " Valid = " + valid.toString()
 					+ ", Invalid = " + invalid.toString();
 
 			getMessageService().logError(
