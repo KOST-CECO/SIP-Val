@@ -73,7 +73,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 	final int	BUFFER	= 2048;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean validate( File sipDatei )
 			throws Validation1dMetadataException
@@ -261,9 +261,14 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				Element elementName = (Element) xpath.evaluate(
 						"/paket/inhaltsverzeichnis/ordner/ordner/name", doc,
 						XPathConstants.NODE );
-				
-				// TODO: Gewährleisten, dass /paket/inhaltsverzeichnis/ordner/name = header ist
 
+				// TODO: Gewährleisten, dass
+				// /paket/inhaltsverzeichnis/ordner/name = header ist
+				/*
+				 * Zwischenzeitlich wird eine Spezielle Fehlermeldung
+				 * ausgegeben, sollte in metadata.xml der content vor header
+				 * aufgeliestet sein (ERROR_MODULE_AD_CONTENTB4HEADER)
+				 */
 				Node parentNode = elementName.getParentNode();
 				NodeList nodeLst = parentNode.getChildNodes();
 
@@ -308,20 +313,42 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			// /header/xsd vorhanden sein, und umgekehrt
 
 			if ( xsdsInZip.size() != xsdsInMetadata.size() ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Ad )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+				if ( xsdsInMetadata.size() == 0 ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											ERROR_MODULE_AD_CONTENTB4HEADER ) );
 
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
+					System.out
+							.print( "\r                                                                                                                                     " );
+					System.out.flush();
+					System.out.print( "\r" );
+					System.out.flush();
 
-				return false;
+					return false;
+
+				} else {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Ad )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+
+					System.out
+							.print( "\r                                                                                                                                     " );
+					System.out.flush();
+					System.out.print( "\r" );
+					System.out.flush();
+
+					return false;
+				}
 			} else {
 				Set keys = xsdsInZip.keySet();
 				Map xsdsInZipControl = new HashMap<String, String>();

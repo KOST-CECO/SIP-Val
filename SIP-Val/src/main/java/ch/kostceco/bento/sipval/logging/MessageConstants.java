@@ -119,6 +119,7 @@ public interface MessageConstants
 
 	// Modul 1d Meldungen
 	String	ERROR_MODULE_AD_WRONGNUMBEROFXSDS				= "error.module.ad.wrongnumberofxsds";
+	String	ERROR_MODULE_AD_CONTENTB4HEADER					= "error.module.ad.contentB4header";
 	String	ERROR_MODULE_AD_METADATA_ERRORS					= "error.module.ad.metadata.errors";
 
 	// Modul 1e Meldungen
