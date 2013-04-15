@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -31,6 +31,7 @@ public interface MessageConstants
 	String	ERROR_PARAMETER_USAGE							= "error.parameter.usage";
 	String	ERROR_LOGDIRECTORY_NODIRECTORY					= "error.logdirectory.nodirectory";
 	String	ERROR_LOGDIRECTORY_NOTWRITABLE					= "error.logdirectory.notwritable";
+	String	ERROR_WORKDIRECTORY_NOTWRITABLE					= "error.workdirectory.notwritable";
 	String	ERROR_SIPFILE_FILENOTEXISTING					= "error.sipfile.filenotexisting";
 	String	ERROR_LOGGING_NOFILEAPPENDER					= "error.logging.nofileappender";
 	String	ERROR_CANNOTCREATEZIP							= "error.cannotcreatezip";

@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -91,6 +91,20 @@ public interface ConfigurationService extends Service
 	 * @return Pfad zum Output Folder des Pdftron
 	 */
 	String getPathToPdftronOutputFolder();
+
+	/**
+	 * Gibt den Pfad zum Siard-Val Exe zurück.
+	 * 
+	 * @return Pfad zum Siard-Val Exe
+	 */
+	String getPathToSiardValExe();
+
+	/**
+	 * Gibt den Pfad zum Output Folder des Siard-Val zurück.
+	 * 
+	 * @return Pfad zum Output Folder des Siard-Val
+	 */
+	String getPathToSiardValOutputFolder();
 
 	String getPathToJhoveJar();
 

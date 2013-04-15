@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -20,7 +20,7 @@ package ch.kostceco.bento.sipval.enums;
 
 public enum PronomUniqueIdEnum implements BaseEnumItemEnum {
 
-	JHOVE(101), PDFTRON(102);
+	JHOVE(101), PDFTRON(102), SIARDVAL(103);
 
 	private final long	id;
 

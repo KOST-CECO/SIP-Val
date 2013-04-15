@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -171,13 +171,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				config = new XMLConfiguration( path );
 
 			} catch ( ConfigurationException e ) {
-				LOGGER.logError( getTextResourceService().getText(
+				System.out
+						.print( "\r                                                                                                                                     " );
+				System.out.flush();
+				System.out.print( "\r" );
+				System.out.flush();
+
+				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_CONFIGURATION_ERROR_1 ) );
-				LOGGER.logError( getTextResourceService().getText(
+				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_CONFIGURATION_ERROR_2 ) );
-				LOGGER.logError( getTextResourceService().getText(
+				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_CONFIGURATION_ERROR_3 ) );
-				System.exit( 0 );
+				System.exit( 1 );
 			}
 		}
 		return config;
@@ -224,6 +230,30 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	public String getPathToPdftronOutputFolder()
 	{
 		Object prop = getConfig().getProperty( "pathtopdftronoutput" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToSiardValExe()
+	{
+		Object prop = getConfig().getProperty( "pathtosiardvalexe" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToSiardValOutputFolder()
+	{
+		Object prop = getConfig().getProperty( "pathtosiardvaloutput" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;

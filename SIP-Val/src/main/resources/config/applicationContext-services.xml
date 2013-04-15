@@ -27,6 +27,10 @@
 		class="ch.kostceco.bento.sipval.service.impl.PdftronServiceImpl">
 	</bean>
 
+	<bean id="siardValService"
+		class="ch.kostceco.bento.sipval.service.impl.SiardValServiceImpl">
+	</bean>
+
 	<bean id="jhoveService"
 		class="ch.kostceco.bento.sipval.service.impl.JhoveServiceImpl">
 		<property name="configurationService" ref="configurationService" />
@@ -91,6 +95,7 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="pdftronService" ref="pdftronService" />
+		<property name="siardValService" ref="siardValService" />
 		<property name="jhoveService" ref="jhoveService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>

@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val v4.0.1 application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -139,6 +139,24 @@ public class SipValidator implements MessageConstants
 
 		// Ueberprüfung des 2. Parameters (Log-Verzeichnis)
 		File directoryOfLogfile = new File( args[1] );
+		if ( !directoryOfLogfile.exists() ) {
+			directoryOfLogfile.mkdir();
+		}
+
+		// Im Logverzeichnis besteht kein Schreibrecht
+		if ( !directoryOfLogfile.canWrite() ) {
+			System.out
+					.print( "\r                                                                                                  " );
+			System.out.flush();
+			System.out.print( "\r" );
+			System.out.flush();
+
+			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
+					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
+			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}
 
 		if ( !directoryOfLogfile.isDirectory() ) {
 			System.out
@@ -154,8 +172,23 @@ public class SipValidator implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Im Logverzeichnis besteht kein Schreibrecht
-		if ( !directoryOfLogfile.canWrite() ) {
+		// Informationen zum Arbeitsverzeichnis holen
+		String pathToWorkDir = sipValidator.getConfigurationService()
+				.getPathToWorkDir();
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
+
+		File tmpDir = new File( pathToWorkDir );
+		if ( !tmpDir.exists() ) {
+			tmpDir.mkdir();
+		}
+
+		// Im workverzeichnis besteht kein Schreibrecht
+		if ( !tmpDir.canWrite() ) {
 			System.out
 					.print( "\r                                                                                                  " );
 			System.out.flush();
@@ -163,7 +196,7 @@ public class SipValidator implements MessageConstants
 			System.out.flush();
 
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
-					ERROR_LOGDIRECTORY_NOTWRITABLE ) );
+					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
@@ -193,18 +226,17 @@ public class SipValidator implements MessageConstants
 		// Archive gleichartig behandelt werden können, egal ob es sich um eine
 		// Verzeichnisstruktur oder ein
 		// Zip-File handelt.
+		// Informationen zum Arbeitsverzeichnis holen
+
 		String originalSipName = sipDatei.getAbsolutePath();
 		if ( sipDatei.isDirectory() ) {
-			String workDir = sipValidator.getConfigurationService()
-					.getPathToWorkDir();
-			File tmpDir = new File( workDir );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 			}
 			tmpDir.mkdir();
 
 			try {
-				File targetFile = new File( workDir, sipDatei.getName()
+				File targetFile = new File( pathToWorkDir, sipDatei.getName()
 						+ ".zip" );
 				Zip64Archiver.archivate( sipDatei, targetFile );
 				sipDatei = targetFile;
@@ -223,8 +255,6 @@ public class SipValidator implements MessageConstants
 
 		} else {
 			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-			String pathToWorkDir = sipValidator.getConfigurationService()
-					.getPathToWorkDir();
 			File workDir = new File( pathToWorkDir );
 			if ( workDir.exists() ) {
 				Util.deleteDir( workDir );
@@ -383,8 +413,6 @@ public class SipValidator implements MessageConstants
 
 		// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 
-		String pathToWorkDir = sipValidator.getConfigurationService()
-				.getPathToWorkDir();
 		File workDir = new File( pathToWorkDir );
 		if ( workDir.exists() ) {
 			Util.deleteDir( workDir );

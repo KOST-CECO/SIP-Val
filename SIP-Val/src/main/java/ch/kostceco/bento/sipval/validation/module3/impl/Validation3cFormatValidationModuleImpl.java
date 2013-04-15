@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2012 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -51,8 +51,10 @@ import ch.kostceco.bento.sipval.exception.module3.Validation3cFormatValidationEx
 import ch.kostceco.bento.sipval.service.ConfigurationService;
 import ch.kostceco.bento.sipval.service.JhoveService;
 import ch.kostceco.bento.sipval.service.PdftronService;
+import ch.kostceco.bento.sipval.service.SiardValService;
 import ch.kostceco.bento.sipval.service.vo.ValidatedFormat;
 import ch.kostceco.bento.sipval.util.PdftronErrorCodes;
+import ch.kostceco.bento.sipval.util.SiardValErrorCodes;
 import ch.kostceco.bento.sipval.util.Util;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
 import ch.kostceco.bento.sipval.validation.module3.Validation3cFormatValidationModule;
@@ -66,6 +68,7 @@ public class Validation3cFormatValidationModuleImpl extends
 {
 
 	private PdftronService			pdftronService;
+	private SiardValService			siardValService;
 	private ConfigurationService	configurationService;
 	private JhoveService			jhoveService;
 
@@ -79,6 +82,16 @@ public class Validation3cFormatValidationModuleImpl extends
 	public void setPdftronService( PdftronService pdftronService )
 	{
 		this.pdftronService = pdftronService;
+	}
+
+	public SiardValService getSiardValService()
+	{
+		return siardValService;
+	}
+
+	public void setSiardValService( SiardValService siardValService )
+	{
+		this.siardValService = siardValService;
 	}
 
 	public ConfigurationService getConfigurationService()
@@ -159,6 +172,12 @@ public class Validation3cFormatValidationModuleImpl extends
 		// Arbeitsverzeichnis entpackt
 		int countContentFiles = 0;
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		File workDir = new File( pathToWorkDir );
 		Map<String, File> fileMap = Util.getFileMap( workDir, true );
 		Set<String> fileMapKeys = fileMap.keySet();
@@ -184,6 +203,7 @@ public class Validation3cFormatValidationModuleImpl extends
 
 		List<String> filesToProcessWithJhove = new ArrayList<String>();
 		List<String> filesToProcessWithPdftron = new ArrayList<String>();
+		List<String> filesToProcessWithSiardVal = new ArrayList<String>();
 
 		Set<String> fileKeys = filesInSipFile.keySet();
 
@@ -195,7 +215,7 @@ public class Validation3cFormatValidationModuleImpl extends
 			// eine der PUIDs des archivierten Files muss in der Konfiguration
 			// als validatedformat vorkommen,
 			// diese Konfiguration bestimmt, ob ein File selektiert wird zur
-			// Format-Validierung mit JHOVE oder Pdftron
+			// Format-Validierung mit JHOVE, Pdftron oder SIARD-Val
 			boolean selected = false;
 			ValidatedFormat value = null;
 
@@ -218,7 +238,7 @@ public class Validation3cFormatValidationModuleImpl extends
 			// Formate (gemäss Konfigurationsdatei) gefunden
 			if ( selected ) {
 				// in der Konfiguration wird bestimmt, welcher PUID-Typ mit
-				// welchem Validator (JHOVE oder Pdftron)
+				// welchem Validator (JHOVE, Pdftron oder SIARD-Val)
 				// untersucht wird
 				if ( value.getValidator().equals(
 						PronomUniqueIdEnum.PDFTRON.name() ) ) {
@@ -226,6 +246,9 @@ public class Validation3cFormatValidationModuleImpl extends
 				} else if ( value.getValidator().equals(
 						PronomUniqueIdEnum.JHOVE.name() ) ) {
 					filesToProcessWithJhove.add( fileKey );
+				} else if ( value.getValidator().equals(
+						PronomUniqueIdEnum.SIARDVAL.name() ) ) {
+					filesToProcessWithSiardVal.add( fileKey );
 				}
 			}
 		}
@@ -572,6 +595,170 @@ public class Validation3cFormatValidationModuleImpl extends
 					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
 			System.out.flush();
 		}
+		
+		// alle Files, die mit SIARD-Val verarbeitet werden, bulk-mässig an die
+		// Applikation übergeben
+/*		if ( filesToProcessWithSiardVal.size() > 0 ) {
+			
+			StringBuffer pathsSiardVal = new StringBuffer();
+			for ( String pathToProcessWithSiardVal : filesToProcessWithSiardVal ) {
+				pathsSiardVal.append( "\"" );
+				pathsSiardVal.append( pathToProcessWithSiardVal );
+				pathsSiardVal.append( "\"" );
+				pathsSiardVal.append( " " );
+			}
+
+			String pathToSiardValExe = getConfigurationService()
+					.getPathToSiardValExe();
+			
+			getSiardValService().setPathToSiardValExe( pathToSiardValExe );
+
+			String pathToSiardValOutput = getConfigurationService()
+					.getPathToSiardValOutputFolder();
+			//TODO: Report ist noch zu machen (nachfolgende Zeilen)
+
+			try {
+				String pathToSiardValReport = getSiardValService()
+						.executeSiardVal( pathToSiardValExe,
+								pathsSiardVal.toString(), pathToSiardValOutput,
+								sipDatei.getName() );
+
+
+				Util.setPathToReportSiardVal( pathToSiardValReport );
+
+				// aus dem Output von Siard-Val die Fehlercodes extrahieren und
+				// übersetzen
+				BufferedInputStream bis = new BufferedInputStream(
+						new FileInputStream( pathToSiardValReport ) );
+				DocumentBuilderFactory dbf = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document doc = db.parse( bis );
+				doc.normalize();
+				NodeList nodeLst = doc.getElementsByTagName( "Error" );
+
+				Map<String, Integer> errorCounter = new HashMap<String, Integer>();
+
+				// Bsp. für einen Error Code: <Error Code="e_PDFA173"
+				// die erste Ziffer nach e_PDFA ist der Error Code.
+				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+					Node dateiNode = nodeLst.item( s );
+					NamedNodeMap nodeMap = dateiNode.getAttributes();
+					Node errorNode = nodeMap.getNamedItem( "Code" );
+					String errorCode = errorNode.getNodeValue();
+					String errorDigit = errorCode.substring( 6, 7 );
+
+					// der Error Code kann auch "Unknown" sein, dieser wird in
+					// den Code "0" übersetzt
+					if ( errorDigit.equals( "U" ) ) {
+						errorDigit = "0";
+					}
+
+					Integer errorCount = errorCounter.get( errorDigit );
+					if ( errorCount == null ) {
+						errorCounter.put( errorDigit, 1 );
+					} else {
+						errorCount = errorCount + 1;
+						errorCounter.put( errorDigit, errorCount );
+					}
+				}
+
+				StringBuffer errorSummary = new StringBuffer();
+				errorSummary.append( getTextResourceService().getText(
+						MESSAGE_MODULE_CC_ERRORS_IN ) );
+				Integer totalErrors = new Integer( 0 );
+
+				List<String> sortedKeys = new ArrayList<String>();
+				sortedKeys.addAll( errorCounter.keySet() );
+				Collections.sort( sortedKeys );
+
+				for ( Iterator<String> iterator = sortedKeys.iterator(); iterator
+						.hasNext(); ) {
+					String errorCounterKey = iterator.next();
+
+					Integer value = errorCounter.get( errorCounterKey );
+					totalErrors = totalErrors + value;
+
+					errorSummary.append( value.toString() );
+					errorSummary.append( " " );
+					errorSummary.append( SiardValErrorCodes
+							.getErrorLabel( errorCounterKey ) );
+					if ( iterator.hasNext() ) {
+						errorSummary.append( ", " );
+					} else {
+						errorSummary.append( ")" );
+					}
+				}
+
+				Integer passCount = new Integer( 0 );
+
+				NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
+
+				// Valide pdfa-Dokumente enthalten
+				// "<Validation> <Pass FileName..."
+				// Anzahl pass = anzahl Valider pdfa
+				for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
+					passCount = passCount + 1;
+				}
+
+				Integer failCount = new Integer( 0 );
+
+				NodeList nodeLstII = doc.getElementsByTagName( "Fail" );
+
+				// Invalide pdfa-Dokumente enthalten "<Validation> <Fail..."
+				// Anzahl fail = anzahl invalider pdfa
+				for ( int s = 0; s < nodeLstII.getLength(); s++ ) {
+					failCount = failCount + 1;
+				}
+
+				int iValidPdfs = passCount;
+				totalErrors = failCount;
+				String sValidPdfs = "siard Valid = " + iValidPdfs + ", ";
+				if ( totalErrors == 0 ) {
+					errorSummary = new StringBuffer( sValidPdfs
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_INVALID ) + totalErrors );
+				} else {
+					isValid = false;
+					errorSummary = new StringBuffer( sValidPdfs
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_INVALID ) + totalErrors
+							+ " " + errorSummary.toString() );
+				}
+
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ errorSummary.toString() );
+
+			} catch ( Exception e ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES ) + e.getMessage() );
+
+				System.out
+						.print( "\r                                                                                                                                     " );
+				System.out.flush();
+				System.out.print( "\r" );
+				System.out.flush();
+
+				return false;
+			}
+			System.out
+					.print( "\r                                                                                                                                     " );
+			System.out.flush();
+			System.out.print( "\r" );
+			System.out.flush();
+
+			zaehlerWait = zaehlerWait + 1;
+
+			System.out.print( getTextResourceService().getText(
+					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
+			System.out.flush();
+		}
+		*/
 
 		System.out
 				.print( "\r                                                                                                                                     " );
