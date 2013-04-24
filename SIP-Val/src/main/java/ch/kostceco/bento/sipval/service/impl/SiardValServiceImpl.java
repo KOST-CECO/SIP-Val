@@ -21,20 +21,20 @@ package ch.kostceco.bento.sipval.service.impl;
 import java.io.File;
 import ch.kostceco.bento.sipval.exception.SystemException;
 import ch.kostceco.bento.sipval.logging.Logger;
-import ch.kostceco.bento.sipval.service.PdftronService;
+import ch.kostceco.bento.sipval.service.SiardValService;
 import ch.kostceco.bento.sipval.service.TextResourceService;
 import ch.kostceco.bento.sipval.util.StreamGobbler;
 import ch.kostceco.bento.sipval.util.Util;
 
 /**
- * Dieser Service stellt die Schnittstelle zur Pdftron Software dar.
+ * Dieser Service stellt die Schnittstelle zur SIARD-Val Software dar.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO
  */
-public class PdftronServiceImpl implements PdftronService
+public class SiardValServiceImpl implements SiardValService
 {
 
-	private static final Logger	LOGGER	= new Logger( PdftronServiceImpl.class );
+	private static final Logger	LOGGER	= new Logger( SiardValServiceImpl.class );
 
 	private TextResourceService	textResourceService;
 
@@ -49,24 +49,22 @@ public class PdftronServiceImpl implements PdftronService
 	}
 
 	@Override
-	public String executePdftron( String pathToPdftronExe,
+	public String executeSiardVal( String pathToSiardValExe,
 			String pathToInputFile, String pathToOutput, String nameOfSip )
 			throws SystemException
 	{
-
 		File report;
-		File pdftronExe = new File( pathToPdftronExe ); // Pfad zum Programm
-														// Pdftron
+		// Pfad zum Programm SIARD-Val
+		File siardvalExe = new File( pathToSiardValExe );
+		// Pfad zur SIARD-Datei
+		File input = new File( pathToInputFile );
 		File output = new File( pathToOutput );
-		StringBuffer command = new StringBuffer( pdftronExe + " " );
+		StringBuffer command = new StringBuffer( "java -jar " + siardvalExe
+				+ " " );
 
-		command.append( "-l B " );
-		command.append( "-o " );
-		command.append( "\"" );
-		command.append( output.getAbsolutePath() );
-		command.append( "\"" );
-		command.append( " " );
 		command.append( pathToInputFile );
+		command.append( " " );
+		command.append( output.getAbsolutePath() );
 
 		try {
 
@@ -93,14 +91,14 @@ public class PdftronServiceImpl implements PdftronService
 
 			Util.switchOnConsole();
 
-			// System.out.println("exit value: " + exitValue);
+			// Der Name des generierten Reports lautet per default
+			// Dateinamen.Extension.validationlog.log
+			// und es gibt keine Möglichkeit, dies zu übersteuern.
+			String log = new String( input.getName() + ".validationlog.log" );
 
-			// Der Name des generierten Reports lautet per default report.xml
-			// und es scheint keine
-			// Möglichkeit zu geben, dies zu übersteuern.
-			report = new File( pathToOutput, "report.xml" );
+			report = new File( pathToOutput, log );
 			File newReport = new File( pathToOutput, nameOfSip
-					+ ".pdftron-log.xml" );
+					+ ".siardval.log" );
 
 			// falls das File bereits existiert, z.B. von einem vorhergehenden
 			// Durchlauf, löschen wir es
@@ -116,12 +114,10 @@ public class PdftronServiceImpl implements PdftronService
 			report = newReport;
 
 		} catch ( Exception e ) {
-			LOGGER.logDebug( "Pdftron Service failed: " + e.getMessage() );
+			LOGGER.logDebug( "SIARD-Val Service failed: " + e.getMessage() );
 			throw new SystemException( e.toString() );
 		}
-
 		return report.getAbsolutePath();
-
 	}
 
 	@Override
@@ -131,7 +127,7 @@ public class PdftronServiceImpl implements PdftronService
 	}
 
 	@Override
-	public String getPathToPdftronExe()
+	public String getPathToSiardValExe()
 	{
 		return null;
 	}
@@ -143,7 +139,7 @@ public class PdftronServiceImpl implements PdftronService
 	}
 
 	@Override
-	public void setPathToPdftronExe( String pathToPdftronExe )
+	public void setPathToSiardValExe( String pathToSiardValExe )
 	{
 
 	}

@@ -54,7 +54,6 @@ import ch.kostceco.bento.sipval.service.PdftronService;
 import ch.kostceco.bento.sipval.service.SiardValService;
 import ch.kostceco.bento.sipval.service.vo.ValidatedFormat;
 import ch.kostceco.bento.sipval.util.PdftronErrorCodes;
-import ch.kostceco.bento.sipval.util.SiardValErrorCodes;
 import ch.kostceco.bento.sipval.util.Util;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
 import ch.kostceco.bento.sipval.validation.module3.Validation3cFormatValidationModule;
@@ -286,8 +285,21 @@ public class Validation3cFormatValidationModuleImpl extends
 		StringBuffer concatenatedOutputs = new StringBuffer();
 
 		String pathToJhoveJar = getConfigurationService().getPathToJhoveJar();
+		// Informationen zum Jhove-Jogverzeichnis holen
 		String pathToJhoveOutput = getConfigurationService()
 				.getPathToJhoveOutput();
+
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
+
+		File jhoveDir = new File( pathToJhoveOutput );
+		if ( !jhoveDir.exists() ) {
+			jhoveDir.mkdir();
+		}
 
 		Set<String> extMapKeys = extensionsMap.keySet();
 		for ( String extMapKey : extMapKeys ) {
@@ -340,7 +352,6 @@ public class Validation3cFormatValidationModuleImpl extends
 								}
 								isValid = false;
 
-							} else {
 							}
 							if ( line.contains( "Well-Formed and valid" ) ) {
 								// Valider Status
@@ -451,8 +462,22 @@ public class Validation3cFormatValidationModuleImpl extends
 			String pathToPdftronExe = getConfigurationService()
 					.getPathToPdftronExe();
 			getPdftronService().setPathToPdftronExe( pathToPdftronExe );
+
+			// Informationen zum PDFTRON-Logverzeichnis holen
 			String pathToPdftronOutput = getConfigurationService()
 					.getPathToPdftronOutputFolder();
+
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
+
+			File pdftronDir = new File( pathToPdftronOutput );
+			if ( !pdftronDir.exists() ) {
+				pdftronDir.mkdir();
+			}
 
 			try {
 				String pathToPdftronReport = getPdftronService()
@@ -595,157 +620,132 @@ public class Validation3cFormatValidationModuleImpl extends
 					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
 			System.out.flush();
 		}
-		
-		// alle Files, die mit SIARD-Val verarbeitet werden, bulk-mässig an die
+
+		// alle Files, die mit SIARD-Val verarbeitet werden, einzel an die
 		// Applikation übergeben
-/*		if ( filesToProcessWithSiardVal.size() > 0 ) {
-			
-			StringBuffer pathsSiardVal = new StringBuffer();
-			for ( String pathToProcessWithSiardVal : filesToProcessWithSiardVal ) {
-				pathsSiardVal.append( "\"" );
-				pathsSiardVal.append( pathToProcessWithSiardVal );
-				pathsSiardVal.append( "\"" );
-				pathsSiardVal.append( " " );
-			}
+
+		if ( filesToProcessWithSiardVal.size() > 0 ) {
+			// StringBuffer pathsSiardVal = new StringBuffer();
+			// for ( String pathToProcessWithSiardVal :
+			// filesToProcessWithSiardVal ) {
+			// pathsSiardVal.append( "\"" );
+			// pathsSiardVal.append( pathToProcessWithSiardVal );
+			// pathsSiardVal.append( "\"" );
+			// pathsSiardVal.append( " " );
+			// }
+
+			String siardReport = null;
+
+			StringBuffer concatenatedOutputs2 = new StringBuffer();
 
 			String pathToSiardValExe = getConfigurationService()
 					.getPathToSiardValExe();
-			
+
 			getSiardValService().setPathToSiardValExe( pathToSiardValExe );
 
+			// Informationen zum SIARD-Val-Logverzeichnis holen
 			String pathToSiardValOutput = getConfigurationService()
 					.getPathToSiardValOutputFolder();
-			//TODO: Report ist noch zu machen (nachfolgende Zeilen)
 
-			try {
-				String pathToSiardValReport = getSiardValService()
-						.executeSiardVal( pathToSiardValExe,
-								pathsSiardVal.toString(), pathToSiardValOutput,
-								sipDatei.getName() );
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
 
-
-				Util.setPathToReportSiardVal( pathToSiardValReport );
-
-				// aus dem Output von Siard-Val die Fehlercodes extrahieren und
-				// übersetzen
-				BufferedInputStream bis = new BufferedInputStream(
-						new FileInputStream( pathToSiardValReport ) );
-				DocumentBuilderFactory dbf = DocumentBuilderFactory
-						.newInstance();
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( bis );
-				doc.normalize();
-				NodeList nodeLst = doc.getElementsByTagName( "Error" );
-
-				Map<String, Integer> errorCounter = new HashMap<String, Integer>();
-
-				// Bsp. für einen Error Code: <Error Code="e_PDFA173"
-				// die erste Ziffer nach e_PDFA ist der Error Code.
-				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
-					Node dateiNode = nodeLst.item( s );
-					NamedNodeMap nodeMap = dateiNode.getAttributes();
-					Node errorNode = nodeMap.getNamedItem( "Code" );
-					String errorCode = errorNode.getNodeValue();
-					String errorDigit = errorCode.substring( 6, 7 );
-
-					// der Error Code kann auch "Unknown" sein, dieser wird in
-					// den Code "0" übersetzt
-					if ( errorDigit.equals( "U" ) ) {
-						errorDigit = "0";
-					}
-
-					Integer errorCount = errorCounter.get( errorDigit );
-					if ( errorCount == null ) {
-						errorCounter.put( errorDigit, 1 );
-					} else {
-						errorCount = errorCount + 1;
-						errorCounter.put( errorDigit, errorCount );
-					}
-				}
-
-				StringBuffer errorSummary = new StringBuffer();
-				errorSummary.append( getTextResourceService().getText(
-						MESSAGE_MODULE_CC_ERRORS_IN ) );
-				Integer totalErrors = new Integer( 0 );
-
-				List<String> sortedKeys = new ArrayList<String>();
-				sortedKeys.addAll( errorCounter.keySet() );
-				Collections.sort( sortedKeys );
-
-				for ( Iterator<String> iterator = sortedKeys.iterator(); iterator
-						.hasNext(); ) {
-					String errorCounterKey = iterator.next();
-
-					Integer value = errorCounter.get( errorCounterKey );
-					totalErrors = totalErrors + value;
-
-					errorSummary.append( value.toString() );
-					errorSummary.append( " " );
-					errorSummary.append( SiardValErrorCodes
-							.getErrorLabel( errorCounterKey ) );
-					if ( iterator.hasNext() ) {
-						errorSummary.append( ", " );
-					} else {
-						errorSummary.append( ")" );
-					}
-				}
-
-				Integer passCount = new Integer( 0 );
-
-				NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
-
-				// Valide pdfa-Dokumente enthalten
-				// "<Validation> <Pass FileName..."
-				// Anzahl pass = anzahl Valider pdfa
-				for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
-					passCount = passCount + 1;
-				}
-
-				Integer failCount = new Integer( 0 );
-
-				NodeList nodeLstII = doc.getElementsByTagName( "Fail" );
-
-				// Invalide pdfa-Dokumente enthalten "<Validation> <Fail..."
-				// Anzahl fail = anzahl invalider pdfa
-				for ( int s = 0; s < nodeLstII.getLength(); s++ ) {
-					failCount = failCount + 1;
-				}
-
-				int iValidPdfs = passCount;
-				totalErrors = failCount;
-				String sValidPdfs = "siard Valid = " + iValidPdfs + ", ";
-				if ( totalErrors == 0 ) {
-					errorSummary = new StringBuffer( sValidPdfs
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_INVALID ) + totalErrors );
-				} else {
-					isValid = false;
-					errorSummary = new StringBuffer( sValidPdfs
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_INVALID ) + totalErrors
-							+ " " + errorSummary.toString() );
-				}
-
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Cc )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ errorSummary.toString() );
-
-			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Cc )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
-
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
-				return false;
+			File siardvalDir = new File( pathToSiardValOutput );
+			if ( !siardvalDir.exists() ) {
+				siardvalDir.mkdir();
 			}
+
+			Integer countInvalid = new Integer( 0 );
+			Integer countValid = new Integer( 0 );
+			Integer failCountA = new Integer( 0 );
+			Integer failCountB = new Integer( 0 );
+			Integer failCountC = new Integer( 0 );
+			Integer failCountD = new Integer( 0 );
+			Integer failCountE = new Integer( 0 );
+			Integer failCountF = new Integer( 0 );
+			Integer failCountG = new Integer( 0 );
+			Integer failCountH = new Integer( 0 );
+			Integer failCountI = new Integer( 0 );
+			Integer failCountJ = new Integer( 0 );
+
+			for ( String pathToProcessWithSiardVal : filesToProcessWithSiardVal ) {
+				String pathsSiardVal = new String( pathToProcessWithSiardVal );
+
+				try {
+					siardReport = getSiardValService().executeSiardVal(
+							pathToSiardValExe, pathsSiardVal.toString(),
+							pathToSiardValOutput, sipDatei.getName() );
+
+					BufferedReader in = new BufferedReader( new FileReader(
+							siardReport ) );
+					String line;
+
+					while ( (line = in.readLine()) != null ) {
+
+						concatenatedOutputs2.append( line );
+						concatenatedOutputs2.append( NEWLINE );
+
+						// Valide SIARD-Datei enthält: "TOTAL = Valid"
+						// Invalide SIARD-Datei enthält: "TOTAL = Invalid"
+						// if ( line.contains( "Status:" ) ) {
+						if ( line.contains( "TOTAL = Invalid" ) ) {
+							// Invalider Status
+							countInvalid = countInvalid + 1;
+							isValid = false;
+						}
+						if ( line.contains( "TOTAL = Valid" ) ) {
+							// Valider Status
+							countValid = countValid + 1;
+						}
+						if ( line.contains( "[A] = Invalid" ) ) {
+							// Invalides Modul A
+							failCountA = failCountA + 1;
+						}
+						if ( line.contains( "[B] = Invalid" ) ) {
+							failCountB = failCountB + 1;
+						}
+						if ( line.contains( "[C] = Invalid" ) ) {
+							failCountC = failCountC + 1;
+						}
+						if ( line.contains( "[D] = Invalid" ) ) {
+							failCountD = failCountD + 1;
+						}
+						if ( line.contains( "[E] = Invalid" ) ) {
+							failCountE = failCountE + 1;
+						}
+						if ( line.contains( "[F] = Invalid" ) ) {
+							failCountF = failCountF + 1;
+						}
+						if ( line.contains( "[G] = Invalid" ) ) {
+							failCountG = failCountG + 1;
+						}
+						if ( line.contains( "[H] = Invalid" ) ) {
+							failCountH = failCountH + 1;
+						}
+						if ( line.contains( "[I] = Invalid" ) ) {
+							failCountI = failCountI + 1;
+						}
+						if ( line.contains( "[J] = Invalid" ) ) {
+							failCountJ = failCountJ + 1;
+						}
+					}
+
+					in.close();
+
+				} catch ( Exception e ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Cc )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES ) + e.getMessage() );
+					return false;
+				}
+			}
+
 			System.out
 					.print( "\r                                                                                                                                     " );
 			System.out.flush();
@@ -757,8 +757,122 @@ public class Validation3cFormatValidationModuleImpl extends
 			System.out.print( getTextResourceService().getText(
 					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
 			System.out.flush();
+
+			Integer iValidSiard = countValid;
+			Integer totalErrors = countInvalid;
+
+			StringBuffer errorSummary;
+
+			// Log Ausgabe erstellen nach diesem Prinzip Beispiel:
+			// siard Valide = 1, Invalid = 4 (Anzahl Fehler nach Typen:
+			// 1 Lesbarkeit 4 Content 1 Erkennung)
+			String sValidSiard = "siard Valid = " + iValidSiard + ", ";
+			if ( totalErrors == 0 ) {
+				errorSummary = new StringBuffer( sValidSiard
+						+ getTextResourceService().getText(
+								MESSAGE_MODULE_CC_INVALID ) + totalErrors );
+			} else {
+				isValid = false;
+				errorSummary = new StringBuffer( sValidSiard
+						+ getTextResourceService().getText(
+								MESSAGE_MODULE_CC_INVALID )
+						+ totalErrors
+						+ " "
+						+ getTextResourceService().getText(
+								MESSAGE_MODULE_CC_ERRORS_IN ) );
+				if ( failCountA != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountA
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_A ) );
+				}
+				if ( failCountB != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountB
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_B ) );
+				}
+				if ( failCountC != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountC
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_C ) );
+				}
+				if ( failCountD != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountD
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_D ) );
+				}
+				if ( failCountE != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountE
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_E ) );
+				}
+				if ( failCountF != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountF
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_F ) );
+				}
+				if ( failCountG != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountG
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_G ) );
+				}
+				if ( failCountH != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountH
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_H ) );
+				}
+				if ( failCountI != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountI
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_I ) );
+				}
+				if ( failCountJ != 0 ) {
+					errorSummary = new StringBuffer( errorSummary.toString()
+							+ failCountJ
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CC_ERRORS_IN_J ) );
+				}
+				errorSummary = new StringBuffer( errorSummary.toString() + ")" );
+			}
+
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_Cc )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ errorSummary.toString() );
+
+			// TODO: die im StringBuffer konkatinierten Outputs der einzelnen
+			// Verarbeitungen wieder in das Output-File zurückschreiben
+			if ( siardReport != null ) {
+				try {
+					BufferedWriter out = new BufferedWriter( new FileWriter(
+							siardReport ) );
+					out.write( concatenatedOutputs2.toString() );
+					out.close();
+					Util.setPathToReportSiardVal( siardReport );
+
+				} catch ( IOException e ) {
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_Cc )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService()
+													.getText(
+															MESSAGE_MODULE_CC_CANNOTWRITESIARDVALREPORT ) );
+					return false;
+				}
+			}
+
 		}
-		*/
 
 		System.out
 				.print( "\r                                                                                                                                     " );

@@ -50,6 +50,7 @@ public interface MessageConstants
 
 	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
 	String	MESSAGE_FOOTER_REPORTPDFTRON					= "message.footer.reportpdftron";
+	String	MESSAGE_FOOTER_REPORTSIARDVAL					= "message.footer.reportsiardval";
 
 	// Globale Meldungen
 	String	MESSAGE_SIPVALIDATION							= "message.sipvalidation";
@@ -153,8 +154,19 @@ public interface MessageConstants
 
 	// Modul 3c Meldungen
 	String	MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT		= "message.module.cc.cannotwritejhovereport";
+	String	MESSAGE_MODULE_CC_CANNOTWRITESIARDVALREPORT		= "message.module.cc.cannotwritesiardvalreport";
 	String	MESSAGE_MODULE_CC_INVALID						= "message.module.cc.invalid";
 	String	MESSAGE_MODULE_CC_ERRORS_IN						= "message.module.cc.errors.in";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_A					= "message.module.cc.errors.in.a";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_B					= "message.module.cc.errors.in.b";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_C					= "message.module.cc.errors.in.c";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_D					= "message.module.cc.errors.in.d";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_E					= "message.module.cc.errors.in.e";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_F					= "message.module.cc.errors.in.f";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_G					= "message.module.cc.errors.in.g";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_H					= "message.module.cc.errors.in.h";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_I					= "message.module.cc.errors.in.i";
+	String	MESSAGE_MODULE_CC_ERRORS_IN_J					= "message.module.cc.errors.in.j";
 	String	MESSAGE_MODULE_CC_NOJHOVEVAL					= "message.module.cc.nojhoveval";
 
 	// Modul 3d Meldungen

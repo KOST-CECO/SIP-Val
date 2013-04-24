@@ -1,5 +1,5 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v4.0.1 application is used for validate Submission Information Package (SIP).
+The SIP-Val v4.1.0 application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
@@ -384,7 +384,7 @@ public class SipValidator implements MessageConstants
 		}
 		LOGGER.logInfo( "" );
 
-		// Ausgabe der Pfade zu den Jhove/Pdftron Reports, falls welche
+		// Ausgabe der Pfade zu den Jhove/Pdftron & Co. Reports, falls welche
 		// generiert wurden
 		if ( Util.getPathToReportJHove() != null ) {
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
@@ -394,6 +394,11 @@ public class SipValidator implements MessageConstants
 			LOGGER.logInfo( sipValidator.getTextResourceService()
 					.getText( MESSAGE_FOOTER_REPORTPDFTRON,
 							Util.getPathToReportPdftron() ) );
+		}
+		if ( Util.getPathToReportSiardVal() != null ) {
+			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
+					MESSAGE_FOOTER_REPORTSIARDVAL,
+					Util.getPathToReportSiardVal() ) );
 		}
 
 		LOGGER.logInfo( "" );
