@@ -1,0 +1,11 @@
+SIP-VAL
+=======
+The SIP-Val application is used for validate Submission Information Package (SIP). 
+
+SIP-Val, Copyright (C) 2011-2013 Claire Roethlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it under certain conditions;
+see GPL-3.0_COPYING.txt for details.
+
+You can download SIP-Val under http://kost-ceco.ch/cms/index.php?sip-val_de. 
+For installation-instructions check the manual (DE/FR).
