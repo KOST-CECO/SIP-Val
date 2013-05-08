@@ -100,9 +100,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public Integer getAllowedVersion1()
+	public Integer getAllowedVersionBar1()
 	{
-		Object prop = getConfig().getProperty( "allowedversion1" );
+		Object prop = getConfig().getProperty( "allowedversionbar1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			Integer intValue = new Integer( value );
@@ -112,9 +112,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public Integer getAllowedVersion4()
+	public Integer getAllowedVersionBar4Ech1()
 	{
-		Object prop = getConfig().getProperty( "allowedversion4" );
+		Object prop = getConfig().getProperty( "allowedversionbar4ech1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			Integer intValue = new Integer( value );
@@ -239,9 +239,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToSiardValExe()
+	public String getPathToSiardValJar()
 	{
-		Object prop = getConfig().getProperty( "pathtosiardvalexe" );
+		Object prop = getConfig().getProperty( "pathtosiardvaljar" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;

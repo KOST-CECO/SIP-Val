@@ -223,8 +223,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		// eine Reihe *.xsd files, welche sich je nach SIP-Version
 		// unterscheiden.
 
-		Integer allowedV1 = getConfigurationService().getAllowedVersion1();
-		Integer allowedV4 = getConfigurationService().getAllowedVersion4();
+		Integer allowedV1 = getConfigurationService().getAllowedVersionBar1();
+		Integer allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
 		// generiert eine Map mit den xsd-files und Ordnern, welche in
 		// header/xsd/ enthalten sein müssen
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
@@ -240,7 +240,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				String name = fileEntry.getName();
 
 				if ( name.endsWith( XSD_ARELDA ) ) {
-					// dann handelt es sich um die Version 1
+					// dann handelt es sich um die Version BAR1
 					version = 1;
 					getMessageService()
 							.logError(
@@ -296,7 +296,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 					}
 				}
 				if ( name.endsWith( "arelda.xsd" ) ) {
-					// dann handelt es sich um die Version 4
+					// dann handelt es sich um die Version BAR4 respektive eCH1
 					version = 4;
 					getMessageService()
 							.logError(
@@ -309,7 +309,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 													version ) );
 					// Ausgabe der Version als Information
 
-					if ( allowedV4 == 4 ) {
+					if ( allowedV4 == 1 ) {
 
 						allowedXsdFiles.put( "header/xsd/ablieferung.xsd",
 								"header/xsd/ablieferung.xsd/" );

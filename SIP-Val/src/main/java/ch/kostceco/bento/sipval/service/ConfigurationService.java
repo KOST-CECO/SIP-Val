@@ -97,7 +97,7 @@ public interface ConfigurationService extends Service
 	 * 
 	 * @return Pfad zum Siard-Val Exe
 	 */
-	String getPathToSiardValExe();
+	String getPathToSiardValJar();
 
 	/**
 	 * Gibt den Pfad zum Output Folder des Siard-Val zurück.
@@ -128,10 +128,10 @@ public interface ConfigurationService extends Service
 	List<ValidatedFormat> getValidatedFormats();
 	
 	/**
-	 * Gibt aus ob die Version 1 und 4 erlaubt ist oder nicht.
+	 * Gibt aus ob die BAR Version 1 und 4= eCH Version 1 erlaubt ist oder nicht.
 	 * 
-	 * @return Version 1 respektive 4, welche erlaubt sind
+	 * @return 1 wenn erlaubt respektive 0 wenn nicht erlaubt
 	 */
-	Integer getAllowedVersion1();
-	Integer getAllowedVersion4();
+	Integer getAllowedVersionBar1();
+	Integer getAllowedVersionBar4Ech1();
 }

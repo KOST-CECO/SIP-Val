@@ -33,14 +33,14 @@ public interface SiardValService extends Service
 	 * 
 	 * @return Pfad zum SIARD-Val Executable
 	 */
-	public String getPathToSiardValExe();
+	public String getPathToSiardValJar();
 
 	/**
 	 * Setzt den Pfad zum SIARD-Val Executable
 	 * 
 	 * @return Pfad zum SIARD-Val Executable
 	 */
-	public void setPathToSiardValExe( String pathToSiardValExe );
+	public void setPathToSiardValJar( String pathToSiardValJar );
 
 	/**
 	 * Gibt den Pfad zum Input File (das zu validierende Dokument) zurück
@@ -62,7 +62,7 @@ public interface SiardValService extends Service
 	 * @return Pfad zum von SIARD-Val generierten LOG-Report
 	 * @throws Exception
 	 */
-	public String executeSiardVal( String pathToSiardValExe,
+	public String executeSiardVal( String pathToSiardValJar,
 			String pathToInputFile, String pathToOutput, String nameOfSip )
 			throws SystemException;
 }

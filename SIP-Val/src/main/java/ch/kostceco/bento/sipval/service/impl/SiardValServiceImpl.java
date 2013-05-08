@@ -49,17 +49,17 @@ public class SiardValServiceImpl implements SiardValService
 	}
 
 	@Override
-	public String executeSiardVal( String pathToSiardValExe,
+	public String executeSiardVal( String pathToSiardValJar,
 			String pathToInputFile, String pathToOutput, String nameOfSip )
 			throws SystemException
 	{
 		File report;
 		// Pfad zum Programm SIARD-Val
-		File siardvalExe = new File( pathToSiardValExe );
+		File siardvalJar = new File( pathToSiardValJar );
 		// Pfad zur SIARD-Datei
 		File input = new File( pathToInputFile );
 		File output = new File( pathToOutput );
-		StringBuffer command = new StringBuffer( "java -jar " + siardvalExe
+		StringBuffer command = new StringBuffer( "java -jar " + siardvalJar
 				+ " " );
 
 		command.append( pathToInputFile );
@@ -127,7 +127,7 @@ public class SiardValServiceImpl implements SiardValService
 	}
 
 	@Override
-	public String getPathToSiardValExe()
+	public String getPathToSiardValJar()
 	{
 		return null;
 	}
@@ -139,7 +139,7 @@ public class SiardValServiceImpl implements SiardValService
 	}
 
 	@Override
-	public void setPathToSiardValExe( String pathToSiardValExe )
+	public void setPathToSiardValJar( String pathToSiardValJar )
 	{
 
 	}

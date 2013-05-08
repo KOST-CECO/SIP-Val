@@ -625,23 +625,15 @@ public class Validation3cFormatValidationModuleImpl extends
 		// Applikation übergeben
 
 		if ( filesToProcessWithSiardVal.size() > 0 ) {
-			// StringBuffer pathsSiardVal = new StringBuffer();
-			// for ( String pathToProcessWithSiardVal :
-			// filesToProcessWithSiardVal ) {
-			// pathsSiardVal.append( "\"" );
-			// pathsSiardVal.append( pathToProcessWithSiardVal );
-			// pathsSiardVal.append( "\"" );
-			// pathsSiardVal.append( " " );
-			// }
 
 			String siardReport = null;
 
 			StringBuffer concatenatedOutputs2 = new StringBuffer();
 
-			String pathToSiardValExe = getConfigurationService()
-					.getPathToSiardValExe();
+			String pathToSiardValJar = getConfigurationService()
+					.getPathToSiardValJar();
 
-			getSiardValService().setPathToSiardValExe( pathToSiardValExe );
+			getSiardValService().setPathToSiardValJar( pathToSiardValJar );
 
 			// Informationen zum SIARD-Val-Logverzeichnis holen
 			String pathToSiardValOutput = getConfigurationService()
@@ -677,7 +669,7 @@ public class Validation3cFormatValidationModuleImpl extends
 
 				try {
 					siardReport = getSiardValService().executeSiardVal(
-							pathToSiardValExe, pathsSiardVal.toString(),
+							pathToSiardValJar, pathsSiardVal.toString(),
 							pathToSiardValOutput, sipDatei.getName() );
 
 					BufferedReader in = new BufferedReader( new FileReader(
