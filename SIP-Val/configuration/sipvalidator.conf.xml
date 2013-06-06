@@ -2,16 +2,16 @@
 <configuration>
 	<allowedlengthofpaths>179</allowedlengthofpaths>
 	<allowedlengthoffiles>40</allowedlengthoffiles>
-	<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_[A-Za-z0-9_]*</allowedsipname>
+	<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
 	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
-	<pathtopdftronoutput>logs\pdftron</pathtopdftronoutput>
+	<pathtosiardvaljar>SIARD-Val\siard-val.jar</pathtosiardvaljar>
 	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
 	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
-	<pathtojhoveoutput>logs\jhove</pathtojhoveoutput>
-	<pathtoworkdir>SIP-Val\work</pathtoworkdir>
+	<pathtoworkdir>work_SIP-Val</pathtoworkdir>
 	<pathtodroidsignature>SIP-Val\configuration\DROID_SignatureFile_V59-kc.xml</pathtodroidsignature>
-	<allowedversion1>1</allowedversion1>
-	<allowedversion4>4</allowedversion4>
+	<allowedversionbar1>1</allowedversionbar1>
+	<allowedversionbar4ech1>1</allowedversionbar4ech1>
+
 	
 	<allowedformats>
 		<allowedformat>
@@ -56,7 +56,7 @@
 			<pronomuniqueid>x-fmt/18</pronomuniqueid>		<validator/>					<description>Comma Separated Values</description>
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/161</pronomuniqueid>		<validator/>					<description>siard</description>
+			<pronomuniqueid>fmt/161</pronomuniqueid>		<validator>SIARDVAL</validator>	<description>siard</description>
 		</validatedformat>
 		<validatedformat>
 			<pronomuniqueid>fmt/353</pronomuniqueid>			<validator>JHOVE</validator>	<description>TIFF</description>	

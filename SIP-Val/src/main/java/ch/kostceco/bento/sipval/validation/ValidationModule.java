@@ -34,7 +34,7 @@ import ch.kostceco.bento.sipval.service.Service;
 public interface ValidationModule extends Service
 {
 
-	public boolean validate( File sipDatei ) throws SipValidatorException;
+	public boolean validate( File sipDatei, File directoryOfLogfile ) throws SipValidatorException;
 
 	public MessageService getMessageService();
 

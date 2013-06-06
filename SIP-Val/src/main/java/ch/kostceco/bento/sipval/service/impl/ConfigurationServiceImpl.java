@@ -227,33 +227,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToPdftronOutputFolder()
-	{
-		Object prop = getConfig().getProperty( "pathtopdftronoutput" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
 	public String getPathToSiardValJar()
 	{
 		Object prop = getConfig().getProperty( "pathtosiardvaljar" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getPathToSiardValOutputFolder()
-	{
-		Object prop = getConfig().getProperty( "pathtosiardvaloutput" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -303,18 +279,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	public String getPathToJhoveJar()
 	{
 		Object prop = getConfig().getProperty( "pathtojhovejar" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getPathToJhoveOutput()
-	{
-		Object prop = getConfig().getProperty( "pathtojhoveoutput" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;

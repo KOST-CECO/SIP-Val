@@ -60,7 +60,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean validate( File sipDatei ) throws Validation1cNamingException
+	public boolean validate( File sipDatei, File directoryOfLogfile ) throws Validation1cNamingException
 	{
 
 		boolean valid = true;
@@ -489,7 +489,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 	}
 
-	public static void main( String[] args )
+/*	public static void main( String[] args )
 	{
 
 		File sipDatei = new File(
@@ -497,10 +497,10 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 		Validation1cNamingModuleImpl module = new Validation1cNamingModuleImpl();
 		try {
-			module.validate( sipDatei );
+			module.validate( sipDatei, directoryOfLogfile );
 		} catch ( Validation1cNamingException e ) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }

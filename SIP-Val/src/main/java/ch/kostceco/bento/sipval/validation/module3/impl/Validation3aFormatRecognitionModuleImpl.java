@@ -56,7 +56,7 @@ public class Validation3aFormatRecognitionModuleImpl extends
 	}
 
 	@Override
-	public boolean validate( File sipDatei )
+	public boolean validate( File sipDatei, File directoryOfLogfile )
 			throws Validation3aFormatRecognitionException
 	{
 		boolean valid = true;

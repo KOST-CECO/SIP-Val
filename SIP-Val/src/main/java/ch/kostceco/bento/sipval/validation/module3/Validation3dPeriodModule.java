@@ -36,6 +36,6 @@ import ch.kostceco.bento.sipval.validation.ValidationModule;
 public interface Validation3dPeriodModule extends ValidationModule
 {
 
-	public boolean validate( File sipDatei ) throws Validation3dPeriodException;
+	public boolean validate( File sipDatei, File directoryOfLogfile ) throws Validation3dPeriodException;
 
 }

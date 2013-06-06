@@ -4,27 +4,14 @@
 	<allowedlengthoffiles>40</allowedlengthoffiles>
 	<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
 	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
-	<pathtopdftronoutput>logs\pdftron</pathtopdftronoutput>
+	<pathtosiardvaljar>SIARD-Val\siard-val.jar</pathtosiardvaljar>
 	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
 	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
-	<pathtojhoveoutput>logs\jhove</pathtojhoveoutput>
-	<pathtoworkdir>SIP-Val\work</pathtoworkdir>
-	<pathtodroidsignature>SIP-Val\configuration\DROID_SignatureFile_V52-kc.xml</pathtodroidsignature>
-	<allowedxsdfiles>
-		<allowedxsdfile>			<filename>ablieferung.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>archivischeNotiz.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>archivischerVorgang.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>arelda_v3.13.2.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>base.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>datei.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>dokument.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>dossier.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>ordner.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>ordnungssystem.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>ordnungssystemposition.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>paket.xsd</filename>		</allowedxsdfile>
-		<allowedxsdfile>			<filename>provenienz.xsd</filename>		</allowedxsdfile>
-	</allowedxsdfiles>
+	<pathtoworkdir>work_SIP-Val</pathtoworkdir>
+	<pathtodroidsignature>SIP-Val\configuration\DROID_SignatureFile_V59-kc.xml</pathtodroidsignature>
+	<allowedversionbar1>1</allowedversionbar1>
+	<allowedversionbar4ech1>1</allowedversionbar4ech1>
+
 	
 	<allowedformats>
 		<allowedformat>
@@ -43,6 +30,8 @@
 		</allowedformat>
 		<allowedformat>
 			<puid>fmt/141</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio (PCMWAVEFORMAT)</comment>		</allowedformat>
+		<allowedformat>
+			<puid>fmt/142</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio (WAVEFORMATEX)</comment>		</allowedformat>
 		<allowedformat>
 			<puid>fmt/6</puid>		<extension>wav, wave</extension>		<comment>Waveform Audio</comment>
 		</allowedformat>
@@ -67,7 +56,7 @@
 			<pronomuniqueid>x-fmt/18</pronomuniqueid>		<validator/>					<description>Comma Separated Values</description>
 		</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/161</pronomuniqueid>		<validator/>					<description>siard</description>
+			<pronomuniqueid>fmt/161</pronomuniqueid>		<validator>SIARDVAL</validator>	<description>siard</description>
 		</validatedformat>
 		<validatedformat>
 			<pronomuniqueid>fmt/353</pronomuniqueid>			<validator>JHOVE</validator>	<description>TIFF</description>	

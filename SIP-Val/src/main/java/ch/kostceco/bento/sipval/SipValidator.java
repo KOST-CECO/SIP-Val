@@ -1,5 +1,5 @@
 /*== SIP-Val ==================================================================================
-The SIP-Val v4.1.0 application is used for validate Submission Information Package (SIP).
+The SIP-Val v4.1.1 application is used for validate Submission Information Package (SIP).
 Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
@@ -347,7 +347,7 @@ public class SipValidator implements MessageConstants
 				MESSAGE_SIPVALIDATION, sipDatei.getName() ) );
 
 		Controller controller = (Controller) context.getBean( "controller" );
-		boolean okMandatory = controller.executeMandatory( sipDatei );
+		boolean okMandatory = controller.executeMandatory( sipDatei, directoryOfLogfile );
 		boolean ok = false;
 
 		// die Validierungen 1a - 1d sind obligatorisch, wenn sie bestanden
@@ -356,21 +356,21 @@ public class SipValidator implements MessageConstants
 		// ausgeführt werden.
 		if ( okMandatory ) {
 
-			ok = controller.executeOptional( sipDatei );
+			ok = controller.executeOptional( sipDatei, directoryOfLogfile );
 
 			// Ausführen der beiden optionalen Schritte
 			if ( args.length > 2 && args[2].equals( "+3c" ) ) {
-				boolean ok3c = controller.execute3c( sipDatei );
+				boolean ok3c = controller.execute3c( sipDatei, directoryOfLogfile );
 				ok = ok && ok3c;
 			}
 
 			if ( args.length > 2 && args[2].equals( "+3d" ) ) {
-				boolean ok3d = controller.execute3d( sipDatei );
+				boolean ok3d = controller.execute3d( sipDatei, directoryOfLogfile );
 				ok = ok && ok3d;
 			}
 
 			if ( args.length > 3 && args[3].equals( "+3d" ) ) {
-				boolean ok3d = controller.execute3d( sipDatei );
+				boolean ok3d = controller.execute3d( sipDatei, directoryOfLogfile );
 				ok = ok && ok3d;
 			}
 

@@ -261,13 +261,13 @@ public class Controller implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File sipDatei )
+	public boolean executeMandatory( File sipDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 
 		// Validation Step Aa
 		try {
-			if ( this.getValidation1aZipModule().validate( sipDatei ) ) {
+			if ( this.getValidation1aZipModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Aa ) ) );
@@ -301,7 +301,7 @@ public class Controller implements MessageConstants
 		// Validation Step Ab
 		try {
 			if ( this.getValidation1bFolderStructureModule()
-					.validate( sipDatei ) ) {
+					.validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Ab ) ) );
@@ -335,7 +335,7 @@ public class Controller implements MessageConstants
 
 		// Validation Step Ac
 		try {
-			if ( this.getValidation1cNamingModule().validate( sipDatei ) ) {
+			if ( this.getValidation1cNamingModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Ac ) ) );
@@ -366,7 +366,7 @@ public class Controller implements MessageConstants
 
 		// Validation Step Ad
 		try {
-			if ( this.getValidation1dMetadataModule().validate( sipDatei ) ) {
+			if ( this.getValidation1dMetadataModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Ad ) ) );
@@ -401,13 +401,13 @@ public class Controller implements MessageConstants
 
 	}
 
-	public boolean executeOptional( File sipDatei )
+	public boolean executeOptional( File sipDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 
 		// Validation Step Ae
 		try {
-			if ( this.getValidation1eSipTypeModule().validate( sipDatei ) ) {
+			if ( this.getValidation1eSipTypeModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Ae ) ) );
@@ -436,7 +436,7 @@ public class Controller implements MessageConstants
 
 		// Validation Step Af
 		try {
-			if ( this.getValidation1fPrimaryDataModule().validate( sipDatei ) ) {
+			if ( this.getValidation1fPrimaryDataModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Af ) ) );
@@ -467,7 +467,7 @@ public class Controller implements MessageConstants
 
 		// Validation Step Ba
 		try {
-			if ( this.getValidation2aFileIntegrityModule().validate( sipDatei ) ) {
+			if ( this.getValidation2aFileIntegrityModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Ba ) ) );
@@ -499,7 +499,7 @@ public class Controller implements MessageConstants
 
 		// Validation Step Bb
 		try {
-			if ( this.getValidation2bChecksumModule().validate( sipDatei ) ) {
+			if ( this.getValidation2bChecksumModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Bb ) ) );
@@ -530,7 +530,7 @@ public class Controller implements MessageConstants
 
 		// Validation Step Bc
 		try {
-			if ( this.getValidation2cSurplusFilesModule().validate( sipDatei ) ) {
+			if ( this.getValidation2cSurplusFilesModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Bc ) ) );
@@ -563,7 +563,7 @@ public class Controller implements MessageConstants
 		// Validation Step Bd
 		try {
 			if ( this.getValidation2dGeverFileIntegrityModule().validate(
-					sipDatei ) ) {
+					sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Bd ) ) );
@@ -596,7 +596,7 @@ public class Controller implements MessageConstants
 		// Validation Step Ca
 		try {
 			if ( this.getValidation3aFormatRecognitionModule().validate(
-					sipDatei ) ) {
+					sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Ca ) ) );
@@ -629,7 +629,7 @@ public class Controller implements MessageConstants
 		// Validation Step Cb
 		try {
 			if ( this.getValidation3bUnspecifiedFormatModule().validate(
-					sipDatei ) ) {
+					sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Cb ) ) );
@@ -663,14 +663,14 @@ public class Controller implements MessageConstants
 
 	}
 
-	public boolean execute3c( File sipDatei )
+	public boolean execute3c( File sipDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 
 		// Validation Step 3c
 		try {
 			if ( this.getValidation3cFormatValidationModule().validate(
-					sipDatei ) ) {
+					sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Cc ) ) );
@@ -705,13 +705,13 @@ public class Controller implements MessageConstants
 
 	}
 
-	public boolean execute3d( File sipDatei )
+	public boolean execute3d( File sipDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 
 		// Validation Step 3d
 		try {
-			if ( this.getValidation3dPeriodModule().validate( sipDatei ) ) {
+			if ( this.getValidation3dPeriodModule().validate( sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Cd ) ) );

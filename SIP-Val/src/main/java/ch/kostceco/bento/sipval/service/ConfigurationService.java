@@ -86,29 +86,15 @@ public interface ConfigurationService extends Service
 	String getPathToPdftronExe();
 
 	/**
-	 * Gibt den Pfad zum Output Folder des Pdftron zurück.
-	 * 
-	 * @return Pfad zum Output Folder des Pdftron
-	 */
-	String getPathToPdftronOutputFolder();
-
-	/**
 	 * Gibt den Pfad zum Siard-Val Exe zurück.
 	 * 
 	 * @return Pfad zum Siard-Val Exe
 	 */
 	String getPathToSiardValJar();
 
-	/**
-	 * Gibt den Pfad zum Output Folder des Siard-Val zurück.
-	 * 
-	 * @return Pfad zum Output Folder des Siard-Val
-	 */
-	String getPathToSiardValOutputFolder();
 
 	String getPathToJhoveJar();
 
-	String getPathToJhoveOutput();
 
 	String getPathToJhoveConfiguration();
 

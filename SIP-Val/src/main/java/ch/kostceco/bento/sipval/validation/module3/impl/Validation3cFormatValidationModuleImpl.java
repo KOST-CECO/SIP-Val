@@ -115,7 +115,7 @@ public class Validation3cFormatValidationModuleImpl extends
 	}
 
 	@Override
-	public boolean validate( File sipDatei )
+	public boolean validate( File sipDatei, File directoryOfLogfile )
 			throws Validation3cFormatValidationException
 	{
 
@@ -145,6 +145,13 @@ public class Validation3cFormatValidationModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+
+			System.out
+					.print( "\r                                                                                                                                     " );
+			System.out.flush();
+			System.out.print( "\r" );
+			System.out.flush();
+
 			return false;
 		}
 
@@ -162,6 +169,13 @@ public class Validation3cFormatValidationModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_CANNOT_INITIALIZE_DROID ) );
+
+			System.out
+					.print( "\r                                                                                                                                     " );
+			System.out.flush();
+			System.out.print( "\r" );
+			System.out.flush();
+
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -286,8 +300,8 @@ public class Validation3cFormatValidationModuleImpl extends
 
 		String pathToJhoveJar = getConfigurationService().getPathToJhoveJar();
 		// Informationen zum Jhove-Jogverzeichnis holen
-		String pathToJhoveOutput = getConfigurationService()
-				.getPathToJhoveOutput();
+		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
+
 
 		/*
 		 * Nicht vergessen in
@@ -376,6 +390,13 @@ public class Validation3cFormatValidationModuleImpl extends
 									.getText( MESSAGE_MODULE_Cc )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES ) + e.getMessage() );
+
+					System.out
+							.print( "\r                                                                                                                                     " );
+					System.out.flush();
+					System.out.print( "\r" );
+					System.out.flush();
+
 					return false;
 				}
 
@@ -423,6 +444,13 @@ public class Validation3cFormatValidationModuleImpl extends
 										+ getTextResourceService()
 												.getText(
 														MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT ) );
+
+				System.out
+						.print( "\r                                                                                                                                     " );
+				System.out.flush();
+				System.out.print( "\r" );
+				System.out.flush();
+
 				return false;
 			}
 		}
@@ -464,8 +492,7 @@ public class Validation3cFormatValidationModuleImpl extends
 			getPdftronService().setPathToPdftronExe( pathToPdftronExe );
 
 			// Informationen zum PDFTRON-Logverzeichnis holen
-			String pathToPdftronOutput = getConfigurationService()
-					.getPathToPdftronOutputFolder();
+			String pathToPdftronOutput = directoryOfLogfile.getAbsolutePath();
 
 			/*
 			 * Nicht vergessen in
@@ -636,8 +663,7 @@ public class Validation3cFormatValidationModuleImpl extends
 			getSiardValService().setPathToSiardValJar( pathToSiardValJar );
 
 			// Informationen zum SIARD-Val-Logverzeichnis holen
-			String pathToSiardValOutput = getConfigurationService()
-					.getPathToSiardValOutputFolder();
+			String pathToSiardValOutput = directoryOfLogfile.getAbsolutePath();
 
 			/*
 			 * Nicht vergessen in
@@ -734,6 +760,13 @@ public class Validation3cFormatValidationModuleImpl extends
 									.getText( MESSAGE_MODULE_Cc )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES ) + e.getMessage() );
+
+					System.out
+							.print( "\r                                                                                                                                     " );
+					System.out.flush();
+					System.out.print( "\r" );
+					System.out.flush();
+
 					return false;
 				}
 			}
@@ -840,8 +873,6 @@ public class Validation3cFormatValidationModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ errorSummary.toString() );
 
-			// TODO: die im StringBuffer konkatinierten Outputs der einzelnen
-			// Verarbeitungen wieder in das Output-File zurückschreiben
 			if ( siardReport != null ) {
 				try {
 					BufferedWriter out = new BufferedWriter( new FileWriter(
@@ -860,6 +891,13 @@ public class Validation3cFormatValidationModuleImpl extends
 											+ getTextResourceService()
 													.getText(
 															MESSAGE_MODULE_CC_CANNOTWRITESIARDVALREPORT ) );
+
+					System.out
+							.print( "\r                                                                                                                                     " );
+					System.out.flush();
+					System.out.print( "\r" );
+					System.out.flush();
+
 					return false;
 				}
 			}

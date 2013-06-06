@@ -36,7 +36,7 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 {
 
 	@Override
-	public boolean validate( File sipDatei ) throws Validation1aZipException
+	public boolean validate( File sipDatei, File directoryOfLogfile ) throws Validation1aZipException
 	{
 
 		boolean valid = false;

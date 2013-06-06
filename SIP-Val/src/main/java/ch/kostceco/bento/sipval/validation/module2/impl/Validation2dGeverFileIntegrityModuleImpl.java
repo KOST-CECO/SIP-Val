@@ -54,7 +54,7 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean validate( File sipDatei )
+	public boolean validate( File sipDatei, File directoryOfLogfile )
 			throws Validation2dGeverFileIntegrityException
 	{
 		Map<String, String> dateiRefContent = new HashMap<String, String>();

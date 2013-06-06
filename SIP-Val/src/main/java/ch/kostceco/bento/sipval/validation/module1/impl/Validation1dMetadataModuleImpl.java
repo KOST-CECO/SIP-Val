@@ -75,7 +75,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean validate( File sipDatei )
+	public boolean validate( File sipDatei, File directoryOfLogfile )
 			throws Validation1dMetadataException
 	{
 

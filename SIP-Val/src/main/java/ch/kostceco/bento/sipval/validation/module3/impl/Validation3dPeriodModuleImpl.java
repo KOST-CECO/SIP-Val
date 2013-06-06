@@ -62,7 +62,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean validate( File sipDatei ) throws Validation3dPeriodException
+	public boolean validate( File sipDatei, File directoryOfLogfile ) throws Validation3dPeriodException
 	{
 
 		String toplevelDir = sipDatei.getName();

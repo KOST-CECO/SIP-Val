@@ -34,7 +34,7 @@ import ch.kostceco.bento.sipval.validation.ValidationModule;
 public interface Validation2cSurplusFilesModule extends ValidationModule
 {
 
-	public boolean validate( File sipDatei )
+	public boolean validate( File sipDatei, File directoryOfLogfile )
 			throws Validation2cSurplusFilesException;
 
 }
