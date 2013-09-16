@@ -724,7 +724,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						.get( keyMetadataMD5 );
 
 				if ( pruefsummeMetadataMD5 != null ) {
-					if ( !pruefsummeSipMD5.equals( pruefsummeMetadataMD5 ) ) {
+					if ( !pruefsummeSipMD5.equalsIgnoreCase( pruefsummeMetadataMD5 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
 										MESSAGE_MODULE_Bb )
@@ -759,7 +759,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						.get( keyMetadataSHA1 );
 
 				if ( pruefsummeMetadataSHA1 != null ) {
-					if ( !pruefsummeSipSHA1.equals( pruefsummeMetadataSHA1 ) ) {
+					if ( !pruefsummeSipSHA1.equalsIgnoreCase( pruefsummeMetadataSHA1 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
 										MESSAGE_MODULE_Bb )
@@ -794,7 +794,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						.get( keyMetadataSHA256 );
 
 				if ( pruefsummeMetadataSHA256 != null ) {
-					if ( !pruefsummeSipSHA256.equals( pruefsummeMetadataSHA256 ) ) {
+					if ( !pruefsummeSipSHA256.equalsIgnoreCase( pruefsummeMetadataSHA256 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
 										MESSAGE_MODULE_Bb )
