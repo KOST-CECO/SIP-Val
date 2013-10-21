@@ -65,24 +65,12 @@ public class Validation3aFormatRecognitionModuleImpl extends
 
 		String nameOfSignature = getConfigurationService()
 				.getPathToDroidSignatureFile();
-		Integer zaehlerWait = 1;
-		System.out.print( getTextResourceService().getText(
-				MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-		System.out.flush();
-
 		if ( nameOfSignature == null ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_Ca )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE ) );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
 		}
 
@@ -108,13 +96,6 @@ public class Validation3aFormatRecognitionModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_CANNOT_INITIALIZE_DROID ) );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -172,19 +153,6 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				}
 
 			}
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
-			zaehlerWait = zaehlerWait + 1;
-
-			System.out.print( getTextResourceService().getText(
-					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-			System.out.flush();
-
 		}
 
 		Set<String> keysExt = counterPuid.keySet();
@@ -200,22 +168,8 @@ public class Validation3aFormatRecognitionModuleImpl extends
 							+ value.toString()
 							+ getTextResourceService().getText(
 									MESSAGE_MODULE_CA_FILES ) );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			valid = false;
 		}
-
-		System.out
-				.print( "\r                                                                                                                                     " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
-
 		return valid;
 	}
 

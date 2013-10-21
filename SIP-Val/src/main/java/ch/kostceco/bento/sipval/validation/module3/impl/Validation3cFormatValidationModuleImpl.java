@@ -120,10 +120,6 @@ public class Validation3cFormatValidationModuleImpl extends
 	{
 
 		boolean isValid = true;
-		Integer zaehlerWait = 1;
-		System.out.print( getTextResourceService().getText(
-				MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-		System.out.flush();
 
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
 
@@ -145,13 +141,6 @@ public class Validation3cFormatValidationModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE ) );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
 		}
 
@@ -169,13 +158,6 @@ public class Validation3cFormatValidationModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_CANNOT_INITIALIZE_DROID ) );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -390,13 +372,6 @@ public class Validation3cFormatValidationModuleImpl extends
 									.getText( MESSAGE_MODULE_Cc )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES ) + e.getMessage() );
-
-					System.out
-							.print( "\r                                                                                                                                     " );
-					System.out.flush();
-					System.out.print( "\r" );
-					System.out.flush();
-
 					return false;
 				}
 
@@ -409,18 +384,6 @@ public class Validation3cFormatValidationModuleImpl extends
 										MESSAGE_MODULE_CC_NOJHOVEVAL )
 								+ extension );
 			}
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
-			zaehlerWait = zaehlerWait + 1;
-
-			System.out.print( getTextResourceService().getText(
-					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-			System.out.flush();
-
 		}
 
 		// die im StringBuffer konkatinierten Outputs der einzelnen
@@ -444,13 +407,6 @@ public class Validation3cFormatValidationModuleImpl extends
 										+ getTextResourceService()
 												.getText(
 														MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT ) );
-
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				return false;
 			}
 		}
@@ -626,26 +582,8 @@ public class Validation3cFormatValidationModuleImpl extends
 						getTextResourceService().getText( MESSAGE_MODULE_Cc )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES ) + e.getMessage() );
-
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				return false;
 			}
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
-			zaehlerWait = zaehlerWait + 1;
-
-			System.out.print( getTextResourceService().getText(
-					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-			System.out.flush();
 		}
 
 		// alle Files, die mit SIARD-Val verarbeitet werden, einzel an die
@@ -760,29 +698,9 @@ public class Validation3cFormatValidationModuleImpl extends
 									.getText( MESSAGE_MODULE_Cc )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES ) + e.getMessage() );
-
-					System.out
-							.print( "\r                                                                                                                                     " );
-					System.out.flush();
-					System.out.print( "\r" );
-					System.out.flush();
-
 					return false;
 				}
 			}
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
-			zaehlerWait = zaehlerWait + 1;
-
-			System.out.print( getTextResourceService().getText(
-					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-			System.out.flush();
-
 			Integer iValidSiard = countValid;
 			Integer totalErrors = countInvalid;
 
@@ -891,25 +809,11 @@ public class Validation3cFormatValidationModuleImpl extends
 											+ getTextResourceService()
 													.getText(
 															MESSAGE_MODULE_CC_CANNOTWRITESIARDVALREPORT ) );
-
-					System.out
-							.print( "\r                                                                                                                                     " );
-					System.out.flush();
-					System.out.print( "\r" );
-					System.out.flush();
-
 					return false;
 				}
 			}
 
 		}
-
-		System.out
-				.print( "\r                                                                                                                                     " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
-
 		return isValid;
 	}
 

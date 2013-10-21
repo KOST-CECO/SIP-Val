@@ -92,44 +92,22 @@ public class SipValidator implements MessageConstants
 
 		SipValidator sipValidator = (SipValidator) context
 				.getBean( "sipvalidator" );
-		System.out.print( sipValidator.getTextResourceService().getText(
-				MESSAGE_WAIT ) );
-		System.out.flush();
 
 		// Ist die Anzahl Parameter (2) korrekt?
 		if ( args.length < 2 ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_PARAMETER_USAGE ) );
 			System.exit( 1 );
 		}
 
 		File sipDatei = new File( args[0] );
-		System.out
-				.print( "\r                                                                                                  " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
 
 		LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 				MESSAGE_SIPVALIDATION, sipDatei.getName() ) );
-		System.out.print( sipValidator.getTextResourceService().getText(
-				MESSAGE_WAIT ) );
-		System.out.flush();
 
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.6.0" ) < 0 ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_WRONG_JRE ) );
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
@@ -145,12 +123,6 @@ public class SipValidator implements MessageConstants
 
 		// Im Logverzeichnis besteht kein Schreibrecht
 		if ( !directoryOfLogfile.canWrite() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
@@ -159,12 +131,6 @@ public class SipValidator implements MessageConstants
 		}
 
 		if ( !directoryOfLogfile.isDirectory() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
@@ -193,12 +159,6 @@ public class SipValidator implements MessageConstants
 
 		// Im workverzeichnis besteht kein Schreibrecht
 		if ( !tmpDir.canWrite() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
@@ -208,12 +168,6 @@ public class SipValidator implements MessageConstants
 
 		// Ueberprüfung des 1. Parameters (SIP-Datei): existiert die Datei?
 		if ( !sipDatei.exists() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_SIPFILE_FILENOTEXISTING ) );
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
@@ -246,12 +200,6 @@ public class SipValidator implements MessageConstants
 				sipDatei = targetFile;
 
 			} catch ( Exception e ) {
-				System.out
-						.print( "\r                                                                                                  " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 						ERROR_CANNOTCREATEZIP ) );
 				System.exit( 1 );
@@ -269,12 +217,6 @@ public class SipValidator implements MessageConstants
 		// Ueberprüfung der optionalen Parameter (3. und 4.)
 		if ( args.length == 3
 				&& !(args[2].equals( "+3c" ) || args[2].equals( "+3d" )) ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_1 ) );
 			System.exit( 1 );
@@ -282,12 +224,6 @@ public class SipValidator implements MessageConstants
 
 		if ( args.length == 4
 				&& !(args[2].equals( "+3c" ) && args[3].equals( "+3d" )) ) {
-			System.out
-					.print( "\r                                                             " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_2 ) );
 			System.exit( 1 );
@@ -301,12 +237,6 @@ public class SipValidator implements MessageConstants
 			File fJhoveApp = new File( jhoveApp );
 			if ( !fJhoveApp.exists()
 					|| !fJhoveApp.getName().equals( "JhoveApp.jar" ) ) {
-				System.out
-						.print( "\r                                                                                                  " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 						ERROR_JHOVEAPP_MISSING ) );
 				System.exit( 1 );
@@ -319,12 +249,6 @@ public class SipValidator implements MessageConstants
 			File fJhoveConf = new File( jhoveConf );
 			if ( !fJhoveConf.exists()
 					|| !fJhoveConf.getName().equals( "jhove.conf" ) ) {
-				System.out
-						.print( "\r                                                                                                  " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 						ERROR_JHOVECONF_MISSING ) );
 				System.exit( 1 );
@@ -336,12 +260,6 @@ public class SipValidator implements MessageConstants
 				.getBean( "logconfigurator" );
 		String logFileName = logConfigurator.configure(
 				directoryOfLogfile.getAbsolutePath(), sipDatei.getName() );
-
-		System.out
-				.print( "\r                                                                                                  " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
 
 		LOGGER.logError( sipValidator.getTextResourceService().getText(
 				MESSAGE_SIPVALIDATION, sipDatei.getName() ) );

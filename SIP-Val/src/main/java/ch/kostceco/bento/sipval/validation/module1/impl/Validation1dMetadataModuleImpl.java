@@ -116,9 +116,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			Zip64File zipfile = new Zip64File( sipDatei );
 
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-			System.out.print( getTextResourceService().getText(
-					MESSAGE_MODULE_WAIT ) );
-			System.out.flush();
 			for ( FileEntry fileEntry : fileEntryList ) {
 
 				if ( fileEntry.getName().equals( "header/" + METADATA )
@@ -194,12 +191,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					builder.setErrorHandler( handler );
 					builder.parse( xmlToValidate.getAbsolutePath() );
 					if ( handler.validationError == true ) {
-						System.out
-								.print( "\r                                                                                                                                     " );
-						System.out.flush();
-						System.out.print( "\r" );
-						System.out.flush();
-
 						return false;
 					}
 
@@ -237,13 +228,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 										MESSAGE_DASHES )
 								+ getTextResourceService().getText(
 										ERROR_MODULE_AE_NOMETADATAFOUND ) );
-
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				return false;
 			}
 
@@ -294,13 +278,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 						getTextResourceService().getText( MESSAGE_MODULE_Ad )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES ) + e.getMessage() );
-
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				return false;
 			}
 
@@ -321,13 +298,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 											MESSAGE_DASHES )
 									+ getTextResourceService().getText(
 											ERROR_MODULE_AD_CONTENTB4HEADER ) );
-
-					System.out
-							.print( "\r                                                                                                                                     " );
-					System.out.flush();
-					System.out.print( "\r" );
-					System.out.flush();
-
 					return false;
 
 				} else {
@@ -340,13 +310,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 											+ getTextResourceService()
 													.getText(
 															ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
-
-					System.out
-							.print( "\r                                                                                                                                     " );
-					System.out.flush();
-					System.out.print( "\r" );
-					System.out.flush();
-
 					return false;
 				}
 			} else {
@@ -369,13 +332,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 												+ getTextResourceService()
 														.getText(
 																ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
-
-						System.out
-								.print( "\r                                                                                                                                     " );
-						System.out.flush();
-						System.out.print( "\r" );
-						System.out.flush();
-
 						return false;
 					}
 					xsdsInZipControl.remove( key );
@@ -390,16 +346,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 											+ getTextResourceService()
 													.getText(
 															ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
-
-					System.out
-							.print( "\r                                                                                                                                     " );
-					System.out.flush();
-					System.out.print( "\r" );
-					System.out.flush();
-
 					return false;
 				}
-
 			}
 
 		} catch ( Exception e ) {
@@ -407,22 +355,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					getTextResourceService().getText( MESSAGE_MODULE_Ad )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ e.getMessage() );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
 
 		}
-		System.out
-				.print( "\r                                                                                                                                     " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
-
 		return true;
 	}
 

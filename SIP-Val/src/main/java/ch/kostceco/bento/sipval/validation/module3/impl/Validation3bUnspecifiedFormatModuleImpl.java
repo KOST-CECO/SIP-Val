@@ -65,10 +65,6 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 
 		String nameOfSignature = getConfigurationService()
 				.getPathToDroidSignatureFile();
-		Integer zaehlerWait = 1;
-		System.out.print( getTextResourceService().getText(
-				MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-		System.out.flush();
 
 		if ( nameOfSignature == null ) {
 			getMessageService().logError(
@@ -76,13 +72,6 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE ) );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
 		}
 
@@ -104,13 +93,6 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_CANNOT_INITIALIZE_DROID ) );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -199,25 +181,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 				}
 
 			}
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
-			zaehlerWait = zaehlerWait + 1;
-
-			System.out.print( getTextResourceService().getText(
-					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-			System.out.flush();
-
 		}
-		System.out
-				.print( "\r                                                                                                                                     " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
-
 		return valid;
 	}
 

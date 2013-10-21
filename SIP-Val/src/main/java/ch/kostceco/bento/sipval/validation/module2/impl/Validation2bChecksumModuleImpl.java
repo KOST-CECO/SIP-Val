@@ -75,11 +75,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 		Map<String, String> filesInMetadataSHA512 = new HashMap<String, String>();
 
 		try {
-			Integer zaehlerWait = 1;
-			System.out.print( getTextResourceService().getText(
-					MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-			System.out.flush();
-
 			Zip64File zipfile = new Zip64File( sipDatei );
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 
@@ -103,13 +98,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										MESSAGE_DASHES )
 								+ getTextResourceService().getText(
 										ERROR_MODULE_AE_NOMETADATAFOUND ) );
-
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				return false;
 			}
 
@@ -183,12 +171,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						// Länge (=32) überprüft
 
 						if ( pruefsumme.length() != 32 ) {
-							System.out
-									.print( "\r                                                                                                                                     " );
-							System.out.flush();
-							System.out.print( "\r" );
-							System.out.flush();
-
 							valid = false;
 
 							getMessageService().logError(
@@ -253,13 +235,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																+ getTextResourceService()
 																		.getText(
 																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
-
-										System.out
-												.print( "\r                                                                                                                                     " );
-										System.out.flush();
-										System.out.print( "\r" );
-										System.out.flush();
-
 										return false;
 
 									} finally {
@@ -278,13 +253,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																	+ getTextResourceService()
 																			.getText(
 																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
-
-											System.out
-													.print( "\r                                                                                                                                     " );
-											System.out.flush();
-											System.out.print( "\r" );
-											System.out.flush();
-
 											return false;
 										}
 									}
@@ -302,12 +270,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						// Länge (=40) überprüft
 
 						if ( pruefsumme.length() != 40 ) {
-							System.out
-									.print( "\r                                                                                                                                     " );
-							System.out.flush();
-							System.out.print( "\r" );
-							System.out.flush();
-
 							valid = false;
 
 							getMessageService().logError(
@@ -371,13 +333,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																+ getTextResourceService()
 																		.getText(
 																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
-
-										System.out
-												.print( "\r                                                                                                                                     " );
-										System.out.flush();
-										System.out.print( "\r" );
-										System.out.flush();
-
 										return false;
 
 									} finally {
@@ -396,13 +351,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																	+ getTextResourceService()
 																			.getText(
 																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
-
-											System.out
-													.print( "\r                                                                                                                                     " );
-											System.out.flush();
-											System.out.print( "\r" );
-											System.out.flush();
-
 											return false;
 										}
 									}
@@ -421,12 +369,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						// Länge (=64) überprüft
 
 						if ( pruefsumme.length() != 64 ) {
-							System.out
-									.print( "\r                                                                                                                                     " );
-							System.out.flush();
-							System.out.print( "\r" );
-							System.out.flush();
-
 							valid = false;
 
 							getMessageService().logError(
@@ -491,13 +433,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																+ getTextResourceService()
 																		.getText(
 																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
-
-										System.out
-												.print( "\r                                                                                                                                     " );
-										System.out.flush();
-										System.out.print( "\r" );
-										System.out.flush();
-
 										return false;
 
 									} finally {
@@ -517,12 +452,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																			.getText(
 																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
 
-											System.out
-													.print( "\r                                                                                                                                     " );
-											System.out.flush();
-											System.out.print( "\r" );
-											System.out.flush();
-
 											return false;
 										}
 									}
@@ -541,12 +470,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						// Länge (=128) überprüft
 
 						if ( pruefsumme.length() != 128 ) {
-							System.out
-									.print( "\r                                                                                                                                     " );
-							System.out.flush();
-							System.out.print( "\r" );
-							System.out.flush();
-
 							valid = false;
 
 							getMessageService().logError(
@@ -611,13 +534,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																+ getTextResourceService()
 																		.getText(
 																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
-
-										System.out
-												.print( "\r                                                                                                                                     " );
-										System.out.flush();
-										System.out.print( "\r" );
-										System.out.flush();
-
 										return false;
 
 									} finally {
@@ -636,13 +552,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																	+ getTextResourceService()
 																			.getText(
 																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
-
-											System.out
-													.print( "\r                                                                                                                                     " );
-											System.out.flush();
-											System.out.print( "\r" );
-											System.out.flush();
-
 											return false;
 										}
 									}
@@ -680,18 +589,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 							}
 						}
 					}
-					System.out
-							.print( "\r                                                                                                                                     " );
-					System.out.flush();
-					System.out.print( "\r" );
-					System.out.flush();
-
-					zaehlerWait = zaehlerWait + 1;
-
-					System.out.print( getTextResourceService().getText(
-							MESSAGE_MODULE_WAITZAEHLER, zaehlerWait ) );
-					System.out.flush();
-
 				}
 
 			} catch ( Exception e ) {
@@ -699,13 +596,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						getTextResourceService().getText( MESSAGE_MODULE_Bb )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES ) + e.getMessage() );
-
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				return false;
 			}
 
@@ -724,7 +614,8 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						.get( keyMetadataMD5 );
 
 				if ( pruefsummeMetadataMD5 != null ) {
-					if ( !pruefsummeSipMD5.equalsIgnoreCase( pruefsummeMetadataMD5 ) ) {
+					if ( !pruefsummeSipMD5
+							.equalsIgnoreCase( pruefsummeMetadataMD5 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
 										MESSAGE_MODULE_Bb )
@@ -733,13 +624,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										+ getTextResourceService().getText(
 												MESSAGE_MODULE_Bb_WRONGMD5,
 												keyMetadataMD5 ) );
-
-						System.out
-								.print( "\r                                                                                                                                     " );
-						System.out.flush();
-						System.out.print( "\r" );
-						System.out.flush();
-
 						valid = false;
 					}
 
@@ -759,7 +643,8 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						.get( keyMetadataSHA1 );
 
 				if ( pruefsummeMetadataSHA1 != null ) {
-					if ( !pruefsummeSipSHA1.equalsIgnoreCase( pruefsummeMetadataSHA1 ) ) {
+					if ( !pruefsummeSipSHA1
+							.equalsIgnoreCase( pruefsummeMetadataSHA1 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
 										MESSAGE_MODULE_Bb )
@@ -768,13 +653,6 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										+ getTextResourceService().getText(
 												MESSAGE_MODULE_Bb_WRONGMD5,
 												keyMetadataSHA1 ) );
-
-						System.out
-								.print( "\r                                                                                                                                     " );
-						System.out.flush();
-						System.out.print( "\r" );
-						System.out.flush();
-
 						valid = false;
 					}
 
@@ -794,7 +672,8 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						.get( keyMetadataSHA256 );
 
 				if ( pruefsummeMetadataSHA256 != null ) {
-					if ( !pruefsummeSipSHA256.equalsIgnoreCase( pruefsummeMetadataSHA256 ) ) {
+					if ( !pruefsummeSipSHA256
+							.equalsIgnoreCase( pruefsummeMetadataSHA256 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
 										MESSAGE_MODULE_Bb )
@@ -803,18 +682,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										+ getTextResourceService().getText(
 												MESSAGE_MODULE_Bb_WRONGMD5,
 												keyMetadataSHA256 ) );
-
-						System.out
-								.print( "\r                                                                                                                                     " );
-						System.out.flush();
-						System.out.print( "\r" );
-						System.out.flush();
-
 						valid = false;
 					}
-
 				}
-
 			}
 
 			zipfile.close();
@@ -825,23 +695,8 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 					getTextResourceService().getText( MESSAGE_MODULE_Bb )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ e.getMessage() + "Vergleich" );
-
-			System.out
-					.print( "\r                                                                                                                                     " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			return false;
-
 		}
-		System.out
-				.print( "\r                                                                                                                                     " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
-
 		return valid;
-
 	}
 }

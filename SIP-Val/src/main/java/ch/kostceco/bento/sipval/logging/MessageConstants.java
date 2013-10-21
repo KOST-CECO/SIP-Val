@@ -27,7 +27,6 @@ public interface MessageConstants
 {
 
 	// Initialisierung und Parameter-Ueberpruefung
-	String	MESSAGE_WAIT									= "message.wait";
 	String	ERROR_PARAMETER_USAGE							= "error.parameter.usage";
 	String	ERROR_LOGDIRECTORY_NODIRECTORY					= "error.logdirectory.nodirectory";
 	String	ERROR_LOGDIRECTORY_NOTWRITABLE					= "error.logdirectory.notwritable";
@@ -56,8 +55,6 @@ public interface MessageConstants
 	String	MESSAGE_SIPVALIDATION							= "message.sipvalidation";
 	String	MESSAGE_VALIDATION_INTERRUPTED					= "message.validation.interrupted";
 	String	MESSAGE_VALIDATION_FINISHED						= "message.validation.finished";
-	String	MESSAGE_MODULE_WAIT								= "message.module.wait";
-	String	MESSAGE_MODULE_WAITZAEHLER						= "message.module.waitzaehler";
 	String	MESSAGE_MODULE_VALID							= "message.module.valid";
 	String	MESSAGE_MODULE_INVALID							= "message.module.invalid";
 	String	MESSAGE_MODULE_INVALID_2ARGS					= "message.module.invalid.2args";
