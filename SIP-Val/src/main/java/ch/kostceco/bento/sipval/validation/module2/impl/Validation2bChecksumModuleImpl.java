@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire RÃ¶thlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -32,11 +32,13 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.xpath.XPathAPI;
+// import org.apache.xpath.XPathAPI; 
+//wird nicht mehr verwendet, wenn Zeitoptimiert
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.traversal.NodeIterator;
+//import org.w3c.dom.traversal.NodeIterator;
+//wird nicht mehr verwendet, wenn Zeitoptimiert
 
 import ch.kostceco.bento.sipval.exception.module2.Validation2bChecksumException;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
@@ -107,6 +109,8 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 					.getName() );
 			BufferedInputStream is = new BufferedInputStream( eis );
 
+			// Integer count = 0;
+
 			try {
 				DocumentBuilderFactory dbf = DocumentBuilderFactory
 						.newInstance();
@@ -116,28 +120,65 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 				NodeList nodeLst = doc.getElementsByTagName( "datei" );
 
 				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+					String pruefsumme = null;
+					String pruefalgorithmus = null;
+					String path = null;
+
+					/*
+					 * Temp-Ausgabe verwendet zur Zeitoptimierung count = count
+					 * + 1; java.util.Date now = new java.util.Date();
+					 * java.text.SimpleDateFormat sdf = new
+					 * java.text.SimpleDateFormat( "dd.MM.yyyy HH.mm.ss" );
+					 * String ausgabe = sdf.format( now ); System.out.print(
+					 * ausgabe + "  -->  Zaehler " + count + "  " );
+					 */
+
 					Node dateiNode = nodeLst.item( s );
+					// System.out.println(dateiNode.getTextContent());
 
-					NodeIterator nl2 = XPathAPI.selectNodeIterator( dateiNode,
-							"pruefsumme" );
-					Node pruefsummeNode = nl2.nextNode();
-					String pruefsumme = pruefsummeNode.getTextContent();
+					NodeList childNodes = dateiNode.getChildNodes();
+					for ( int y = 0; y < childNodes.getLength(); y++ ) {
+						Node subNode = childNodes.item( y );
+						if ( subNode.getNodeName().equals( "pruefsumme" ) ) {
+							// System.out.println("pruefsumme gefunden --> " +
+							// subNode.getTextContent());
+							pruefsumme = subNode.getTextContent();
+						} else if ( subNode.getNodeName().equals(
+								"pruefalgorithmus" ) ) {
+							// System.out.println("pruefalgorithmus gefunden --> "
+							// + subNode.getTextContent());
+							pruefalgorithmus = subNode.getTextContent();
+						} else if ( subNode.getNodeName().equals( "name" ) ) {
+							// System.out.println("name gefunden --> " +
+							// subNode.getTextContent());
+							path = subNode.getTextContent();
+						}
+					}
 
-					NodeIterator nl3 = XPathAPI.selectNodeIterator( dateiNode,
-							"pruefalgorithmus" );
-					Node pruefalgorithmusNode = nl3.nextNode();
-					String pruefalgorithmus = pruefalgorithmusNode
-							.getTextContent();
+					// selectNodeIterator ist zu Zeitintensiv bei grossen
+					// XML-Dateien mit getChildNodes() ersetzt
+
+					/*
+					 * NodeIterator nl2 = XPathAPI.selectNodeIterator(
+					 * dateiNode, "pruefsumme" ); Node pruefsummeNode =
+					 * nl2.nextNode(); String pruefsumme =
+					 * pruefsummeNode.getTextContent();
+					 * 
+					 * NodeIterator nl3 = XPathAPI.selectNodeIterator(
+					 * dateiNode, "pruefalgorithmus" ); Node
+					 * pruefalgorithmusNode = nl3.nextNode(); String
+					 * pruefalgorithmus = pruefalgorithmusNode
+					 * .getTextContent();
+					 * 
+					 * NodeIterator nl = XPathAPI.selectNodeIterator( dateiNode,
+					 * "name" ); Node nameNode = nl.nextNode(); String path =
+					 * nameNode.getTextContent();
+					 */
 
 					String pruefalgorithmusMD5 = "MD5";
 					String pruefalgorithmusSHA1 = "SHA-1";
 					String pruefalgorithmusSHA256 = "SHA-256";
 					String pruefalgorithmusSHA512 = "SHA-512";
-
-					NodeIterator nl = XPathAPI.selectNodeIterator( dateiNode,
-							"name" );
-					Node nameNode = nl.nextNode();
-					String path = nameNode.getTextContent();
 
 					boolean topReachedPath = false;
 
@@ -168,7 +209,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 					if ( pruefalgorithmus.equals( pruefalgorithmusMD5 ) ) {
 						// pruefalgorithmus ist MD5 und wird auf die korrekte
-						// Länge (=32) überprüft
+						// LÃ¤nge (=32) Ã¼berprÃ¼ft
 
 						if ( pruefsumme.length() != 32 ) {
 							valid = false;
@@ -267,7 +308,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 					}
 					if ( pruefalgorithmus.equals( pruefalgorithmusSHA1 ) ) {
 						// pruefalgorithmus ist SHA1 und wird auf die korrekte
-						// Länge (=40) überprüft
+						// LÃ¤nge (=40) Ã¼berprÃ¼ft
 
 						if ( pruefsumme.length() != 40 ) {
 							valid = false;
@@ -366,7 +407,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 					if ( pruefalgorithmus.equals( pruefalgorithmusSHA256 ) ) {
 						// pruefalgorithmus ist SHA256 und wird auf die korrekte
-						// Länge (=64) überprüft
+						// LÃ¤nge (=64) Ã¼berprÃ¼ft
 
 						if ( pruefsumme.length() != 64 ) {
 							valid = false;
@@ -467,7 +508,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 					if ( pruefalgorithmus.equals( pruefalgorithmusSHA512 ) ) {
 						// pruefalgorithmus ist SHA512 und wird auf die korrekte
-						// Länge (=128) überprüft
+						// LÃ¤nge (=128) Ã¼berprÃ¼ft
 
 						if ( pruefsumme.length() != 128 ) {
 							valid = false;
@@ -694,7 +735,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_Bb )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() + "Vergleich" );
+							+ e.getMessage() + " (2b)" );
 			return false;
 		}
 		return valid;

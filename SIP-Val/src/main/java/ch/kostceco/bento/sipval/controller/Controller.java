@@ -283,7 +283,6 @@ public class Controller implements MessageConstants
 				this.getValidation1aZipModule().getMessageService().print();
 				return false;
 			}
-
 		} catch ( Validation1aZipException e ) {
 			LOGGER.logInfo( getTextResourceService().getText(
 					MESSAGE_MODULE_INVALID_2ARGS,
@@ -686,7 +685,6 @@ public class Controller implements MessageConstants
 						.getMessageService().print();
 				valid = false;
 			}
-
 		} catch ( Validation3cFormatValidationException e ) {
 			LOGGER.logInfo( getTextResourceService().getText(
 					MESSAGE_MODULE_INVALID_2ARGS,
@@ -725,7 +723,6 @@ public class Controller implements MessageConstants
 				this.getValidation3dPeriodModule().getMessageService().print();
 				valid = false;
 			}
-
 		} catch ( Validation3dPeriodException e ) {
 			LOGGER.logInfo( getTextResourceService().getText(
 					MESSAGE_MODULE_INVALID_2ARGS,

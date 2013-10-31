@@ -29,11 +29,9 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.traversal.NodeIterator;
 
 import ch.kostceco.bento.sipval.exception.module2.Validation2aFileIntegrityException;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
@@ -121,10 +119,24 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
 					Node dateiNode = nodeLst.item( s );
 
-					NodeIterator nl = XPathAPI.selectNodeIterator( dateiNode,
-							"name" );
-					Node nameNode = nl.nextNode();
-					String path = nameNode.getTextContent();
+					String path = null;
+
+					NodeList childNodes = dateiNode.getChildNodes();
+					for ( int y = 0; y < childNodes.getLength(); y++ ) {
+						Node subNode = childNodes.item( y );
+						if ( subNode.getNodeName().equals( "name" ) ) {
+							path = subNode.getTextContent();
+						}
+					}
+
+					// selectNodeIterator ist zu Zeitintensiv bei grossen
+					// XML-Dateien mit getChildNodes() ersetzt
+
+					/*
+					 * NodeIterator nl = XPathAPI.selectNodeIterator( dateiNode,
+					 * "name" ); Node nameNode = nl.nextNode(); String path =
+					 * nameNode.getTextContent();
+					 */
 
 					boolean topReached = false;
 

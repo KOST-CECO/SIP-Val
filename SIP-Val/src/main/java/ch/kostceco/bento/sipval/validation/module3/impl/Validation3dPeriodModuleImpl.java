@@ -1,6 +1,6 @@
 /*== SIP-Val ==================================================================================
 The SIP-Val application is used for validate Submission Information Package (SIP).
-Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
+Copyright (C) 2011-2013 Claire RÃ¶thlisberger (KOST-CECO), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 SIP-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -126,7 +126,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						"/paket/ablieferung/entstehungszeitraum/bis/ca", doc,
 						XPathConstants.NODE );
 
-				// Wenn nachträglich nicht geändert ist der
+				// Wenn nachtrÃ¤glich nicht geÃ¤ndert ist der
 				// Ablieferungs-entstehungszeitraum brauchbar,
 				// d.h. er soll mit dem Zeitraum vom Dossier validiert werden.
 				boolean dateAblieferungUseable = true;
@@ -137,14 +137,14 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 				// Existiert das "Ablieferungsdatum Von"?
 				if ( elementAblDatumVon != null ) {
 
-					// Das elementAblDatumVon existiert und wird gemäss dem
+					// Das elementAblDatumVon existiert und wird gemÃ¤ss dem
 					// Subprogramm parseDatumVon in ein Datum umgewandelt und
 					// validiert
 					Date date = parseDatumVon( elementAblDatumVon
 							.getTextContent() );
 
 					// das umgewandelte Datum wird als calAblieferungVon
-					// übernommen
+					// Ã¼bernommen
 					calAblieferungVon.setTime( date );
 					if ( date == null ) {
 
@@ -166,14 +166,14 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 					// Existiert das "Ablieferungsdatum Bis"?
 					if ( elementAblDatumBis != null ) {
 
-						// Das elementAblDatumBis existiert und wird gemäss dem
+						// Das elementAblDatumBis existiert und wird gemÃ¤ss dem
 						// Subprogramm parseDatumBis in ein Datum umgewandelt
 						// und validiert
 						Date dateB = parseDatumBis( elementAblDatumBis
 								.getTextContent() );
 
 						// das umgewandelte Datum wird als calAblieferungBis
-						// übernommen
+						// Ã¼bernommen
 						calAblieferungBis.setTime( dateB );
 						if ( dateB == null ) {
 
@@ -192,10 +192,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							return false;
 						}
 
-						// der String datumVon respektive datumBis enthält die
+						// der String datumVon respektive datumBis enthÃ¤lt die
 						// reelle Eingabe des Entstehungszeitraums Von und Bis
 						// und
-						// wird für den allfälligen Fehlerlog benötigt
+						// wird fÃ¼r den allfÃ¤lligen Fehlerlog benÃ¶tigt
 						String datumVon = ((elementAblCaVon != null && elementAblCaVon
 								.getTextContent().equals( "true" )) ? "ca. "
 								: "")
@@ -271,7 +271,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						// falls das Ablieferungs-Datum "Bis" vor dem Datum
 						// "Von" liegt, gehen wir davon aus,
 						// das eine Verwechslung vorliegt, d.h. wir geben den
-						// Fehler aus, Schritt 3d ist invalid und für die
+						// Fehler aus, Schritt 3d ist invalid und fÃ¼r die
 						// weiterverarbeitung
 						// tauschen die calDaten gegeneinander aus.
 						if ( calAblieferungBis.before( calAblieferungVon ) ) {
@@ -279,7 +279,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							calAblieferungBis = calAblieferungVon;
 							calAblieferungVon = calTmp;
 
-							// Zusammenstellung der parameter die für den
+							// Zusammenstellung der parameter die fÃ¼r den
 							// logreport gebraucht werden (die reellen Daten)
 							String[] params = new String[4];
 							params[0] = (elementAblCaVon != null && elementAblCaVon
@@ -312,7 +312,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 						// Das elementAblDatumBis existiert nicht
 						// Dies bedeutet, dass dieser Schritt noch immer Valid
-						// sein könnte, da der Entstehungszeitraum auf der Stufe
+						// sein kÃ¶nnte, da der Entstehungszeitraum auf der Stufe
 						// Ablieferung optional ist.
 						// Es Soll kein Fehler ausgegeben werden sondern nur der
 						// Marker dateAblieferungUsable = false (unbrauchbar)
@@ -324,7 +324,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 					// Das elementAblDatumVon existiert nicht
 					// Dies bedeutet, dass dieser Schritt noch immer Valid sein
-					// könnte, da der Entstehungszeitraum auf der Stufe
+					// kÃ¶nnte, da der Entstehungszeitraum auf der Stufe
 					// Ablieferung optional ist.
 					// Es Soll kein Fehler ausgegeben werden sondern nur der
 					// Marker dateAblieferungUsable = false (unbrauchbar)
@@ -335,16 +335,73 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 				// Ende der Zeitraumvalidierung auf der Stufe Ablieferung
 				// ******************************************************
 				// Start mit der Zeitraumvalidierung auf der Stufe Dossier
-				// mit allfälliger Validierung gegenüber jener der Ablieferung
+				// mit allfÃ¤lliger Validierung gegenÃ¼ber jener der Ablieferung
 
-				// über alle Dossiers iterieren
+				// Ã¼ber alle Dossiers iterieren
 				boolean noDateValidation = false;
 				NodeList nodeLstDossier = doc.getElementsByTagName( "dossier" );
 				for ( int s = 0; s < nodeLstDossier.getLength(); s++ ) {
 					Node dossierNode = nodeLstDossier.item( s );
+					
 
 					// Lesen der Werte vom Entstehungszeitraum der Dossier
-					NodeIterator nl = XPathAPI.selectNodeIterator( dossierNode,
+					
+					String dateDossierVon = null;
+					String dateDossierBis = null;
+					Node circaDossierVonNode = null;
+					Node circaDossierBisNode = null;
+
+					NodeList childNodesDos = dossierNode.getChildNodes();
+					for ( int y = 0; y < childNodesDos.getLength(); y++ ) {
+						Node subNodeDos = childNodesDos.item( y );
+						if ( subNodeDos.getNodeName().equals(
+								"entstehungszeitraum" ) ) {
+							NodeList childNodesDosVon = subNodeDos.getChildNodes();
+							for ( int yD = 0; yD < childNodesDosVon.getLength(); yD++ ) {
+								Node subNodeDosVon = childNodesDosVon.item( yD );
+								if ( subNodeDosVon.getNodeName().equals(
+										"von" ) ) {
+									NodeList childNodesDosVonDC = subNodeDosVon.getChildNodes();
+									for ( int yV = 0; yV < childNodesDosVonDC.getLength(); yV++ ) {
+										Node subNodeDosVonDC = childNodesDosVonDC.item( yV );
+										if ( subNodeDosVonDC.getNodeName().equals(
+										"datum" ) ) {
+											dateDossierVon = subNodeDosVonDC.getTextContent();
+/*											java.util.Date now = new java.util.Date();
+											java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( "dd.MM.yyyy HH.mm.ss" );
+											String ausgabe = sdf.format( now ); 
+											System.out.println( ausgabe + "  --> Von  " + dateDossierVon);*/
+										} else if ( subNodeDosVonDC.getNodeName().equals(
+												"ca" ) ) {
+											circaDossierVonNode = subNodeDosVonDC;
+										}
+									}
+								} else if ( subNodeDosVon.getNodeName().equals(
+										"bis" ) ) {
+									NodeList childNodesDosBisDC = subNodeDosVon.getChildNodes();
+									for ( int yB = 0; yB < childNodesDosBisDC.getLength(); yB++ ) {
+										Node subNodeDosBisDC = childNodesDosBisDC.item( yB );
+										if ( subNodeDosBisDC.getNodeName().equals(
+										"datum" ) ) {
+											dateDossierBis = subNodeDosBisDC.getTextContent();
+/*											java.util.Date now = new java.util.Date();
+											java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( "dd.MM.yyyy HH.mm.ss" );
+											String ausgabe = sdf.format( now ); 
+											System.out.println( ausgabe + "  -->  Bis  " + dateDossierBis);*/
+										} else if ( subNodeDosBisDC.getNodeName().equals(
+												"ca" ) ) {
+											circaDossierBisNode = subNodeDosBisDC;
+										}
+									}
+								}
+							}
+						}
+					}
+
+					// selectNodeIterator ist zu Zeitintensiv bei grossen
+					// XML-Dateien mit getChildNodes() ersetzt
+
+/*					NodeIterator nl = XPathAPI.selectNodeIterator( dossierNode,
 							"entstehungszeitraum/von/datum" );
 					Node nameNode = nl.nextNode();
 					String dateDossierVon = nameNode.getTextContent();
@@ -359,6 +416,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 					nlCa = XPathAPI.selectNodeIterator( dossierNode,
 							"entstehungszeitraum/bis/ca" );
 					Node circaDossierBisNode = nlCa.nextNode();
+					*/
 
 					// Existiert das "Dossierdatum Von und Bis"?
 					Calendar calDossierVon = Calendar.getInstance();
@@ -366,7 +424,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 					boolean dossierRangeOk = true;
 					if ( dateDossierVon != null && dateDossierBis != null ) {
 
-						// dateDossierVon existiert und wird gemäss dem
+						// dateDossierVon existiert und wird gemÃ¤ss dem
 						// Subprogramm parseDatumVon in ein Datum umgewandelt
 						// und validiert
 						Date date = parseDatumVon( dateDossierVon );
@@ -388,10 +446,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						}
 
 						// das umgewandelte Datum wird als calDossierVon
-						// übernommen
+						// Ã¼bernommen
 						calDossierVon.setTime( date );
 
-						// dateDossierBis existiert und wird gemäss dem
+						// dateDossierBis existiert und wird gemÃ¤ss dem
 						// Subprogramm parseDatumBis in ein Datum umgewandelt
 						// und validiert
 						date = parseDatumBis( dateDossierBis );
@@ -413,13 +471,13 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						}
 
 						// das umgewandelte Datum wird als calDossierBis
-						// übernommen
+						// Ã¼bernommen
 						calDossierBis.setTime( date );
 
-						// der String datumVonDos respektive datumBisDos enthält
+						// der String datumVonDos respektive datumBisDos enthÃ¤lt
 						// die reelle Eingabe des Entstehungszeitraums Von und
 						// Bis und
-						// wird für den allfälligen Fehlerlog benötigt
+						// wird fÃ¼r den allfÃ¤lligen Fehlerlog benÃ¶tigt
 						String datumVonDos = ((circaDossierVonNode != null && circaDossierVonNode
 								.getTextContent().equals( "true" )) ? "ca. "
 								: "")
@@ -495,7 +553,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						// falls das Dossier-Datum "Bis" vor dem Datum "Von"
 						// liegt, gehen wir davon aus,
 						// das eine Verwechslung vorliegt, d.h. wir geben den
-						// Fehler aus, Schritt 3d ist invalid und für die
+						// Fehler aus, Schritt 3d ist invalid und fÃ¼r die
 						// weiterverarbeitung
 						// tauschen die calDaten gegeneinander aus.
 						if ( calDossierBis.before( calDossierVon ) ) {
@@ -507,7 +565,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							String dossierId = dossierElement
 									.getAttribute( "id" );
 
-							// Zusammenstellung der parameter die für den
+							// Zusammenstellung der parameter die fÃ¼r den
 							// logreport gebraucht werden (die reellen Daten)
 							String[] params = new String[5];
 							params[0] = dossierId;
@@ -537,13 +595,13 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							valid = false;
 						}
 
-						// Validierung der Zeiträume gegenüber jener der
+						// Validierung der ZeitrÃ¤ume gegenÃ¼ber jener der
 						// Ablieferung
 						// ---------------------------------------------------------
 
 						// nur wenn ein der Ablieferungszeitraum brauchbar ist,
 						// wird ein Dossierzeitraum darauf
-						// geprüft, dass er in diesen hineinpasst.
+						// geprÃ¼ft, dass er in diesen hineinpasst.
 						if ( dateAblieferungUseable ) {
 							// "keine Angabe" auf Stufe Dossier wird mit dem
 							// calWert von der Ablieferung gesetzt
@@ -571,7 +629,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 								String dossierId = dossierElement
 										.getAttribute( "id" );
 
-								// Zusammenstellung der parameter die für den
+								// Zusammenstellung der parameter die fÃ¼r den
 								// logreport gebraucht werden (die reellen
 								// Daten)
 								String[] params = new String[9];
@@ -616,19 +674,19 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 					}
 
 					if ( !dossierRangeOk ) {
-						// kein gültiger Dossierzeitraum vorhanden
+						// kein gÃ¼ltiger Dossierzeitraum vorhanden
 						if ( dateAblieferungUseable ) {
-							// wir haben keinen gültigen Dossierzeitraum, jedoch
+							// wir haben keinen gÃ¼ltigen Dossierzeitraum, jedoch
 							// Ablieferungszeitraum und verwenden
-							// diesen als Validierungszeitraum für
+							// diesen als Validierungszeitraum fÃ¼r
 							// untergeordnete Dokumente
 							calDossierVon = calAblieferungVon;
 							calDossierBis = calAblieferungBis;
 						} else {
-							// wir haben weder einen gültigen Dossier- noch
+							// wir haben weder einen gÃ¼ltigen Dossier- noch
 							// Ablieferungs-Zeitraum,
-							// allfällige untergeordnete Dokumente werden also
-							// nicht gegenüber der oberen Ebene validiert.
+							// allfÃ¤llige untergeordnete Dokumente werden also
+							// nicht gegenÃ¼ber der oberen Ebene validiert.
 							noDateValidation = true;
 						}
 					}
@@ -636,15 +694,33 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 					// Ende der Zeitraumvalidierung auf der Stufe Dossier
 					// ******************************************************
 					// Start mit der Zeitraumvalidierung auf der Stufe Dokument
-					// mit allfälliger Validierung gegenüber jener der Dossier
+					// mit allfÃ¤lliger Validierung gegenÃ¼ber jener der Dossier
 
 					// Lesen der Werte vom Entstehungszeitraum der Dokumente
-					NodeIterator nlEntstehungszeitraumDok = XPathAPI
+					
+					Node dokEntstehungszeitraumNode = null;
+					
+					NodeList childNodesDok = dossierNode.getChildNodes();
+					for ( int y = 0; y < childNodesDok.getLength(); y++ ) {
+						Node subNodeDok = childNodesDok.item( y );
+						if ( subNodeDok.getNodeName().equals(
+								"dokument" ) ) {
+							NodeList childNodesDokEzr = subNodeDok.getChildNodes();
+							for ( int yV = 0; yV < childNodesDokEzr.getLength(); yV++ ) {
+								Node subNodeDokEzr = childNodesDokEzr.item( yV );
+								if ( subNodeDokEzr.getNodeName().equals(
+								"entstehungszeitraum" ) ) {
+									dokEntstehungszeitraumNode = subNodeDokEzr;
+	
+			// selectNodeIterator ist zu Zeitintensiv bei grossen
+			// XML-Dateien mit getChildNodes() ersetzt
+					
+/*					NodeIterator nlEntstehungszeitraumDok = XPathAPI
 							.selectNodeIterator( dossierNode,
 									"dokument/entstehungszeitraum" );
-					Node dokEntstehungszeitraumNode = null;
+
 					while ( (dokEntstehungszeitraumNode = nlEntstehungszeitraumDok
-							.nextNode()) != null ) {
+							.nextNode()) != null ) {*/
 
 						// id des Dokument-Nodes ermitteln
 						Node dokNode = dokEntstehungszeitraumNode
@@ -652,7 +728,48 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						Element dokElement = (Element) dokNode;
 						String dokumentId = dokElement.getAttribute( "id" );
 
-						NodeIterator nlVon = XPathAPI.selectNodeIterator(
+						Node nodeVon = null;
+						Node nodeBis = null;
+						Node nodeCaVon = null;
+						Node nodeCaBis = null;
+
+						NodeList childNodesDokVon = dokEntstehungszeitraumNode.getChildNodes();
+								for ( int yD = 0; yD < childNodesDokVon.getLength(); yD++ ) {
+									Node subNodeDokVon = childNodesDokVon.item( yD );
+									if ( subNodeDokVon.getNodeName().equals(
+											"von" ) ) {
+										NodeList childNodesDokVonDC = subNodeDokVon.getChildNodes();
+										for ( int yB = 0; yB < childNodesDokVonDC.getLength(); yB++ ) {
+											Node subNodeDokVonDC = childNodesDokVonDC.item( yB );
+											if ( subNodeDokVonDC.getNodeName().equals(
+											"datum" ) ) {
+												nodeVon = subNodeDokVonDC;
+											} else if ( subNodeDokVonDC.getNodeName().equals(
+													"ca" ) ) {
+												nodeCaVon = subNodeDokVonDC;
+											}
+										}
+									} else if ( subNodeDokVon.getNodeName().equals(
+											"bis" ) ) {
+										NodeList childNodesDokBisDC = subNodeDokVon.getChildNodes();
+										for ( int yB = 0; yB < childNodesDokBisDC.getLength(); yB++ ) {
+											Node subNodeDokBisDC = childNodesDokBisDC.item( yB );
+											if ( subNodeDokBisDC.getNodeName().equals(
+											"datum" ) ) {
+												nodeBis = subNodeDokBisDC;
+											} else if ( subNodeDokBisDC.getNodeName().equals(
+													"ca" ) ) {
+												nodeCaBis = subNodeDokBisDC;
+											}
+										}
+									}
+								}
+
+						// selectNodeIterator ist zu Zeitintensiv bei grossen
+						// XML-Dateien mit getChildNodes() ersetzt
+
+						
+/*						NodeIterator nlVon = XPathAPI.selectNodeIterator(
 								dokEntstehungszeitraumNode, "von/datum" );
 						Node nodeVon = nlVon.nextNode();
 
@@ -668,7 +785,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						// hat das "bis" Element ein "ca" Element?
 						NodeIterator nlCaBis = XPathAPI.selectNodeIterator(
 								dokEntstehungszeitraumNode, "bis/ca" );
-						Node nodeCaBis = nlCaBis.nextNode();
+						Node nodeCaBis = nlCaBis.nextNode();*/
 
 						Date dateDokVon = null;
 
@@ -676,7 +793,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						if ( nodeVon != null
 								&& nodeVon.getTextContent() != null ) {
 
-							// dateDokVon existiert und wird gemäss dem
+							// dateDokVon existiert und wird gemÃ¤ss dem
 							// Subprogramm parseDatumVon in ein Datum
 							// umgewandelt und validiert
 							dateDokVon = parseDatumVon( nodeVon
@@ -702,7 +819,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 						}
 
-						// das umgewandelte Datum wird als calDokVon übernommen
+						// das umgewandelte Datum wird als calDokVon Ã¼bernommen
 						Calendar calDokVon = Calendar.getInstance();
 						calDokVon.setTime( dateDokVon );
 
@@ -712,7 +829,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						if ( nodeBis != null
 								&& nodeBis.getTextContent() != null ) {
 
-							// dateDokBis existiert und wird gemäss dem
+							// dateDokBis existiert und wird gemÃ¤ss dem
 							// Subprogramm parseDatumVon in ein Datum
 							// umgewandelt und validiert
 							dateDokBis = parseDatumBis( nodeBis
@@ -737,7 +854,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							}
 						}
 
-						// das umgewandelte Datum wird als calDokBis übernommen
+						// das umgewandelte Datum wird als calDokBis Ã¼bernommen
 						Calendar calDokBis = Calendar.getInstance();
 						calDokBis.setTime( dateDokBis );
 
@@ -754,7 +871,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							// entsprechend in der Zukunft = invalid
 							valid = false;
 
-							// Zusammenstellung der parameter die für den
+							// Zusammenstellung der parameter die fÃ¼r den
 							// logreport gebraucht werden (die reellen Daten)
 							String[] params = new String[3];
 							params[0] = dokumentId;
@@ -784,7 +901,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							// entsprechend in der Zukunft = invalid
 							valid = false;
 
-							// Zusammenstellung der parameter die für den
+							// Zusammenstellung der parameter die fÃ¼r den
 							// logreport gebraucht werden (die reellen Daten)
 							String[] params = new String[3];
 							params[0] = dokumentId;
@@ -809,7 +926,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						// falls das Dokument-Datum "Bis" vor dem Datum "Von"
 						// liegt, gehen wir davon aus,
 						// das eine Verwechslung vorliegt, d.h. wir geben den
-						// Fehler aus, Schritt 3d ist invalid und für die
+						// Fehler aus, Schritt 3d ist invalid und fÃ¼r die
 						// weiterverarbeitung
 						// tauschen die calDaten gegeneinander aus.
 						if ( calDokBis.before( calDokVon ) ) {
@@ -817,7 +934,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							calDokBis = calDokVon;
 							calDokVon = calTmp;
 
-							// Zusammenstellung der parameter die für den
+							// Zusammenstellung der parameter die fÃ¼r den
 							// logreport gebraucht werden (die reellen Daten)
 							String[] params = new String[5];
 							params[0] = dokumentId;
@@ -843,12 +960,12 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							valid = false;
 						}
 
-						// Validierung der Zeiträume gegenüber jener der Dossier
+						// Validierung der ZeitrÃ¤ume gegenÃ¼ber jener der Dossier
 						// ---------------------------------------------------------
 
 						// nur wenn ein Zeitraum brauchbar ist, wird ein
 						// Dokumentzeitraum darauf
-						// geprüft, dass er in diesen hineinpasst.
+						// geprÃ¼ft, dass er in diesen hineinpasst.
 						if ( !noDateValidation ) {
 							// "keine Angabe" auf Stufe Dok wird mit dem calWert
 							// vom Dossier gesetzt
@@ -866,7 +983,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							if ( (calDokVon.before( calDossierVon ) || calDokBis
 									.after( calDossierBis )) ) {
 
-								// Zusammenstellung der parameter die für den
+								// Zusammenstellung der parameter die fÃ¼r den
 								// logreport gebraucht werden (die reellen
 								// Daten)
 
@@ -905,6 +1022,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						}
 
 					}
+				}
+			}
+		}
 
 					// Ende der Zeitraumvalidierung auf der Stufe Dokument
 

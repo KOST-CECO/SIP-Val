@@ -239,4 +239,5 @@ public class Logger
 		NDC.pop();
 		NDC.remove();
 	}
+
 }
