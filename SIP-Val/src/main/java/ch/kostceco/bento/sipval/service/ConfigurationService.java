@@ -78,19 +78,13 @@ public interface ConfigurationService extends Service
 
 	String getPathOfDroidSignatureFile() throws MalformedURLException;
 
-	/**
-	 * Gibt den Pfad zum Pdftron Exe zurück.
-	 * 
-	 * @return Pfad zum Pdftron Exe
-	 */
-	String getPathToPdftronExe();
 
 	/**
-	 * Gibt den Pfad zum Siard-Val Exe zurück.
+	 * Gibt den Pfad zum KOST-Val Exe zurück.
 	 * 
-	 * @return Pfad zum Siard-Val Exe
+	 * @return Pfad zum KOST-Val Exe
 	 */
-	String getPathToSiardValJar();
+	String getPathToKostValJar();
 
 
 	String getPathToJhoveJar();

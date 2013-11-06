@@ -23,12 +23,8 @@
 		class="ch.kostceco.bento.sipval.service.impl.MessageServiceImpl">
 	</bean>
 
-	<bean id="pdftronService"
-		class="ch.kostceco.bento.sipval.service.impl.PdftronServiceImpl">
-	</bean>
-
-	<bean id="siardValService"
-		class="ch.kostceco.bento.sipval.service.impl.SiardValServiceImpl">
+	<bean id="kostValService"
+		class="ch.kostceco.bento.sipval.service.impl.KostValServiceImpl">
 	</bean>
 
 	<bean id="jhoveService"
@@ -94,8 +90,7 @@
 	<bean id="validation3cFormatValidationModule" class="ch.kostceco.bento.sipval.validation.module3.impl.Validation3cFormatValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
-		<property name="pdftronService" ref="pdftronService" />
-		<property name="siardValService" ref="siardValService" />
+		<property name="kostValService" ref="kostValService" />
 		<property name="jhoveService" ref="jhoveService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>

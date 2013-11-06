@@ -48,8 +48,7 @@ public interface MessageConstants
 	String	MESSAGE_FOOTER_SIP								= "message.footer.sip";
 
 	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
-	String	MESSAGE_FOOTER_REPORTPDFTRON					= "message.footer.reportpdftron";
-	String	MESSAGE_FOOTER_REPORTSIARDVAL					= "message.footer.reportsiardval";
+	String	MESSAGE_FOOTER_REPORTKOSTVAL					= "message.footer.reportkostval";
 
 	// Globale Meldungen
 	String	MESSAGE_SIPVALIDATION							= "message.sipvalidation";
@@ -151,7 +150,7 @@ public interface MessageConstants
 
 	// Modul 3c Meldungen
 	String	MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT		= "message.module.cc.cannotwritejhovereport";
-	String	MESSAGE_MODULE_CC_CANNOTWRITESIARDVALREPORT		= "message.module.cc.cannotwritesiardvalreport";
+	String	MESSAGE_MODULE_CC_CANNOTWRITEKOSTVALREPORT		= "message.module.cc.cannotwritekostvalreport";
 	String	MESSAGE_MODULE_CC_INVALID						= "message.module.cc.invalid";
 	String	MESSAGE_MODULE_CC_ERRORS_IN						= "message.module.cc.errors.in";
 	String	MESSAGE_MODULE_CC_ERRORS_IN_A					= "message.module.cc.errors.in.a";

@@ -18,29 +18,18 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.bento.sipval.validation.module3.impl;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
@@ -50,10 +39,8 @@ import ch.kostceco.bento.sipval.enums.PronomUniqueIdEnum;
 import ch.kostceco.bento.sipval.exception.module3.Validation3cFormatValidationException;
 import ch.kostceco.bento.sipval.service.ConfigurationService;
 import ch.kostceco.bento.sipval.service.JhoveService;
-import ch.kostceco.bento.sipval.service.PdftronService;
-import ch.kostceco.bento.sipval.service.SiardValService;
+import ch.kostceco.bento.sipval.service.KostValService;
 import ch.kostceco.bento.sipval.service.vo.ValidatedFormat;
-import ch.kostceco.bento.sipval.util.PdftronErrorCodes;
 import ch.kostceco.bento.sipval.util.Util;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
 import ch.kostceco.bento.sipval.validation.module3.Validation3cFormatValidationModule;
@@ -66,31 +53,20 @@ public class Validation3cFormatValidationModuleImpl extends
 		ValidationModuleImpl implements Validation3cFormatValidationModule
 {
 
-	private PdftronService			pdftronService;
-	private SiardValService			siardValService;
+	private KostValService			kostValService;
 	private ConfigurationService	configurationService;
 	private JhoveService			jhoveService;
 
 	public static String			NEWLINE	= System.getProperty( "line.separator" );
 
-	public PdftronService getPdftronService()
+	public KostValService getKostValService()
 	{
-		return pdftronService;
+		return kostValService;
 	}
 
-	public void setPdftronService( PdftronService pdftronService )
+	public void setKostValService( KostValService kostValService )
 	{
-		this.pdftronService = pdftronService;
-	}
-
-	public SiardValService getSiardValService()
-	{
-		return siardValService;
-	}
-
-	public void setSiardValService( SiardValService siardValService )
-	{
-		this.siardValService = siardValService;
+		this.kostValService = kostValService;
 	}
 
 	public ConfigurationService getConfigurationService()
@@ -197,8 +173,7 @@ public class Validation3cFormatValidationModuleImpl extends
 								MESSAGE_MODULE_CD_NUMBER_OF_CONTENT_FILES ) );
 
 		List<String> filesToProcessWithJhove = new ArrayList<String>();
-		List<String> filesToProcessWithPdftron = new ArrayList<String>();
-		List<String> filesToProcessWithSiardVal = new ArrayList<String>();
+		List<String> filesToProcessWithKostVal = new ArrayList<String>();
 
 		Set<String> fileKeys = filesInSipFile.keySet();
 
@@ -210,7 +185,7 @@ public class Validation3cFormatValidationModuleImpl extends
 			// eine der PUIDs des archivierten Files muss in der Konfiguration
 			// als validatedformat vorkommen,
 			// diese Konfiguration bestimmt, ob ein File selektiert wird zur
-			// Format-Validierung mit JHOVE, Pdftron oder SIARD-Val
+			// Format-Validierung mit JHOVE oder KOST-Val
 			boolean selected = false;
 			ValidatedFormat value = null;
 
@@ -233,17 +208,14 @@ public class Validation3cFormatValidationModuleImpl extends
 			// Formate (gemäss Konfigurationsdatei) gefunden
 			if ( selected ) {
 				// in der Konfiguration wird bestimmt, welcher PUID-Typ mit
-				// welchem Validator (JHOVE, Pdftron oder SIARD-Val)
+				// welchem Validator (JHOVE oder KOST-Val)
 				// untersucht wird
 				if ( value.getValidator().equals(
-						PronomUniqueIdEnum.PDFTRON.name() ) ) {
-					filesToProcessWithPdftron.add( fileKey );
-				} else if ( value.getValidator().equals(
 						PronomUniqueIdEnum.JHOVE.name() ) ) {
 					filesToProcessWithJhove.add( fileKey );
 				} else if ( value.getValidator().equals(
-						PronomUniqueIdEnum.SIARDVAL.name() ) ) {
-					filesToProcessWithSiardVal.add( fileKey );
+						PronomUniqueIdEnum.KOSTVAL.name() ) ) {
+					filesToProcessWithKostVal.add( fileKey );
 				}
 			}
 		}
@@ -284,7 +256,6 @@ public class Validation3cFormatValidationModuleImpl extends
 		// Informationen zum Jhove-Jogverzeichnis holen
 		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
 
-
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
@@ -299,7 +270,6 @@ public class Validation3cFormatValidationModuleImpl extends
 
 		Set<String> extMapKeys = extensionsMap.keySet();
 		for ( String extMapKey : extMapKeys ) {
-
 			StringBuffer pathsJhove = extensionsMap.get( extMapKey );
 			String extension = extMapKey;
 			if ( extension.equals( "gif" ) || extension.equals( "html" )
@@ -310,8 +280,6 @@ public class Validation3cFormatValidationModuleImpl extends
 					|| extension.equals( "spf" ) || extension.equals( "jp2" )
 					|| extension.equals( "jpg2" ) || extension.equals( "j2c" )
 					|| extension.equals( "jpf" ) || extension.equals( "jpx" )
-					|| extension.equals( "pdf" ) || extension.equals( "tif" )
-					|| extension.equals( "tiff" ) || extension.equals( "tfx" )
 					|| extension.equals( "wav" ) || extension.equals( "wave" )
 					|| extension.equals( "bwf" ) || extension.equals( "xml" )
 					|| extension.equals( "xsd" ) ) {
@@ -431,177 +399,22 @@ public class Validation3cFormatValidationModuleImpl extends
 							+ msg );
 		}
 
-		// alle Files, die mit Pdftron verarbeitet werden, bulk-mässig an die
-		// Applikation übergeben
-		if ( filesToProcessWithPdftron.size() > 0 ) {
-
-			StringBuffer pathsPdftron = new StringBuffer();
-			for ( String pathToProcessWithPdftron : filesToProcessWithPdftron ) {
-				pathsPdftron.append( "\"" );
-				pathsPdftron.append( pathToProcessWithPdftron );
-				pathsPdftron.append( "\"" );
-				pathsPdftron.append( " " );
-			}
-
-			String pathToPdftronExe = getConfigurationService()
-					.getPathToPdftronExe();
-			getPdftronService().setPathToPdftronExe( pathToPdftronExe );
-
-			// Informationen zum PDFTRON-Logverzeichnis holen
-			String pathToPdftronOutput = directoryOfLogfile.getAbsolutePath();
-
-			/*
-			 * Nicht vergessen in
-			 * "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property
-			 * name="configurationService" ref="configurationService" />
-			 */
-
-			File pdftronDir = new File( pathToPdftronOutput );
-			if ( !pdftronDir.exists() ) {
-				pdftronDir.mkdir();
-			}
-
-			try {
-				String pathToPdftronReport = getPdftronService()
-						.executePdftron( pathToPdftronExe,
-								pathsPdftron.toString(), pathToPdftronOutput,
-								sipDatei.getName() );
-
-				Util.setPathToReportPdftron( pathToPdftronReport );
-
-				// aus dem Output von Pdftron die Fehlercodes extrahieren und
-				// übersetzen
-				BufferedInputStream bis = new BufferedInputStream(
-						new FileInputStream( pathToPdftronReport ) );
-				DocumentBuilderFactory dbf = DocumentBuilderFactory
-						.newInstance();
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( bis );
-				doc.normalize();
-				NodeList nodeLst = doc.getElementsByTagName( "Error" );
-
-				Map<String, Integer> errorCounter = new HashMap<String, Integer>();
-
-				// Bsp. für einen Error Code: <Error Code="e_PDFA173"
-				// die erste Ziffer nach e_PDFA ist der Error Code.
-				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
-					Node dateiNode = nodeLst.item( s );
-					NamedNodeMap nodeMap = dateiNode.getAttributes();
-					Node errorNode = nodeMap.getNamedItem( "Code" );
-					String errorCode = errorNode.getNodeValue();
-					String errorDigit = errorCode.substring( 6, 7 );
-
-					// der Error Code kann auch "Unknown" sein, dieser wird in
-					// den Code "0" übersetzt
-					if ( errorDigit.equals( "U" ) ) {
-						errorDigit = "0";
-					}
-
-					Integer errorCount = errorCounter.get( errorDigit );
-					if ( errorCount == null ) {
-						errorCounter.put( errorDigit, 1 );
-					} else {
-						errorCount = errorCount + 1;
-						errorCounter.put( errorDigit, errorCount );
-					}
-				}
-
-				StringBuffer errorSummary = new StringBuffer();
-				errorSummary.append( getTextResourceService().getText(
-						MESSAGE_MODULE_CC_ERRORS_IN ) );
-				Integer totalErrors = new Integer( 0 );
-
-				List<String> sortedKeys = new ArrayList<String>();
-				sortedKeys.addAll( errorCounter.keySet() );
-				Collections.sort( sortedKeys );
-
-				for ( Iterator<String> iterator = sortedKeys.iterator(); iterator
-						.hasNext(); ) {
-					String errorCounterKey = iterator.next();
-
-					Integer value = errorCounter.get( errorCounterKey );
-					totalErrors = totalErrors + value;
-
-					errorSummary.append( value.toString() );
-					errorSummary.append( " " );
-					errorSummary.append( PdftronErrorCodes
-							.getErrorLabel( errorCounterKey ) );
-					if ( iterator.hasNext() ) {
-						errorSummary.append( ", " );
-					} else {
-						errorSummary.append( ")" );
-					}
-				}
-
-				Integer passCount = new Integer( 0 );
-
-				NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
-
-				// Valide pdfa-Dokumente enthalten
-				// "<Validation> <Pass FileName..."
-				// Anzahl pass = anzahl Valider pdfa
-				for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
-					passCount = passCount + 1;
-				}
-
-				Integer failCount = new Integer( 0 );
-
-				NodeList nodeLstII = doc.getElementsByTagName( "Fail" );
-
-				// Invalide pdfa-Dokumente enthalten "<Validation> <Fail..."
-				// Anzahl fail = anzahl invalider pdfa
-				for ( int s = 0; s < nodeLstII.getLength(); s++ ) {
-					failCount = failCount + 1;
-				}
-
-				int iValidPdfs = passCount;
-				totalErrors = failCount;
-				String sValidPdfs = "pdf Valid = " + iValidPdfs + ", ";
-
-				if ( totalErrors == 0 ) {
-					errorSummary = new StringBuffer( sValidPdfs
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_INVALID ) + totalErrors );
-				} else {
-					isValid = false;
-					errorSummary = new StringBuffer( sValidPdfs
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_INVALID ) + totalErrors
-							+ " " + errorSummary.toString() );
-				}
-
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Cc )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ errorSummary.toString() );
-
-			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Cc )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
-				return false;
-			}
-		}
-
-		// alle Files, die mit SIARD-Val verarbeitet werden, einzel an die
+		// alle Files, die mit KOST-Val verarbeitet werden, einzel an die
 		// Applikation übergeben
 
-		if ( filesToProcessWithSiardVal.size() > 0 ) {
+		if ( filesToProcessWithKostVal.size() > 0 ) {
 
-			String siardReport = null;
+			String kostvalReport = null;
 
 			StringBuffer concatenatedOutputs2 = new StringBuffer();
 
-			String pathToSiardValJar = getConfigurationService()
-					.getPathToSiardValJar();
+			String pathToKostValJar = getConfigurationService()
+					.getPathToKostValJar();
 
-			getSiardValService().setPathToSiardValJar( pathToSiardValJar );
+			getKostValService().setPathToKostValJar( pathToKostValJar );
 
-			// Informationen zum SIARD-Val-Logverzeichnis holen
-			String pathToSiardValOutput = directoryOfLogfile.getAbsolutePath();
+			// Informationen zum KOST-Val-Logverzeichnis holen
+			String pathToKostValOutput = directoryOfLogfile.getAbsolutePath();
 
 			/*
 			 * Nicht vergessen in
@@ -610,34 +423,39 @@ public class Validation3cFormatValidationModuleImpl extends
 			 * name="configurationService" ref="configurationService" />
 			 */
 
-			File siardvalDir = new File( pathToSiardValOutput );
-			if ( !siardvalDir.exists() ) {
-				siardvalDir.mkdir();
+			File kostvalDir = new File( pathToKostValOutput );
+			if ( !kostvalDir.exists() ) {
+				kostvalDir.mkdir();
 			}
 
-			Integer countInvalid = new Integer( 0 );
-			Integer countValid = new Integer( 0 );
-			Integer failCountA = new Integer( 0 );
-			Integer failCountB = new Integer( 0 );
-			Integer failCountC = new Integer( 0 );
-			Integer failCountD = new Integer( 0 );
-			Integer failCountE = new Integer( 0 );
-			Integer failCountF = new Integer( 0 );
-			Integer failCountG = new Integer( 0 );
-			Integer failCountH = new Integer( 0 );
-			Integer failCountI = new Integer( 0 );
-			Integer failCountJ = new Integer( 0 );
+			Integer countInvalidSiard = new Integer( 0 );
+			Integer countValidSiard = new Integer( 0 );
+			Integer countInvalidTiff = new Integer( 0 );
+			Integer countValidTiff = new Integer( 0 );
+			Integer countInvalidPdfa = new Integer( 0 );
+			Integer countValidPdfa = new Integer( 0 );
 
-			for ( String pathToProcessWithSiardVal : filesToProcessWithSiardVal ) {
-				String pathsSiardVal = new String( pathToProcessWithSiardVal );
+			Integer firstFileK = new Integer( 0 );
+
+			for ( String pathToProcessWithKostVal : filesToProcessWithKostVal ) {
+				firstFileK = firstFileK + 1;
+				if ( firstFileK != 1 ) {
+					// die einzelnen Logs sollen getrent werden
+					concatenatedOutputs2.append( NEWLINE );
+					concatenatedOutputs2
+							.append( "***************************************************************************" );
+					concatenatedOutputs2.append( NEWLINE );
+				}
+
+				String pathsKostVal = new String( pathToProcessWithKostVal );
 
 				try {
-					siardReport = getSiardValService().executeSiardVal(
-							pathToSiardValJar, pathsSiardVal.toString(),
-							pathToSiardValOutput, sipDatei.getName() );
+					kostvalReport = getKostValService().executeKostVal(
+							pathToKostValJar, pathsKostVal.toString(),
+							pathToKostValOutput, sipDatei.getName() );
 
 					BufferedReader in = new BufferedReader( new FileReader(
-							siardReport ) );
+							kostvalReport ) );
 					String line;
 
 					while ( (line = in.readLine()) != null ) {
@@ -645,48 +463,44 @@ public class Validation3cFormatValidationModuleImpl extends
 						concatenatedOutputs2.append( line );
 						concatenatedOutputs2.append( NEWLINE );
 
-						// Valide SIARD-Datei enthält: "TOTAL = Valid"
-						// Invalide SIARD-Datei enthält: "TOTAL = Invalid"
-						// if ( line.contains( "Status:" ) ) {
-						if ( line.contains( "TOTAL = Invalid" ) ) {
-							// Invalider Status
-							countInvalid = countInvalid + 1;
-							isValid = false;
-						}
-						if ( line.contains( "TOTAL = Valid" ) ) {
-							// Valider Status
-							countValid = countValid + 1;
-						}
-						if ( line.contains( "[A] = Invalid" ) ) {
-							// Invalides Modul A
-							failCountA = failCountA + 1;
-						}
-						if ( line.contains( "[B] = Invalid" ) ) {
-							failCountB = failCountB + 1;
-						}
-						if ( line.contains( "[C] = Invalid" ) ) {
-							failCountC = failCountC + 1;
-						}
-						if ( line.contains( "[D] = Invalid" ) ) {
-							failCountD = failCountD + 1;
-						}
-						if ( line.contains( "[E] = Invalid" ) ) {
-							failCountE = failCountE + 1;
-						}
-						if ( line.contains( "[F] = Invalid" ) ) {
-							failCountF = failCountF + 1;
-						}
-						if ( line.contains( "[G] = Invalid" ) ) {
-							failCountG = failCountG + 1;
-						}
-						if ( line.contains( "[H] = Invalid" ) ) {
-							failCountH = failCountH + 1;
-						}
-						if ( line.contains( "[I] = Invalid" ) ) {
-							failCountI = failCountI + 1;
-						}
-						if ( line.contains( "[J] = Invalid" ) ) {
-							failCountJ = failCountJ + 1;
+						// Valide Datei enthält: "TOTAL = Valid"
+						// Invalide Datei enthält: "TOTAL = Invalid"
+						if ( pathsKostVal.toLowerCase().endsWith( ".siard" ) ) {
+							if ( line.contains( "TOTAL = Invalid" ) ) {
+								// Invalider Status
+								countInvalidSiard = countInvalidSiard + 1;
+								isValid = false;
+							}
+							if ( line.contains( "TOTAL = Valid" ) ) {
+								// Valider Status
+								countValidSiard = countValidSiard + 1;
+							}
+						} else if ( pathsKostVal.toLowerCase()
+								.endsWith( ".tif" )
+								|| pathsKostVal.toLowerCase()
+										.endsWith( ".tiff" ) ) {
+							if ( line.contains( "TOTAL = Invalid" ) ) {
+								// Invalider Status
+								countInvalidTiff = countInvalidTiff + 1;
+								isValid = false;
+							}
+							if ( line.contains( "TOTAL = Valid" ) ) {
+								// Valider Status
+								countValidTiff = countValidTiff + 1;
+							}
+						} else if ( pathsKostVal.toLowerCase()
+								.endsWith( ".pdf" )
+								|| pathsKostVal.toLowerCase()
+										.endsWith( ".pdfa" ) ) {
+							if ( line.contains( "TOTAL = Invalid" ) ) {
+								// Invalider Status
+								countInvalidPdfa = countInvalidPdfa + 1;
+								isValid = false;
+							}
+							if ( line.contains( "TOTAL = Valid" ) ) {
+								// Valider Status
+								countValidPdfa = countValidPdfa + 1;
+							}
 						}
 					}
 
@@ -701,103 +515,105 @@ public class Validation3cFormatValidationModuleImpl extends
 					return false;
 				}
 			}
-			Integer iValidSiard = countValid;
-			Integer totalErrors = countInvalid;
+			Integer iValidKostvalSiard = countValidSiard;
+			Integer totalErrorsSiard = countInvalidSiard;
+			Integer iValidKostvalTiff = countValidTiff;
+			Integer totalErrorsTiff = countInvalidTiff;
+			Integer iValidKostvalPdfa = countValidPdfa;
+			Integer totalErrorsPdfa = countInvalidPdfa;
 
-			StringBuffer errorSummary;
+			StringBuffer errorSummarySiard;
+			StringBuffer errorSummaryTiff;
+			StringBuffer errorSummaryPdfa;
 
 			// Log Ausgabe erstellen nach diesem Prinzip Beispiel:
-			// siard Valide = 1, Invalid = 4 (Anzahl Fehler nach Typen:
-			// 1 Lesbarkeit 4 Content 1 Erkennung)
-			String sValidSiard = "siard Valid = " + iValidSiard + ", ";
-			if ( totalErrors == 0 ) {
-				errorSummary = new StringBuffer( sValidSiard
+			// siard Valide = 1, Invalid = 4
+			String sValidKostvalSiard = "siard Valid = " + iValidKostvalSiard
+					+ ", ";
+			if ( totalErrorsSiard == 0 ) {
+				errorSummarySiard = new StringBuffer( sValidKostvalSiard
 						+ getTextResourceService().getText(
-								MESSAGE_MODULE_CC_INVALID ) + totalErrors );
+								MESSAGE_MODULE_CC_INVALID ) + totalErrorsSiard );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ errorSummarySiard.toString() );
 			} else {
 				isValid = false;
-				errorSummary = new StringBuffer( sValidSiard
+				errorSummarySiard = new StringBuffer( sValidKostvalSiard
 						+ getTextResourceService().getText(
-								MESSAGE_MODULE_CC_INVALID )
-						+ totalErrors
-						+ " "
-						+ getTextResourceService().getText(
-								MESSAGE_MODULE_CC_ERRORS_IN ) );
-				if ( failCountA != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountA
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_A ) );
-				}
-				if ( failCountB != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountB
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_B ) );
-				}
-				if ( failCountC != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountC
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_C ) );
-				}
-				if ( failCountD != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountD
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_D ) );
-				}
-				if ( failCountE != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountE
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_E ) );
-				}
-				if ( failCountF != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountF
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_F ) );
-				}
-				if ( failCountG != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountG
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_G ) );
-				}
-				if ( failCountH != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountH
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_H ) );
-				}
-				if ( failCountI != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountI
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_I ) );
-				}
-				if ( failCountJ != 0 ) {
-					errorSummary = new StringBuffer( errorSummary.toString()
-							+ failCountJ
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_ERRORS_IN_J ) );
-				}
-				errorSummary = new StringBuffer( errorSummary.toString() + ")" );
+								MESSAGE_MODULE_CC_INVALID ) + totalErrorsSiard );
+				errorSummarySiard = new StringBuffer(
+						errorSummarySiard.toString() + ")" );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ errorSummarySiard.toString() );
 			}
 
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cc )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ errorSummary.toString() );
+			// Log Ausgabe erstellen nach diesem Prinzip Beispiel:
+			// tiff Valide = 1, Invalid = 4
+			String sValidKostvalTiff = "tiff Valid = " + iValidKostvalTiff
+					+ ", ";
+			if ( totalErrorsTiff == 0 ) {
+				errorSummaryTiff = new StringBuffer( sValidKostvalTiff
+						+ getTextResourceService().getText(
+								MESSAGE_MODULE_CC_INVALID ) + totalErrorsTiff );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ errorSummaryTiff.toString() );
+			} else {
+				isValid = false;
+				errorSummaryTiff = new StringBuffer( sValidKostvalTiff
+						+ getTextResourceService().getText(
+								MESSAGE_MODULE_CC_INVALID ) + totalErrorsTiff );
+				errorSummaryTiff = new StringBuffer(
+						errorSummaryTiff.toString() + ")" );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ errorSummaryTiff.toString() );
+			}
 
-			if ( siardReport != null ) {
+			// Log Ausgabe erstellen nach diesem Prinzip Beispiel:
+			// pdfa Valide = 1, Invalid = 4
+			String sValidKostvalPdfa = "pdfa Valid = " + iValidKostvalPdfa
+					+ ", ";
+			if ( totalErrorsPdfa == 0 ) {
+				errorSummaryPdfa = new StringBuffer( sValidKostvalPdfa
+						+ getTextResourceService().getText(
+								MESSAGE_MODULE_CC_INVALID ) + totalErrorsPdfa );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ errorSummaryPdfa.toString() );
+			} else {
+				isValid = false;
+				errorSummaryPdfa = new StringBuffer( sValidKostvalPdfa
+						+ getTextResourceService().getText(
+								MESSAGE_MODULE_CC_INVALID ) + totalErrorsPdfa );
+				errorSummaryPdfa = new StringBuffer(
+						errorSummaryPdfa.toString() + ")" );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ errorSummaryPdfa.toString() );
+			}
+
+			if ( kostvalReport != null ) {
 				try {
 					BufferedWriter out = new BufferedWriter( new FileWriter(
-							siardReport ) );
+							kostvalReport ) );
 					out.write( concatenatedOutputs2.toString() );
 					out.close();
-					Util.setPathToReportSiardVal( siardReport );
+					Util.setPathToReportKostVal( kostvalReport );
 
 				} catch ( IOException e ) {
 					getMessageService()
@@ -808,7 +624,7 @@ public class Validation3cFormatValidationModuleImpl extends
 													MESSAGE_DASHES )
 											+ getTextResourceService()
 													.getText(
-															MESSAGE_MODULE_CC_CANNOTWRITESIARDVALREPORT ) );
+															MESSAGE_MODULE_CC_CANNOTWRITEKOSTVALREPORT ) );
 					return false;
 				}
 			}

@@ -19,9 +19,15 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 package ch.kostceco.bento.sipval.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import ch.kostceco.bento.sipval.exception.SystemException;
 import ch.kostceco.bento.sipval.logging.Logger;
-import ch.kostceco.bento.sipval.service.SiardValService;
+import ch.kostceco.bento.sipval.service.KostValService;
 import ch.kostceco.bento.sipval.service.TextResourceService;
 import ch.kostceco.bento.sipval.util.StreamGobbler;
 import ch.kostceco.bento.sipval.util.Util;
@@ -31,10 +37,10 @@ import ch.kostceco.bento.sipval.util.Util;
  * 
  * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO
  */
-public class SiardValServiceImpl implements SiardValService
+public class KostValServiceImpl implements KostValService
 {
 
-	private static final Logger	LOGGER	= new Logger( SiardValServiceImpl.class );
+	private static final Logger	LOGGER	= new Logger( KostValServiceImpl.class );
 
 	private TextResourceService	textResourceService;
 
@@ -49,17 +55,17 @@ public class SiardValServiceImpl implements SiardValService
 	}
 
 	@Override
-	public String executeSiardVal( String pathToSiardValJar,
+	public String executeKostVal( String pathToKostValJar,
 			String pathToInputFile, String pathToOutput, String nameOfSip )
 			throws SystemException
 	{
 		File report;
-		// Pfad zum Programm SIARD-Val
-		File siardvalJar = new File( pathToSiardValJar );
+		// Pfad zum Programm KOST-Val
+		File kostvalJar = new File( pathToKostValJar );
 		// Pfad zur SIARD-Datei
 		File input = new File( pathToInputFile );
 		File output = new File( pathToOutput );
-		StringBuffer command = new StringBuffer( "java -jar " + siardvalJar
+		StringBuffer command = new StringBuffer( "java -jar " + kostvalJar
 				+ " " );
 
 		command.append( pathToInputFile );
@@ -97,8 +103,7 @@ public class SiardValServiceImpl implements SiardValService
 			String log = new String( input.getName() + ".validationlog.log" );
 
 			report = new File( pathToOutput, log );
-			File newReport = new File( pathToOutput, nameOfSip
-					+ ".siardval.log" );
+			File newReport = new File( pathToOutput, nameOfSip + ".kostval.log" );
 
 			// falls das File bereits existiert, z.B. von einem vorhergehenden
 			// Durchlauf, löschen wir es
@@ -106,15 +111,32 @@ public class SiardValServiceImpl implements SiardValService
 				newReport.delete();
 			}
 
-			boolean renameOk = report.renameTo( newReport );
-			if ( !renameOk ) {
-				throw new SystemException(
-						"Der Report konnte nicht umbenannt werden." );
+			// Rename funktioniert nicht zuverlässig. Entsprechend wird eine
+			// Kopie angelegt
+			InputStream inStream = null;
+			OutputStream outStream = null;
+
+			try {
+				File afile = report;
+				File bfile = newReport;
+				inStream = new FileInputStream( afile );
+				outStream = new FileOutputStream( bfile );
+				byte[] buffer = new byte[1024];
+				int length;
+				// copy the file content in bytes
+				while ( (length = inStream.read( buffer )) > 0 ) {
+					outStream.write( buffer, 0, length );
+				}
+				inStream.close();
+				outStream.close();
+
+			} catch ( IOException e ) {
+				e.printStackTrace();
 			}
 			report = newReport;
 
 		} catch ( Exception e ) {
-			LOGGER.logDebug( "SIARD-Val Service failed: " + e.getMessage() );
+			LOGGER.logDebug( "KOST-Val Service failed: " + e.getMessage() );
 			throw new SystemException( e.toString() );
 		}
 		return report.getAbsolutePath();
@@ -127,7 +149,7 @@ public class SiardValServiceImpl implements SiardValService
 	}
 
 	@Override
-	public String getPathToSiardValJar()
+	public String getPathToKostValJar()
 	{
 		return null;
 	}
@@ -139,7 +161,7 @@ public class SiardValServiceImpl implements SiardValService
 	}
 
 	@Override
-	public void setPathToSiardValJar( String pathToSiardValJar )
+	public void setPathToKostValJar( String pathToKostValJar )
 	{
 
 	}

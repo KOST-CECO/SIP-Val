@@ -83,9 +83,6 @@ public class JhoveServiceImpl implements JhoveService
 			command.append( "-m jpeg2000-hul " );
 		} else if ( extension.equals( "pdf" ) ) {
 			command.append( "-m pdf-hul " );
-		} else if ( extension.equals( "tif" ) || extension.equals( "tiff" )
-				|| extension.equals( "tfx" ) ) {
-			command.append( "-m tiff-hul " );
 		} else if ( extension.equals( "wav" ) || extension.equals( "wave" )
 				|| extension.equals( "bwf" ) ) {
 			command.append( "-m wave-hul " );

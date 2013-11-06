@@ -214,22 +214,11 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
-	@Override
-	public String getPathToPdftronExe()
-	{
-		Object prop = getConfig().getProperty( "pathtopdftronexe" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
 
 	@Override
-	public String getPathToSiardValJar()
+	public String getPathToKostValJar()
 	{
-		Object prop = getConfig().getProperty( "pathtosiardvaljar" );
+		Object prop = getConfig().getProperty( "pathtokostvaljar" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;

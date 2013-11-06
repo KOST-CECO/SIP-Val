@@ -306,21 +306,16 @@ public class SipValidator implements MessageConstants
 		}
 		LOGGER.logInfo( "" );
 
-		// Ausgabe der Pfade zu den Jhove/Pdftron & Co. Reports, falls welche
+		// Ausgabe der Pfade zu den Jhove/KOST-Val & Co. Reports, falls welche
 		// generiert wurden
 		if ( Util.getPathToReportJHove() != null ) {
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
 					MESSAGE_FOOTER_REPORTJHOVE, Util.getPathToReportJHove() ) );
 		}
-		if ( Util.getPathToReportPdftron() != null ) {
-			LOGGER.logInfo( sipValidator.getTextResourceService()
-					.getText( MESSAGE_FOOTER_REPORTPDFTRON,
-							Util.getPathToReportPdftron() ) );
-		}
-		if ( Util.getPathToReportSiardVal() != null ) {
+		if ( Util.getPathToReportKostVal() != null ) {
 			LOGGER.logInfo( sipValidator.getTextResourceService().getText(
-					MESSAGE_FOOTER_REPORTSIARDVAL,
-					Util.getPathToReportSiardVal() ) );
+					MESSAGE_FOOTER_REPORTKOSTVAL,
+					Util.getPathToReportKostVal() ) );
 		}
 
 		LOGGER.logInfo( "" );

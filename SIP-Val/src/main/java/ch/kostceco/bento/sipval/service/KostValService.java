@@ -21,26 +21,26 @@ package ch.kostceco.bento.sipval.service;
 import ch.kostceco.bento.sipval.exception.SystemException;
 
 /**
- * Service Interface für SIARD-Val.
+ * Service Interface für KOST-Val.
  * 
  * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO
  */
-public interface SiardValService extends Service
+public interface KostValService extends Service
 {
 
 	/**
-	 * Gibt den Pfad zum SIARD-Val Executable zurück
+	 * Gibt den Pfad zum KOST-Val Executable zurück
 	 * 
-	 * @return Pfad zum SIARD-Val Executable
+	 * @return Pfad zum KOST-Val Executable
 	 */
-	public String getPathToSiardValJar();
+	public String getPathToKostValJar();
 
 	/**
-	 * Setzt den Pfad zum SIARD-Val Executable
+	 * Setzt den Pfad zum KOST-Val Executable
 	 * 
-	 * @return Pfad zum SIARD-Val Executable
+	 * @return Pfad zum KOST-Val Executable
 	 */
-	public void setPathToSiardValJar( String pathToSiardValJar );
+	public void setPathToKostValJar( String pathToKostValJar );
 
 	/**
 	 * Gibt den Pfad zum Input File (das zu validierende Dokument) zurück
@@ -57,12 +57,12 @@ public interface SiardValService extends Service
 	public void setPathToInputFile( String pathToInputFile );
 
 	/**
-	 * Führt die Validierung mit SIARD-Val aus
+	 * Führt die Validierung mit KOST-Val aus
 	 * 
-	 * @return Pfad zum von SIARD-Val generierten LOG-Report
+	 * @return Pfad zum von KOST-Val generierten LOG-Report
 	 * @throws Exception
 	 */
-	public String executeSiardVal( String pathToSiardValJar,
+	public String executeKostVal( String pathToKostValJar,
 			String pathToInputFile, String pathToOutput, String nameOfSip )
 			throws SystemException;
 }

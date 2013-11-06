@@ -20,7 +20,7 @@ package ch.kostceco.bento.sipval.enums;
 
 public enum PronomUniqueIdEnum implements BaseEnumItemEnum {
 
-	JHOVE(101), PDFTRON(102), SIARDVAL(103);
+	JHOVE(101), KOSTVAL(102);
 
 	private final long	id;
 

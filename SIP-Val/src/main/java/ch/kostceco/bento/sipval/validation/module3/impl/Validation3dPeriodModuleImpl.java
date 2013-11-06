@@ -34,12 +34,10 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.traversal.NodeIterator;
 
 import ch.kostceco.bento.sipval.exception.module3.Validation3dPeriodException;
 import ch.kostceco.bento.sipval.validation.ValidationModuleImpl;
