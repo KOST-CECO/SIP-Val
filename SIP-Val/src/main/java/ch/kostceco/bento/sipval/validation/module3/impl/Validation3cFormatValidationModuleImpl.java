@@ -125,9 +125,7 @@ public class Validation3cFormatValidationModuleImpl extends
 			Util.switchOffConsole();
 			droid = new Droid();
 
-			String pathOfDroidConfig = getConfigurationService()
-					.getPathOfDroidSignatureFile();
-			droid.readSignatureFile( pathOfDroidConfig );
+			droid.readSignatureFile( nameOfSignature );
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_Cc )

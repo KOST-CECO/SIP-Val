@@ -18,7 +18,6 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.bento.sipval.service;
 
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 
@@ -76,10 +75,7 @@ public interface ConfigurationService extends Service
 	 */
 	String getPathToDroidSignatureFile();
 
-	String getPathOfDroidSignatureFile() throws MalformedURLException;
-
-
-	/**
+		/**
 	 * Gibt den Pfad zum KOST-Val Exe zurück.
 	 * 
 	 * @return Pfad zum KOST-Val Exe

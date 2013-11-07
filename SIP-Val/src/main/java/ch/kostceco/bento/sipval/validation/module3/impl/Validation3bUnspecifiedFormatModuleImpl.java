@@ -83,9 +83,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 			Util.switchOffConsole();
 			droid = new Droid();
 
-			String pathOfDroidConfig = getConfigurationService()
-					.getPathOfDroidSignatureFile();
-			droid.readSignatureFile( pathOfDroidConfig );
+			droid.readSignatureFile( nameOfSignature );
 
 		} catch ( Exception e ) {
 			getMessageService().logError(

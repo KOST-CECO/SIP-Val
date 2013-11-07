@@ -19,7 +19,6 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 package ch.kostceco.bento.sipval.service.impl;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,18 +188,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return config;
 	}
 
-	@Override
-	public String getPathOfDroidSignatureFile() throws MalformedURLException
-	{
-
-		String pathSignature = getPathToDroidSignatureFile();
-
-		File fileSigfile = new File( pathSignature );
-		URL urlSigfile = fileSigfile.toURI().toURL();
-		String result = urlSigfile.getFile();
-
-		return result;
-	}
 
 	@Override
 	public String getPathToDroidSignatureFile()
