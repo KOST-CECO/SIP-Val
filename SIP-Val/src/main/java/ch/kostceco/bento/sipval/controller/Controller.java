@@ -594,7 +594,7 @@ public class Controller implements MessageConstants
 
 		// Validation Step Ca
 		try {
-			if ( this.getValidation3aFormatRecognitionModule().validate(
+			 if ( this.getValidation3aFormatRecognitionModule().validate(
 					sipDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,

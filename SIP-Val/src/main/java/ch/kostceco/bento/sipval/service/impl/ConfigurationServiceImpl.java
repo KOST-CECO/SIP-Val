@@ -170,12 +170,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				config = new XMLConfiguration( path );
 
 			} catch ( ConfigurationException e ) {
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_CONFIGURATION_ERROR_1 ) );
 				LOGGER.logInfo( getTextResourceService().getText(

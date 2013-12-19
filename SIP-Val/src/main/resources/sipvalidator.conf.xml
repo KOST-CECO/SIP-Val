@@ -7,51 +7,45 @@
 	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
 	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
 	<pathtoworkdir>work_SIP-Val</pathtoworkdir>
-	<pathtodroidsignature>SIP-Val\configuration\DROID_SignatureFile_V59-kc.xml</pathtodroidsignature>
+	<pathtodroidsignature>SIP-Val\configuration\KaD_SignatureFile_V70.xml</pathtodroidsignature>
 	<allowedversionbar1>1</allowedversionbar1>
 	<allowedversionbar4ech1>1</allowedversionbar4ech1>
 	
 	<allowedformats>
 		<allowedformat>
-			<puid>x-fmt/111</puid>	<extension>txt</extension>				<comment>Plain Text file</comment>						</allowedformat>
+			<puid>TXT</puid>	<extension>txt</extension>				<comment>Plain Text file</comment>									</allowedformat>
 		<allowedformat>
-			<puid>fmt/353</puid>	<extension>tif, tiff</extension>		<comment>keine Version Unterscheidung</comment>			</allowedformat>
+			<puid>TIFF</puid>	<extension>tif, tiff</extension>		<comment>keine Version Unterscheidung</comment>						</allowedformat>
 		<allowedformat>
-			<puid>x-fmt/392</puid>	<extension>jp2, jpg2, j2c</extension>	<comment>JPEG2000</comment>								</allowedformat>
+			<puid>JP2</puid>	<extension>jp2, jpg2, j2c</extension>	<comment>JPEG2000</comment>											</allowedformat>
 		<allowedformat>
-			<puid>fmt/95</puid>		<extension>pdf</extension>				<comment>Erkennung der PDF/A-Haupteigenschaften v1a</comment>		</allowedformat>
+			<puid>PDFA1</puid>	<extension>pdf</extension>				<comment>Erkennung der PDF/A-Haupteigenschaften v1</comment>		</allowedformat>
 		<allowedformat>
-			<puid>fmt/354</puid>	<extension>pdf</extension>				<comment>Erkennung der PDF/A-Haupteigenschaften v1b</comment>		</allowedformat>
+			<puid>PDFA2</puid>	<extension>pdf</extension>				<comment>Erkennung der PDF/A-Haupteigenschaften v2</comment>		</allowedformat>
 		<allowedformat>
-			<puid>fmt/141</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio (PCMWAVEFORMAT)</comment>		</allowedformat>
+			<puid>WAVE</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio</comment>									</allowedformat>
 		<allowedformat>
-			<puid>fmt/142</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio (WAVEFORMATEX)</comment>		</allowedformat>
+			<puid>CSV</puid>	<extension>csv</extension>				<comment>Comma Separated Values</comment>							</allowedformat>
 		<allowedformat>
-			<puid>fmt/6</puid>		<extension>wav, wave</extension>		<comment>Waveform Audio</comment>						</allowedformat>
-		<allowedformat>
-			<puid>x-fmt/18</puid>	<extension>csv</extension>				<comment>Comma Separated Values</comment>				</allowedformat>
-		<allowedformat>
-			<puid>fmt/161</puid>	<extension>siard</extension>			<comment>Erkennung der SIARD-Haupteigenschaften</comment>			</allowedformat>
+			<puid>SIARD</puid>	<extension>siard</extension>			<comment>Erkennung der SIARD-Haupteigenschaften</comment>			</allowedformat>
 	</allowedformats>
 	
 	<validatedformats>
 		<validatedformat>
-			<pronomuniqueid>x-fmt/111</pronomuniqueid>		<validator/>					<description>Plain Text file</description>	</validatedformat>
+			<pronomuniqueid>TXT</pronomuniqueid>		<validator/>					<description>Plain Text file</description>			</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/95</pronomuniqueid>			<validator>KOSTVAL</validator>	<description>PDF/A-1a</description>			</validatedformat>
+			<pronomuniqueid>PDFA1</pronomuniqueid>		<validator>KOSTVAL</validator>	<description>PDF/A-1</description>					</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/354</pronomuniqueid>		<validator>KOSTVAL</validator>	<description>PDF/A-1b</description>			</validatedformat>
+			<pronomuniqueid>PDFA2</pronomuniqueid>		<validator>KOSTVAL</validator>	<description>PDF/A-2</description>					</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>x-fmt/18</pronomuniqueid>		<validator/>					<description>Comma Separated Values</description>	</validatedformat>
+			<pronomuniqueid>CSV</pronomuniqueid>		<validator/>					<description>Comma Separated Values</description>	</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/161</pronomuniqueid>		<validator>KOSTVAL</validator>	<description>siard</description>			</validatedformat>
+			<pronomuniqueid>SIARD</pronomuniqueid>		<validator>KOSTVAL</validator>	<description>siard</description>					</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/353</pronomuniqueid>		<validator>KOSTVAL</validator>	<description>TIFF</description>				</validatedformat>
+			<pronomuniqueid>TIFF</pronomuniqueid>		<validator>KOSTVAL</validator>	<description>TIFF</description>						</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>x-fmt/392</pronomuniqueid>		<validator>JHOVE</validator>	<description>JPEG2000</description>			</validatedformat>
+			<pronomuniqueid>JP2</pronomuniqueid>		<validator>JHOVE</validator>	<description>JPEG2000</description>					</validatedformat>
 		<validatedformat>
-			<pronomuniqueid>fmt/141</pronomuniqueid>		<validator>JHOVE</validator>	<description>Waveform Audio (PCMWAVEFORMAT)</description>	</validatedformat>
-		<validatedformat>
-			<pronomuniqueid>fmt/6</pronomuniqueid>			<validator>JHOVE</validator>	<description>Waveform Audio</description>	</validatedformat>
+			<pronomuniqueid>WAVE</pronomuniqueid>		<validator>JHOVE</validator>	<description>Waveform Audio</description>			</validatedformat>
 	</validatedformats>
 </configuration>

@@ -543,7 +543,7 @@ public class Validation3cFormatValidationModuleImpl extends
 						+ getTextResourceService().getText(
 								MESSAGE_MODULE_CC_INVALID ) + totalErrorsSiard );
 				errorSummarySiard = new StringBuffer(
-						errorSummarySiard.toString() + ")" );
+						errorSummarySiard.toString() );
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_MODULE_Cc )
 								+ getTextResourceService().getText(
@@ -570,7 +570,7 @@ public class Validation3cFormatValidationModuleImpl extends
 						+ getTextResourceService().getText(
 								MESSAGE_MODULE_CC_INVALID ) + totalErrorsTiff );
 				errorSummaryTiff = new StringBuffer(
-						errorSummaryTiff.toString() + ")" );
+						errorSummaryTiff.toString() );
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_MODULE_Cc )
 								+ getTextResourceService().getText(
@@ -597,7 +597,7 @@ public class Validation3cFormatValidationModuleImpl extends
 						+ getTextResourceService().getText(
 								MESSAGE_MODULE_CC_INVALID ) + totalErrorsPdfa );
 				errorSummaryPdfa = new StringBuffer(
-						errorSummaryPdfa.toString() + ")" );
+						errorSummaryPdfa.toString() );
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_MODULE_Cc )
 								+ getTextResourceService().getText(
