@@ -108,19 +108,24 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 				// Lesen der Werte vom Entstehungszeitraum der Ablieferung
 				XPath xpath = XPathFactory.newInstance().newXPath();
-				Element elementAblDatumVon = (Element) xpath.evaluate(
+				Element elementAblDatumVon = null;
+				Element elementAblDatumBis = null;
+				Element elementAblCaVon = null;
+				Element elementAblCaBis = null;
+
+				elementAblDatumVon = (Element) xpath.evaluate(
 						"/paket/ablieferung/entstehungszeitraum/von/datum",
 						doc, XPathConstants.NODE );
 
-				Element elementAblDatumBis = (Element) xpath.evaluate(
+				elementAblDatumBis = (Element) xpath.evaluate(
 						"/paket/ablieferung/entstehungszeitraum/bis/datum",
 						doc, XPathConstants.NODE );
 
-				Element elementAblCaVon = (Element) xpath.evaluate(
+				elementAblCaVon = (Element) xpath.evaluate(
 						"/paket/ablieferung/entstehungszeitraum/von/ca", doc,
 						XPathConstants.NODE );
 
-				Element elementAblCaBis = (Element) xpath.evaluate(
+				elementAblCaBis = (Element) xpath.evaluate(
 						"/paket/ablieferung/entstehungszeitraum/bis/ca", doc,
 						XPathConstants.NODE );
 
@@ -559,7 +564,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							calDossierBis = calDossierVon;
 							calDossierVon = calTmp;
 
-							Element dossierElement = (Element) dossierNode;
+							Element dossierElement = null;
+							dossierElement = (Element) dossierNode;
 							String dossierId = dossierElement
 									.getAttribute( "id" );
 
@@ -623,7 +629,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							if ( (calDossierVon.before( calAblieferungVon ) || calDossierBis
 									.after( calAblieferungBis )) ) {
 
-								Element dossierElement = (Element) dossierNode;
+								Element dossierElement = null;
+								dossierElement = (Element) dossierNode;
 								String dossierId = dossierElement
 										.getAttribute( "id" );
 
@@ -723,7 +730,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						// id des Dokument-Nodes ermitteln
 						Node dokNode = dokEntstehungszeitraumNode
 								.getParentNode();
-						Element dokElement = (Element) dokNode;
+						Element dokElement = null;
+						dokElement = (Element) dokNode;
 						String dokumentId = dokElement.getAttribute( "id" );
 
 						Node nodeVon = null;
