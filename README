@@ -1,3 +1,10 @@
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+* KOST-Val (https://github.com/KOST-CECO/KOST-Val) supersedes the validation tools SIARD-VAL and SIP-Val by KOST-CECO.  *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
 SIP-VAL
 =======
 The SIP-Val application is used for validate Submission Information Package (SIP). 
